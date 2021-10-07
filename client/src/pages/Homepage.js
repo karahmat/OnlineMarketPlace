@@ -3,7 +3,7 @@ import { UserContext } from '../App.js';
 
 const HomePage = () => {
     const userContext = useContext(UserContext);
-    console.log(userContext);
+    console.log('userContext', userContext);
     const welcomeMessage = userContext.userId !== '' ? `Welcome ${userContext.username}!` : '';
   return (
     <div>

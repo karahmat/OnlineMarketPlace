@@ -1,7 +1,8 @@
 import Cookies from 'js-cookie';
 
-export const getSession = () => {
+export const isAuthenticated = () => {
   const jwt = Cookies.get('jwt');
+  console.log('jwtcookie', jwt);
   let session;
   try {
     if (jwt) {

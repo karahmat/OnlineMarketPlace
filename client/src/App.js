@@ -5,6 +5,7 @@ import Homepage from './pages/Homepage';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
 import Navbar from './components/Navbar';
+import UsersPage from './pages/UsersPage';
 
 export const UserContext = createContext();
 
@@ -29,6 +30,9 @@ function App() {
           </Route>
           <Route path="/login">
             <LoginPage setUser={setUserData} />
+          </Route>
+          <Route path="/users">
+            <UsersPage />
           </Route>
         </Switch>
       </UserContext.Provider>
