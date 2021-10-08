@@ -1,5 +1,6 @@
 import React, { useReducer, useState } from 'react';
 //import { useHistory } from 'react-router-dom';
+import { Container, Form, Button } from 'react-bootstrap';
 
 const initialState = {
     email: '',
@@ -25,7 +26,20 @@ function LoginPage({setUser}) {
         email: '',
         password: ''
     })
+    const [frontEndErrors, setFrontEndErrors] = useState({});
     //const history = useHistory();
+
+    const findFormErrors = () => {
+        
+        const { email, password } = formInputs;
+        const newErrors = {};
+        // name error
+        if ( !email || email === '' ) newErrors.email = 'cannot be blank!';
+        // password error
+        if ( !password || password === '' ) newErrors.password = 'cannot be blank!';          
+        
+        return newErrors
+    }
 
     const handleInputChange = (inputEvent) => {
         dispatch({
@@ -39,50 +53,70 @@ function LoginPage({setUser}) {
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch("/api/login", {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify(formInputs)
-        });
-        const data = await response.json();
-        if (data.userId) {            
-            setUser(data);
-            //<Redirect to="/" />
-            //history.push('/');            
-            // redirect user to /posts
-            window.location.assign('/');
-        } else if (data.errors) {            
-            setErrorMsg(data.errors);
+        setFrontEndErrors({}); 
+        setErrorMsg({email: '', password: ''});
+        // get our new errors
+        const newErrors = findFormErrors()
+
+        if ( Object.keys(newErrors).length > 0 ) {
+            // We got errors!
+            setFrontEndErrors(newErrors);            
+
+        } else {
+
+            const response = await fetch("/api/login", {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(formInputs)
+            });
+
+            const data = await response.json();
+            if (data.userId) {            
+                setUser(data);
+                //history.push('/');            
+                // redirect user to /posts
+                window.location.assign('/');
+            } else if (data.errors) {
+                console.log(data.errors);            
+                setErrorMsg(data.errors);
+            }
+
         }
+
     }
 
+    
 
     return (  
-        <div className="container">
+        <Container>
             
             <h1>Sign In</h1>
-            <div className="row">
-                <div className="input-field col s12">
-                    <input id="email" name="email" type="email" className="validate" onChange={handleInputChange} />
-                    <label htmlFor="email">Email</label>
-                    <span className="helper-text" data-error="wrong" data-success="right"></span>
-                    { errorMsg.email !== '' && <span className="left red-text">{errorMsg.email}</span>}
-                </div>
-            </div>
-
-            <div className="row">
-                <div className="input-field col s12">
-                    <input id="password" name="password" type="password" className="validate" onChange={handleInputChange} />
-                    <label htmlFor="password">Password</label>
-                    { errorMsg.password !== '' && <span className="left red-text">{errorMsg.password}</span>}
-
-                </div>
-            </div>            
+            <Form>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control type="email" placeholder="Enter email" name="email" onChange={handleInputChange} isInvalid={ !!frontEndErrors.email } />
+                    <Form.Control.Feedback type='invalid'>
+                        { frontEndErrors.email }
+                    </Form.Control.Feedback>
+                    { errorMsg.email !== '' && <Form.Text className="text-danger">{errorMsg.email}</Form.Text>}
+                </Form.Group>
             
-            <button className="btn waves-effect waves-light" type="submit" name="action" onClick={handleSubmit}>Submit
-                <i className="material-icons right">send</i>
-            </button>
-        </div>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" placeholder="Password" name="password" onChange={handleInputChange} isInvalid={ !!frontEndErrors.password }/>
+                    <Form.Control.Feedback type='invalid'>
+                        { frontEndErrors.password }
+                    </Form.Control.Feedback>
+                    { errorMsg.password !== '' && <Form.Text className="text-danger">{errorMsg.password}</Form.Text>}
+                </Form.Group>   
+
+                <Button variant="primary" type="submit" onClick={handleSubmit}>
+                    Submit
+                </Button>
+
+            </Form>
+            
+        </Container>
     );
 }
 
