@@ -1,10 +1,12 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import { Route, Switch } from 'react-router';
 import Homepage from './pages/Homepage';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
 import Header from './components/Header';
 import UsersPage from './pages/UsersPage';
+import EditMyProfile from './pages/EditMyProfile';
+import { isAuthenticated } from './utils/authenticate';
 
 export const UserContext = createContext();
 
@@ -14,7 +16,34 @@ function App() {
     username: '',
     email: '',
     usertype: ''
-  });
+  });  
+
+  useEffect(() => {
+    const session = isAuthenticated();      
+        
+    const getUserData = async (userId) => {
+      const response = await fetch(`/api/users/${userId}`, {
+          method: 'GET',
+          headers: { 'content-type': 'application/json' },          
+      })
+      const data = await response.json();
+      
+      if (data.userId) {
+          setUserData(data)         
+      } else if (data.errors) {
+          setUserData(data.errors);
+      }
+    }  
+
+    if (session) {
+      console.log(session);
+      getUserData(session.id)
+    }
+
+    return function cleanup() { setUserData({})}
+
+  }, [])
+    
 
   return (
     <div className="App">
@@ -25,13 +54,16 @@ function App() {
             <Homepage />
           </Route>
           <Route path="/signup">
-            <SignUpPage setUser={setUserData} />
+            <SignUpPage />
           </Route>
           <Route path="/login">
-            <LoginPage setUser={setUserData} />
+            <LoginPage />
           </Route>
           <Route path="/users">
             <UsersPage />
+          </Route>
+          <Route exact={true} path="/user/:userId" >
+            <EditMyProfile />
           </Route>
         </Switch>
       </UserContext.Provider>

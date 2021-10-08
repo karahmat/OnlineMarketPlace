@@ -20,7 +20,7 @@ switch (type) {
 }
 }
 
-function LoginPage({setUser}) {
+function LoginPage() {
     const [formInputs, dispatch] = useReducer(reducer, initialState);
     const [errorMsg, setErrorMsg] = useState({
         email: '',
@@ -71,8 +71,7 @@ function LoginPage({setUser}) {
             });
 
             const data = await response.json();
-            if (data.userId) {            
-                setUser(data);
+            if (data.userId) {                            
                 //history.push('/');            
                 // redirect user to /posts
                 window.location.assign('/');
@@ -110,7 +109,7 @@ function LoginPage({setUser}) {
                     { errorMsg.password !== '' && <Form.Text className="text-danger">{errorMsg.password}</Form.Text>}
                 </Form.Group>   
 
-                <Button variant="primary" type="submit" onClick={handleSubmit}>
+                <Button variant="info rounded" type="submit" onClick={handleSubmit}>
                     Submit
                 </Button>
 

@@ -10,7 +10,7 @@ const requireAuth = (req, res, next) => {
     //check json web token exists and is valid
     if (token) {
       jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
-        console.log('jwtverify', err);  
+        
         if (err) {
           console.log(err.message);
           //res.status(201).json({errorMsg: err.message});
@@ -36,13 +36,12 @@ const checkUser = (req, res, next) => {
     if (token) {
         jwt.verify(token, process.env.JWT_SECRET, async (err, decodedToken) => {
             if (err) {
-              console.log(err.message);
-              res.locals.user = null; //if user does not exist, then user property is null
+              console.log(err.message);              
               next();
             } else {
-              console.log(decodedToken);
+              console.log("decodedtoken", decodedToken);
               let user = await User.findById(decodedToken.id);
-              res.locals.user = user;
+              req.profile = user;
               next();
             }
           });

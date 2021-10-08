@@ -1,4 +1,5 @@
 import React, { useReducer, useState } from 'react';
+//import { useHistory } from 'react-router-dom';
 import { Container, Form, Button } from 'react-bootstrap';
 
 const initialState = {
@@ -25,6 +26,7 @@ function SignUpPage() {
     const [formInputs, dispatch] = useReducer(reducer, initialState);
     const [uniqueErr, setUniqueErr] = useState();
     const [frontEndErrors, setFrontEndErrors] = useState({});
+    //const history = useHistory();
 
     const handleInputChange = (inputEvent) => {
         dispatch({
@@ -126,7 +128,7 @@ function SignUpPage() {
                         label="Seller"
                         name="usertype"
                         type="radio"
-                        value="Seller" 
+                        value="seller" 
                         onChange={handleInputChange}
                                                 
                     />
@@ -135,7 +137,7 @@ function SignUpPage() {
                         label="Buyer"
                         name="usertype"
                         type="radio"
-                        value="Buyer" 
+                        value="buyer" 
                         onChange={handleInputChange}                                             
                     />         
                    { frontEndErrors.usertype && <Form.Text className="text-danger">Please choose one</Form.Text>}                                   
