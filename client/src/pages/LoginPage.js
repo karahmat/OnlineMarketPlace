@@ -1,5 +1,5 @@
-import React, { useReducer } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useReducer, useState } from 'react';
+//import { useHistory } from 'react-router-dom';
 
 const initialState = {
     email: '',
@@ -21,7 +21,11 @@ switch (type) {
 
 function LoginPage({setUser}) {
     const [formInputs, dispatch] = useReducer(reducer, initialState);
-    const history = useHistory();
+    const [errorMsg, setErrorMsg] = useState({
+        email: '',
+        password: ''
+    })
+    //const history = useHistory();
 
     const handleInputChange = (inputEvent) => {
         dispatch({
@@ -41,13 +45,14 @@ function LoginPage({setUser}) {
             body: JSON.stringify(formInputs)
         });
         const data = await response.json();
-        if (data.userId) {
-            console.log(data);
+        if (data.userId) {            
             setUser(data);
             //<Redirect to="/" />
-            history.push('/');            
+            //history.push('/');            
             // redirect user to /posts
-            //window.location.assign('/');
+            window.location.assign('/');
+        } else if (data.errors) {            
+            setErrorMsg(data.errors);
         }
     }
 
@@ -55,11 +60,13 @@ function LoginPage({setUser}) {
     return (  
         <div className="container">
             
+            <h1>Sign In</h1>
             <div className="row">
                 <div className="input-field col s12">
                     <input id="email" name="email" type="email" className="validate" onChange={handleInputChange} />
                     <label htmlFor="email">Email</label>
-                    <span className="helper-text" data-error="wrong" data-success="right">Helper text</span>
+                    <span className="helper-text" data-error="wrong" data-success="right"></span>
+                    { errorMsg.email !== '' && <span className="left red-text">{errorMsg.email}</span>}
                 </div>
             </div>
 
@@ -67,6 +74,8 @@ function LoginPage({setUser}) {
                 <div className="input-field col s12">
                     <input id="password" name="password" type="password" className="validate" onChange={handleInputChange} />
                     <label htmlFor="password">Password</label>
+                    { errorMsg.password !== '' && <span className="left red-text">{errorMsg.password}</span>}
+
                 </div>
             </div>            
             

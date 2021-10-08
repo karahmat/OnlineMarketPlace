@@ -10,17 +10,21 @@ const requireAuth = (req, res, next) => {
     //check json web token exists and is valid
     if (token) {
       jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+        console.log('jwtverify', err);  
         if (err) {
           console.log(err.message);
-          res.status(201).json({errorMsg: err.message});
+          //res.status(201).json({errorMsg: err.message});
+          //req.errorMsg = err.message;
         } else {
-          req.profile = decodedToken;          
+          req.profile = decodedToken;
+          //req.errorMsg = null;          
           next();
         }
       })
 
     } else { //there is no token
-        res.status(201).json({errorMsg: err.message});
+        //req.errorMsg = "there is no token";        
+        res.status(201).json({errorMsg: 'no token here'});
     }
 }
 

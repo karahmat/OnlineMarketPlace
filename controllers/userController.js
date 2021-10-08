@@ -3,21 +3,22 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const { requireAuth } = require('../middleware/authMiddleware');
 
 //function to handle errors
 const handleErrors = (err) => {
     console.log("handleErrors function is called");
-    console.log(err.message);
-    let errors = { email: '', password: '' };
+    
+    let errors = { email: '', password: '', token: '' };
 
     //incorrect username
     if (err.message === "incorrect email") {
-        errors.email = "That email is not registered";
+        errors.email = "This email is not registered";
     }
 
     //incorrect password
     if (err.message === "incorrect password") {
-        errors.password = "That email and/or password is incorrect";
+        errors.password = "This password is incorrect";
     }
 
     //duplicate error code 
@@ -25,6 +26,7 @@ const handleErrors = (err) => {
         errors.email = "That email is already registered";
         return errors;
     }
+
 
     //validation errors
     if (err.message.includes('user validation failed')) {
@@ -52,26 +54,26 @@ router.post('/api/signup', async (req,res) => {
         const token = createToken(user._id, user.usertype);
         //send cookie to browser, but it cannot be accessed by clicking document.cookie due to httpOnly: true
         res.cookie('jwt', token, {httpOnly: false, maxAge: maxAge * 1000}); //maxAge in milliseconds here
-        res.status(201).json({ user: user._id, usertype: user.usertype });   
+        res.status(201).json({ userId: user._id, usertype: user.usertype });   
     }
     catch (err) {                    
-        const errors = handleErrors(err);
+        const errors = handleErrors(err);        
         res.status(400).json({errors});
     }
 
 });
 
 //list all users
-router.get('/api/users', async (req,res) => {
-    
-    try {  
-        const users = await User.find();
-        res.status(201).json({data: users});
-    }
-    catch (err) {                    
-        const errors = handleErrors(err);
-        res.status(400).json({errors});
-    }
+router.get('/api/users', requireAuth, async (req,res) => {
+        
+        try {  
+            const users = await User.find();
+            res.status(201).json({data: users});
+        }
+        catch (err) {                    
+            const errors = handleErrors(err);            
+            res.status(400).json({errors});
+        }
     
 });
 
@@ -110,6 +112,7 @@ router.post('/api/login', async (req,res) => {
     }
     catch (err) {
         const errors = handleErrors(err);
+        console.log(errors);
         res.status(400).json({ errors });
     }
     
