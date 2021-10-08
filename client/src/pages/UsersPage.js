@@ -10,8 +10,13 @@ function UsersPage() {
         <div className="container">
             <h2>Loading.....</h2>
         </div>)
+    } else if (result.errorMsg) {
+        return (
+        <div className="container">
+            <h2>You are not authenticated</h2>
+        </div>
+        )
     }
-
     return ( 
         <div>
             { error && <h2>{ error }</h2>}

@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 
 const initialState = {
     username: '',
@@ -22,6 +22,7 @@ const initialState = {
 
 function SignUpPage() {
     const [formInputs, dispatch] = useReducer(reducer, initialState);
+    const [uniqueErr, setUniqueErr] = useState();
     
     const handleInputChange = (inputEvent) => {
         dispatch({
@@ -40,16 +41,21 @@ function SignUpPage() {
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify(formInputs)
         })
-        if (response.ok) {
+        const data = await response.json();
+        
+        if (data.userId) {
             //history.push('/');
             window.location.assign('/');
             // redirect user to /posts
+        } else if (data.errors) {
+            setUniqueErr(data.errors.email);
         }
     }
 
 
     return (  
         <div className="container">
+            <h1>Sign Up</h1>
             <div className="row">
                 <div className="input-field col s12">
                     <input id="username" name="username" type="text" className="validate" onChange={handleInputChange} />
@@ -61,6 +67,7 @@ function SignUpPage() {
                     <input id="email" name="email" type="email" className="validate" onChange={handleInputChange} />
                     <label htmlFor="email">Email</label>
                     <span className="helper-text" data-error="wrong" data-success="right">Helper text</span>
+                    { uniqueErr && <span className="red">This email is already in use</span>}
                 </div>
             </div>
             <div className="row">
