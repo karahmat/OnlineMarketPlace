@@ -7,8 +7,7 @@ const { requireAuth } = require('../middleware/authMiddleware');
 
 //function to handle errors
 const handleErrors = (err) => {
-    console.log("handleErrors function is called");
-    
+    console.log("handleErrors function is called");  
     let errors = { email: '', password: '', token: '' };
 
     //incorrect username

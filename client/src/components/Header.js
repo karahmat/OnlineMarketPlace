@@ -56,17 +56,18 @@ const Header = () => {
                         <Nav className="ms-auto">
                           { token &&
                             <>
-                              <Link to="/users"><Nav.Link >Users</Nav.Link></Link>
+                              <Nav.Link href="/users">Users</Nav.Link>
+                              <Nav.Link ><i className='fas fa-shopping-cart'>Cart</i></Nav.Link>
                               <Nav.Link ><i onClick={handleLogout} className="material-icons" style={{cursor: 'pointer', marginRight: '10px'}}>logout</i></Nav.Link>
                             </>
                           }
                           { !token && 
                             <>
-                            <Link to="/signup"><Nav.Link><i className='fas fa-user-plus'>SignUp</i></Nav.Link></Link>
-                              <Link to="/login"><Nav.Link><i className='fas fa-user'>Login</i></Nav.Link></Link>
+                              <Nav.Link href="/signup"><i className='fas fa-user-plus'>SignUp</i></Nav.Link>
+                              <Nav.Link href="/login"><i className='fas fa-user'>Login</i></Nav.Link>
                             </>
                           }
-                            <Nav.Link ><i className='fas fa-shopping-cart'>Cart</i></Nav.Link>
+                            
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
