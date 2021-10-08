@@ -1,10 +1,9 @@
 import { createContext, useState } from 'react';
-import './App.css';
 import { Route, Switch } from 'react-router';
 import Homepage from './pages/Homepage';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
-import Navbar from './components/Navbar';
+import Header from './components/Header';
 import UsersPage from './pages/UsersPage';
 
 export const UserContext = createContext();
@@ -20,7 +19,7 @@ function App() {
   return (
     <div className="App">
       <UserContext.Provider value={userData}>
-        <Navbar />
+        <Header />
         <Switch>
           <Route exact={true} path="/">
             <Homepage />
