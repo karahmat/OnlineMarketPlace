@@ -45,8 +45,9 @@ function LoginPage({setUser}) {
             console.log(data);
             setUser(data);
             //<Redirect to="/" />
-            history.push('/');
+            history.push('/');            
             // redirect user to /posts
+            //window.location.assign('/');
         }
     }
 

@@ -51,7 +51,7 @@ router.post('/api/signup', async (req,res) => {
         const user = await User.create(req.body);
         const token = createToken(user._id, user.usertype);
         //send cookie to browser, but it cannot be accessed by clicking document.cookie due to httpOnly: true
-        res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000}); //maxAge in milliseconds here
+        res.cookie('jwt', token, {httpOnly: false, maxAge: maxAge * 1000}); //maxAge in milliseconds here
         res.status(201).json({ user: user._id, usertype: user.usertype });   
     }
     catch (err) {                    
@@ -105,7 +105,7 @@ router.post('/api/login', async (req,res) => {
     try {
         const user = await User.login(email,password); //static method
         const token = createToken(user._id, user.usertype);
-        res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000}); //maxAge in milliseconds here
+        res.cookie('jwt', token, {httpOnly: false, maxAge: maxAge * 1000}); //maxAge in milliseconds here
         res.status(200).json( { userId: user._id, username: user.username, email: user.email, usertype: user.usertype } )
     }
     catch (err) {
@@ -118,7 +118,7 @@ router.post('/api/login', async (req,res) => {
 //user signout
 router.get('/api/logout', (req, res) => {
     res.cookie('jwt', '', { maxAge: 1} );
-    res.redirect('/');
+    res.status(200).json({data: 'signed out'})
 });
 
 module.exports = router;

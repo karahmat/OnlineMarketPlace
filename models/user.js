@@ -26,8 +26,8 @@ const userSchema = new Schema({
         required: [true, 'Seller or Buyer does not exist'] //seller or buyer        
     },    
     shopID: {
-        type: String        
-    }
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User'},
 });
 
 

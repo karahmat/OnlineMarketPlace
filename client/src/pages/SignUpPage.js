@@ -1,5 +1,4 @@
 import React, { useReducer } from 'react';
-import { useHistory } from 'react-router-dom';
 
 const initialState = {
     username: '',
@@ -23,8 +22,7 @@ const initialState = {
 
 function SignUpPage() {
     const [formInputs, dispatch] = useReducer(reducer, initialState);
-    const history = useHistory();
-
+    
     const handleInputChange = (inputEvent) => {
         dispatch({
           type: "update",
@@ -43,7 +41,8 @@ function SignUpPage() {
             body: JSON.stringify(formInputs)
         })
         if (response.ok) {
-            history.push('/');
+            //history.push('/');
+            window.location.assign('/');
             // redirect user to /posts
         }
     }
