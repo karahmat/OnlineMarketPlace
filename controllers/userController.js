@@ -77,11 +77,16 @@ router.get('/api/users', requireAuth, async (req,res) => {
 });
 
 //fetch a user
-router.get('/api/users/:userId', async (req,res) => {
+router.get('/api/users/:userId', requireAuth, async (req,res) => {
 
     try {
-        const user = await User.findOne({_id: req.params.id});
-        res.status(201).json({data: user});
+        const user = await User.findOne({_id: req.params.userId});
+        res.status(201).json({
+            userId: user._id,
+            username: user.username,
+            email: user.email, 
+            usertype: user.usertype
+        });
 
     } catch (err) {
         const errors = handleErrors(err);
@@ -90,9 +95,22 @@ router.get('/api/users/:userId', async (req,res) => {
 })
 
 //update a user
-router.put('/api/users/:userId', async (req, res) => {
-    res.send('ok');
-}) 
+router.put('/api/user/:userId', requireAuth, async (req, res) => {
+    
+    try {
+        const updatedField = {
+            username: req.body.username, 
+            usertype: req.body.usertype
+        }
+        const user = await User.findOneAndUpdate({_id: req.params.userId}, updatedField, {new: true});        
+        const token = createToken(user._id, user.usertype);
+        res.cookie('jwt', token, {httpOnly: false, maxAge: maxAge * 1000}); //maxAge in milliseconds here        
+        res.status(201).json({data: "success"});
+    } catch (err) {
+        const errors = handleErrors(err);
+        res.status(400).json({errors});
+    }
+}); 
 
 //delete a user
 router.delete('/api/users/:userId', async (req,res) => {

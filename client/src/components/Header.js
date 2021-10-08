@@ -1,10 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { isAuthenticated, logOut } from '../utils/authenticate';
 import { Navbar, Nav, Container } from 'react-bootstrap'
+//import { UserContext } from '../App.js';
+import MyProfile from './MyProfile';
 
 
 const Header = () => {
+  //const userData = useContext(UserContext);
   //const history = useHistory();
   const [token, setToken] = useState(null);
   
@@ -58,6 +61,7 @@ const Header = () => {
                             <>
                               <Nav.Link href="/users">Users</Nav.Link>
                               <Nav.Link ><i className='fas fa-shopping-cart'>Cart</i></Nav.Link>
+                              <MyProfile />
                               <Nav.Link ><i onClick={handleLogout} className="material-icons" style={{cursor: 'pointer', marginRight: '10px'}}>logout</i></Nav.Link>
                             </>
                           }
