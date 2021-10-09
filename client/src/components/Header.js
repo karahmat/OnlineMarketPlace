@@ -59,6 +59,7 @@ const Header = () => {
                         <Nav className="ms-auto">
                           { token &&
                             <>
+                              <Nav.Link href="/shops">Shops</Nav.Link>
                               <Nav.Link href="/users">Users</Nav.Link>
                               <Nav.Link ><i className='fas fa-shopping-cart'>Cart</i></Nav.Link>
                               <MyProfile />
