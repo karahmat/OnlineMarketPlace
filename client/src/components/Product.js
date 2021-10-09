@@ -8,13 +8,13 @@ const Product = ({ product }) => {
     <div>
       <Card className='my-3 p-3 rounded'>
         <Link to={`/products/${product.id}`}>
-          <Card.Img src={product.image} variant='top' />
+          <Card.Img src={product.image} variant='top' className='card-image' />
         </Link>
 
         <Card.Body>
           <Link to={`/products/${product.id}`}>
             <Card.Title as='div'>
-              <strong>{product.title}</strong>
+              <strong>{product.title.substring(0, 20)}...</strong>
             </Card.Title>
           </Link>
 

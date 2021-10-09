@@ -10,62 +10,69 @@ import CreateShopPage from './pages/CreateShopPage';
 import AllShops from './pages/AllShops';
 import MyShops from './pages/MyShops';
 import { isAuthenticated } from './utils/authenticate';
+import Banner from './components/Banner';
+import ProductPage from './pages/ProductPage';
 
-export const UserContext = createContext();
+
+export const UserContext = createContext()
 
 function App() {
   const [userData, setUserData] = useState({
     userId: '',
     username: '',
     email: '',
-    usertype: ''
-  });  
+    usertype: '',
+  })
 
   useEffect(() => {
-    const session = isAuthenticated();      
-        
+    const session = isAuthenticated()
+
     const getUserData = async (userId) => {
       const response = await fetch(`/api/users/${userId}`, {
-          method: 'GET',
-          headers: { 'content-type': 'application/json' },          
+        method: 'GET',
+        headers: { 'content-type': 'application/json' },
       })
-      const data = await response.json();
-      
+      const data = await response.json()
+
       if (data.userId) {
-          setUserData(data)         
+        setUserData(data)
       } else if (data.errors) {
-          setUserData(data.errors);
+        setUserData(data.errors)
       }
-    }  
+    }
 
     if (session) {
-      console.log(session);
+      console.log(session)
       getUserData(session.id)
     }
 
-    return function cleanup() { setUserData({})}
-
+    return function cleanup() {
+      setUserData({})
+    }
   }, [])
-    
 
   return (
-    <div className="App">
+    <div className='App'>
       <UserContext.Provider value={userData}>
         <Header />
+        <Banner />
         <Switch>
-          <Route exact={true} path="/">
+          <Route exact={true} path='/'>
             <Homepage />
           </Route>
-          <Route path="/signup">
+          <Route path='/products/:id'>
+            <ProductPage />
+          </Route>
+          <Route path='/signup'>
             <SignUpPage />
           </Route>
-          <Route path="/login">
+          <Route path='/login'>
             <LoginPage />
           </Route>
-          <Route path="/users">
+          <Route path='/users'>
             <UsersPage />
           </Route>
-          <Route exact={true} path="/user/:userId" >
+          <Route exact={true} path='/user/:userId'>
             <EditMyProfile />
           </Route>
           <Route exact={true} path="/shops">
@@ -80,7 +87,7 @@ function App() {
         </Switch>
       </UserContext.Provider>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
