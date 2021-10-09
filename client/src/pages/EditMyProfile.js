@@ -2,6 +2,7 @@ import React, { useReducer, useState, useEffect, useContext } from 'react';
 import { Container, Form, Button } from 'react-bootstrap';
 import { UserContext } from '../App';
 import { useParams } from 'react-router-dom';
+import DeleteMyProfile from '../components/DeleteMyProfile';
 
 const reducer = (state, action) => {
 const { type } = action;
@@ -143,10 +144,17 @@ function EditMyProfile() {
                    { frontEndErrors.usertype && <Form.Text className="text-danger">Please choose one</Form.Text>}                                   
                 </Form.Group>
 
-                <Button variant="info rounded" type="submit" onClick={handleSubmit}>
-                    Submit
+                
+                <Button variant="info rounded" style={{marginRight: "5px"}} type="submit" onClick={handleSubmit}>
+                    Edit My Profile
                 </Button>
+                
 
+                { userId === userData.userId &&
+                 
+                <DeleteMyProfile userId={userId} />
+                
+                }
             </Form>
             </>
            }

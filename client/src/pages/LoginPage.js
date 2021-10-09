@@ -110,7 +110,7 @@ function LoginPage() {
                 </Form.Group>   
 
                 <Button variant="info rounded" type="submit" onClick={handleSubmit}>
-                    Submit
+                    Sign In
                 </Button>
 
             </Form>
