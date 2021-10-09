@@ -19,3 +19,19 @@ h2 {
 h1 {
   padding: 1rem;
 }
+
+.logo {
+  display: inline-block;
+  height: 150px;
+  margin-left: 200px;
+}
+
+.search-bar {
+  display: inline-block;
+  margin-left: 150px;
+}
+
+.card-image {
+  height: 175px;
+  width: 100px;
+}
