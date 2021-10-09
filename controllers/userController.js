@@ -113,8 +113,15 @@ router.put('/api/user/:userId', requireAuth, async (req, res) => {
 }); 
 
 //delete a user
-router.delete('/api/users/:userId', async (req,res) => {
-    res.send('ok');
+router.delete('/api/user/:userId', async (req,res) => {
+    try {
+        const result = await User.deleteOne({_id: req.params.userId});
+        res.status(201).json({data: "User Deleted"});
+        //redirecting is done on the client side
+    } catch (err) {
+        const errors = handleErrors(err);
+        res.status(400).json({errors});
+    }
 });
 
 //user sign-in
