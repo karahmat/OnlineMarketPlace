@@ -48,7 +48,7 @@ const createToken = (id, usertype) => {
 router.post('/api/signup', async (req,res) => {
     
     try {          
-        console.log(req.body);
+        
         const user = await User.create(req.body);
         const token = createToken(user._id, user.usertype);
         //send cookie to browser, but it cannot be accessed by clicking document.cookie due to httpOnly: true
@@ -66,6 +66,7 @@ router.post('/api/signup', async (req,res) => {
 router.get('/api/users', requireAuth, async (req,res) => {
         
         try {  
+            
             const users = await User.find();
             res.status(201).json({data: users});
         }

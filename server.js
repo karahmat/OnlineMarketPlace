@@ -28,6 +28,9 @@ app.use(cookieParser());
 const userRoute = require('./controllers/userController');
 app.use(userRoute);
 
+const shopRoute = require('./controllers/shopController');
+app.use(shopRoute);
+
 // app.get('/', (req,res) => {
 //     res.send('ok');
 // });

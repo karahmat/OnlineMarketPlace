@@ -1,14 +1,18 @@
-import { createContext, useState, useEffect } from 'react'
-import { Route, Switch } from 'react-router'
-import Homepage from './pages/Homepage'
-import SignUpPage from './pages/SignUpPage'
-import LoginPage from './pages/LoginPage'
-import Header from './components/Header'
-import UsersPage from './pages/UsersPage'
-import EditMyProfile from './pages/EditMyProfile'
-import { isAuthenticated } from './utils/authenticate'
-import Banner from './components/Banner'
-import ProductPage from './pages/ProductPage'
+import { createContext, useState, useEffect } from 'react';
+import { Route, Switch } from 'react-router';
+import Homepage from './pages/Homepage';
+import SignUpPage from './pages/SignUpPage';
+import LoginPage from './pages/LoginPage';
+import Header from './components/Header';
+import UsersPage from './pages/UsersPage';
+import EditMyProfile from './pages/EditMyProfile';
+import CreateShopPage from './pages/CreateShopPage';
+import AllShops from './pages/AllShops';
+import MyShops from './pages/MyShops';
+import { isAuthenticated } from './utils/authenticate';
+import Banner from './components/Banner';
+import ProductPage from './pages/ProductPage';
+
 
 export const UserContext = createContext()
 
@@ -70,6 +74,15 @@ function App() {
           </Route>
           <Route exact={true} path='/user/:userId'>
             <EditMyProfile />
+          </Route>
+          <Route exact={true} path="/shops">
+            <AllShops />
+          </Route>
+          <Route path="/shops/createShop">
+            <CreateShopPage />
+          </Route>          
+          <Route path="/shops/by/:userId">
+            <MyShops />
           </Route>
         </Switch>
       </UserContext.Provider>

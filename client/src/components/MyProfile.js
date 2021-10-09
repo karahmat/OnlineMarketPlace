@@ -19,7 +19,8 @@ function MyProfile() {
             <Dropdown.ItemText>{userData.username}</Dropdown.ItemText>
             <Dropdown.ItemText>{userData.email}</Dropdown.ItemText>
             <Dropdown.ItemText>{userData.usertype}</Dropdown.ItemText>
-            { userData.usertype === "seller" && <Dropdown.Item as="button" href="#">My Shops</Dropdown.Item> }
+            { userData.usertype === "seller" && <Dropdown.Item as="button"><Link to={`/shops/by/${userData.userId}`}>My Shops</Link></Dropdown.Item> }
+            { userData.usertype === "seller" && <Dropdown.Item as="button"><Link to={`/shops/CreateShop`}>Create Shop</Link></Dropdown.Item> }            
             <Dropdown.Item as="button"><Link to={`/user/${userData.userId}`}>Edit Profile</Link></Dropdown.Item>        
         </Dropdown.Menu>
     </Dropdown>  
