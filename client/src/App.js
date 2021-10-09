@@ -6,6 +6,9 @@ import LoginPage from './pages/LoginPage';
 import Header from './components/Header';
 import UsersPage from './pages/UsersPage';
 import EditMyProfile from './pages/EditMyProfile';
+import CreateShopPage from './pages/CreateShopPage';
+import AllShops from './pages/AllShops';
+import MyShops from './pages/MyShops';
 import { isAuthenticated } from './utils/authenticate';
 
 export const UserContext = createContext();
@@ -64,6 +67,15 @@ function App() {
           </Route>
           <Route exact={true} path="/user/:userId" >
             <EditMyProfile />
+          </Route>
+          <Route exact={true} path="/shops">
+            <AllShops />
+          </Route>
+          <Route path="/shops/createShop">
+            <CreateShopPage />
+          </Route>          
+          <Route path="/shops/by/:userId">
+            <MyShops />
           </Route>
         </Switch>
       </UserContext.Provider>
