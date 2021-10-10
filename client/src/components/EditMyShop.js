@@ -1,36 +1,31 @@
-import { useState, useReducer, useContext } from 'react';
-import { UserContext } from '../App';
-import Container from 'react-bootstrap/Container';
+import { useState, useReducer } from 'react';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 
-const initialState = {
-    name: '',
-    address: '',
-    description: '',
-    contactnumber: '',
-    postalcode: '',
-    shopimage: ''
-  };
-  
-  const reducer = (state, action) => {
+const reducer = (state, action) => {    
     const { type } = action;
     switch (type) {
-      case "update":
+    case "update":
         return {
-          ...state,
-          [action.payload.field]: action.payload.value
+        ...state,
+        [action.payload.field]: action.payload.value
         }
-      default:
+    default:
         return state;
     }
-  }
+}
 
-function CreateShopPage() {
+function EditMyShop(props) {    
+    const hideModal = props.onHide; //hide my Modal
+
+    const initialState = {
+        ...props.shopdata
+    };
+    
     const [formInputs, dispatch] = useReducer(reducer, initialState);
     const [uniqueErr, setUniqueErr] = useState();
-    const [frontEndErrors, setFrontEndErrors] = useState({});
-    const userData = useContext(UserContext);
+    const [frontEndErrors, setFrontEndErrors] = useState({});    
 
     const handleInputChange = (inputEvent) => {
         dispatch({
@@ -49,7 +44,7 @@ function CreateShopPage() {
         // name error
         if ( !name || name === '' ) newErrors.name = 'cannot be blank!';        
         
-        // adderss error
+        // address error
         if ( !address || address === '' ) newErrors.address = 'cannot be blank!';       
         
         // contactnumber error
@@ -77,16 +72,17 @@ function CreateShopPage() {
 
         } else {
 
-            const response = await fetch(`/api/shops/by/${userData.userId}`, {
-                method: 'POST',
+            const response = await fetch(`/api/shops/shop/${props.shopdata._id}`, {
+                method: 'PUT',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(formInputs)
             })
             const data = await response.json();
             
-            if (data.shopId) {
-                //history.push('/');
-                window.location.assign(`/shops/by/${userData.userId}`);
+            if (data) {
+                //history.push(`/shops/shop/${props.shopdata._id}`);
+                window.location.assign(`/shops/shop/${props.shopdata._id}`);
+                hideModal();                                
                 // redirect user to /posts
             } else if (data.errors) {                
                 setUniqueErr(data.errors.name);
@@ -94,15 +90,26 @@ function CreateShopPage() {
         }
         
     }
-    
 
-    return ( 
-        <Container>
-            <h1 className="mt-2">New Shop</h1>
-            <Form>
+   return ( 
+
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      id="myModal"
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          Edit My Shop
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+      <Form>
                 <Form.Group className="mb-3" controlId="formBasicShopname">
                     <Form.Label>Shop Name</Form.Label>
-                    <Form.Control type="text" placeholder="Enter shop name" name="name" onChange={handleInputChange} isInvalid={ !!frontEndErrors.name } />
+                    <Form.Control type="text" placeholder="Enter shop name" name="name" value={formInputs.name} onChange={handleInputChange} isInvalid={ !!frontEndErrors.name } />
                     <Form.Control.Feedback type='invalid'>
                         { frontEndErrors.name }
                     </Form.Control.Feedback>
@@ -111,12 +118,12 @@ function CreateShopPage() {
 
                 <Form.Group className="mb-3" controlId="formBasicShopname">
                     <Form.Label>Description</Form.Label>
-                    <Form.Control type="text" placeholder="Describe your shop" name="description" onChange={handleInputChange} />                                        
+                    <Form.Control type="text" placeholder="Describe your shop" name="description" value={formInputs.description} onChange={handleInputChange} />                                        
                 </Form.Group>
             
                 <Form.Group className="mb-3" controlId="formBasicAddress">
                     <Form.Label>Address</Form.Label>
-                    <Form.Control type="text" placeholder="Enter address" name="address" onChange={handleInputChange} isInvalid={ !!frontEndErrors.address }/>
+                    <Form.Control type="text" placeholder="Enter address" name="address" value={formInputs.address} onChange={handleInputChange} isInvalid={ !!frontEndErrors.address }/>
                     <Form.Control.Feedback type='invalid'>
                         { frontEndErrors.address }
                     </Form.Control.Feedback>                    
@@ -124,7 +131,7 @@ function CreateShopPage() {
 
                 <Form.Group className="mb-3" controlId="formBasicPostalCode">
                     <Form.Label>Postal Code (Singapore)</Form.Label>
-                    <Form.Control type="number" minLength={6} placeholder="Enter Singapore postal code" name="postalcode" onChange={handleInputChange} isInvalid={ !!frontEndErrors.postalcode }/>
+                    <Form.Control type="number" minLength={6} placeholder="Enter Singapore postal code" name="postalcode" value={formInputs.postalcode} onChange={handleInputChange} isInvalid={ !!frontEndErrors.postalcode }/>
                     <Form.Control.Feedback type='invalid'>
                         { frontEndErrors.postalcode }
                     </Form.Control.Feedback>                    
@@ -132,24 +139,28 @@ function CreateShopPage() {
 
                 <Form.Group className="mb-3" controlId="formBasicContact">
                     <Form.Label>Contact Number</Form.Label>
-                    <Form.Control type="number" minLength={8} placeholder="Enter Singapore number" name="contactnumber" onChange={handleInputChange} isInvalid={ !!frontEndErrors.contactnumber }/>
+                    <Form.Control type="number" minLength={8} placeholder="Enter Singapore number" name="contactnumber" value={formInputs.contactnumber} onChange={handleInputChange} isInvalid={ !!frontEndErrors.contactnumber }/>
                     <Form.Control.Feedback type='invalid'>
                         { frontEndErrors.contactnumber }
                     </Form.Control.Feedback>                    
                 </Form.Group>        
 
                 <Form.Group controlId="formFile" className="mb-3">
-                    <Form.Label>Upload Shop Image: </Form.Label><br />
-                    <Form.Control className="mt-2" type="file" name="shopimage" />
+                    <Form.Label>Upload Shop Image: </Form.Label>
+                    <Form.Control type="file" name="shopimage" />
                 </Form.Group>
 
-                <Button variant="info rounded" type="submit" onClick={handleSubmit}>
-                    Create Shop
+                <Button variant="success rounded" type="submit" onClick={handleSubmit}>
+                    Edit Shop
                 </Button>
 
-            </Form>
-        </Container>
+            </Form>       
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+      </Modal.Footer>
+    </Modal>        
      );
 }
 
-export default CreateShopPage
+export default EditMyShop;

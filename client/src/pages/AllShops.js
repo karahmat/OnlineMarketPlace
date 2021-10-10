@@ -1,4 +1,5 @@
 import { useFetchAPI } from '../hooks/useFetchAPI';
+import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
@@ -27,15 +28,15 @@ function AllShops() {
             <h1 className="mt-3">All Shops</h1>
             <Row>
             { result.data && result.data.map((eachShop, index) => ( 
-                <Col xs={12} sm={6} lg={3}>               
-                    <Card className="mb-3" key={eachShop._id} >
+                <Col xs={12} sm={6} lg={3} key={eachShop._id}>               
+                    <Card className="mb-3" >
                         <Card.Img variant="top" src={eachShop.shopimage} />
                         <Card.Body>
                             <Card.Title>{eachShop.name}</Card.Title>
                             <Card.Text>
                                 {eachShop.description}
                             </Card.Text>                            
-                            <Button variant="primary">Go To Shop</Button>
+                            <Button variant="link"><Link to={`/shops/shop/${eachShop._id}`}>Go To Shop</Link></Button>
                         </Card.Body>
                 </Card>
               </Col>

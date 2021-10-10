@@ -12,8 +12,8 @@ const requireAuth = (req, res, next) => {
       jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
         
         if (err) {
-          console.log(err.message);
-          //res.status(201).json({errorMsg: err.message});
+          console.log("error within requireAuth", err);
+          res.status(201).json({errorMsg: err.message});
           //req.errorMsg = err.message;
         } else {
           req.profile = decodedToken;

@@ -1,5 +1,7 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useFetchAPI } from '../hooks/useFetchAPI';
+import { UserContext } from '../App';
+import { useContext } from 'react';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
@@ -7,6 +9,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
 function MyShops() {    
+    const userData = useContext(UserContext);
     const {userId} = useParams();  
     const apiEndPoint = `/api/shops/by/${userId}`;
     const {result, isLoading } = useFetchAPI(apiEndPoint);   
@@ -26,18 +29,18 @@ function MyShops() {
     return ( 
         
         <Container>              
-            <h1 className="mt-3">My Shops</h1>
+            <h1 className="mt-3">{userData.username}'s Shops</h1>
             <Row>
-            { result.data && result.data.map((eachShop, index) => ( 
-                <Col xs={12} sm={6} lg={3}>               
-                    <Card className="mb-3" key={eachShop._id} >
+            { result.data && result.data.map((eachShop) => ( 
+                <Col xs={12} sm={6} lg={3} key={eachShop._id}>               
+                    <Card className="mb-3">
                         <Card.Img variant="top" src={eachShop.shopimage} />
                         <Card.Body>
                             <Card.Title>{eachShop.name}</Card.Title>
                             <Card.Text>
                                 {eachShop.description}
                             </Card.Text>
-                            <Button variant="primary">Go To Shop</Button>
+                            <Button variant="link"><Link to={`/shops/shop/${eachShop._id}`}>Go To Shop</Link></Button>
                         </Card.Body>
                 </Card>
               </Col>

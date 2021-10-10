@@ -59,7 +59,7 @@ const Header = () => {
                         <Nav className="ms-auto">
                           { token &&
                             <>
-                              <Nav.Link href="/shops">Shops</Nav.Link>
+                              <Nav.Link href="/shops">Shops</Nav.Link>                              
                               <Nav.Link href="/users">Users</Nav.Link>
                               <Nav.Link ><i className='fas fa-shopping-cart'>Cart</i></Nav.Link>
                               <MyProfile />
@@ -68,6 +68,7 @@ const Header = () => {
                           }
                           { !token && 
                             <>
+                              <Nav.Link href="/shops">Shops</Nav.Link>
                               <Nav.Link href="/signup"><i className='fas fa-user-plus'>SignUp</i></Nav.Link>
                               <Nav.Link href="/login"><i className='fas fa-user'>Login</i></Nav.Link>
                             </>
