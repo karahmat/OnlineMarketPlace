@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 function DeleteMyShop({shopId, userId}) {
   
     const handleDelete = async () => {
+       
         const response = await fetch(`/api/shops/shop/${shopId}`, {
             method: 'DELETE',
             headers: { 'content-type': 'application/json' }            

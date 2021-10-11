@@ -33,13 +33,24 @@ function CreateShopPage() {
     const userData = useContext(UserContext);
 
     const handleInputChange = (inputEvent) => {
-        dispatch({
-          type: "update",
-          payload: {
-            field: inputEvent.target.name,
-            value: inputEvent.target.value
-          }
-        })
+
+        if (inputEvent.target.name == "shopimage") {
+            dispatch({
+                type: "update",
+                payload: {
+                    field: 'shopimage',
+                    value: inputEvent.target.files[0]
+                }
+            });  
+        } else {
+            dispatch({
+                type: "update",
+                payload: {
+                    field: inputEvent.target.name,
+                    value: inputEvent.target.value
+                }
+            });               
+        }
       }
     
     const findFormErrors = () => {
@@ -76,11 +87,16 @@ function CreateShopPage() {
             setFrontEndErrors(newErrors);            
 
         } else {
+            const formData = new FormData();
+
+            for (const [key, value] of Object.entries(formInputs)) {                                
+                formData.append(key, value);
+            }            
 
             const response = await fetch(`/api/shops/by/${userData.userId}`, {
                 method: 'POST',
-                headers: { 'content-type': 'application/json' },
-                body: JSON.stringify(formInputs)
+                // headers: { 'content-type': 'application/json' },
+                body: formData
             })
             const data = await response.json();
             
@@ -140,7 +156,7 @@ function CreateShopPage() {
 
                 <Form.Group controlId="formFile" className="mb-3">
                     <Form.Label>Upload Shop Image: </Form.Label><br />
-                    <Form.Control className="mt-2" type="file" name="shopimage" />
+                    <Form.Control className="mt-2" type="file" name="shopimage" onChange={handleInputChange} />
                 </Form.Group>
 
                 <Button variant="info rounded" type="submit" onClick={handleSubmit}>

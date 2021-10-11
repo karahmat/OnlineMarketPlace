@@ -3,7 +3,27 @@ const express = require('express');
 const router = express.Router();
 const Shop = require('../models/shop');
 const User = require('../models/user');
+const Product = require('../models/product');
 const { requireAuth } = require('../middleware/authMiddleware');
+
+//dependencies needed for image saving
+const multer = require('multer');
+const imgur = require('imgur');
+const fs = require('fs');
+
+// ==== 
+// set up for multer diskstorage
+// ====
+const diskStorage = multer.diskStorage({
+    destination: "./uploads",
+    filename: (req, file, cb) => {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    }
+  })
+
+// after you setup multer to choose your disk storage, you can initialize a middleware to use for your routes
+const uploadMiddleware = multer({ storage: diskStorage });
+router.use(uploadMiddleware.any());
 
 //function to handle errors
 const handleErrors = (err) => {
@@ -30,12 +50,25 @@ const handleErrors = (err) => {
 router.post('/api/shops/by/:userId', requireAuth, async (req,res) => {
     try {       
         
-        //some codes to parse image stuff
+        // settings for IMGUR
+        // Change this cliend id to your own.
+        const clientId = process.env.IMGUR_ID;        
+        imgur.setClientId(clientId);        
 
         const inputField = {
             ...req.body, 
             userId: req.params.userId
         }
+
+        if (req.files[0]) {
+            const file = req.files[0];
+            console.log(file);
+            const urlImage = await imgur.uploadFile(`./uploads/${file.filename}`);
+            fs.unlinkSync(`./uploads/${file.filename}`);
+            
+            inputField.shopimage = urlImage.link;
+        }
+
         const shop = await Shop.create(inputField);       
         res.status(201).json({ shopId: shop._id, name: shop.name });   
     }
@@ -91,8 +124,11 @@ router.get('/api/shops/shop/:shopId', async(req,res) => {
 
 //edit each shop details
 router.put('/api/shops/shop/:shopId', requireAuth, async (req,res) => {
-    try {                  
-        //some codes to parse image stuff
+    try {                          
+        // settings for IMGUR
+        // Change this cliend id to your own.
+        const clientId = process.env.IMGUR_ID;        
+        imgur.setClientId(clientId);       
 
         const updatedField = {
             name: req.body.name,
@@ -101,6 +137,16 @@ router.put('/api/shops/shop/:shopId', requireAuth, async (req,res) => {
             contactnumber: req.body.contactnumber,
             postalcode: req.body.postalcode
         }
+
+        if (req.files[0]) {
+            const file = req.files[0];
+            console.log("files here", file);
+            const urlImage = await imgur.uploadFile(`./uploads/${file.filename}`);
+            fs.unlinkSync(`./uploads/${file.filename}`);
+            
+            updatedField.shopimage = urlImage.link;
+        }
+
         const updatedShop = await Shop.findOneAndUpdate({_id: req.params.shopId}, updatedField, {new: true});  
         
         res.status(201).json({data: updatedShop});   
@@ -115,8 +161,9 @@ router.put('/api/shops/shop/:shopId', requireAuth, async (req,res) => {
 router.delete('/api/shops/shop/:shopId', requireAuth, async(req,res) => {
     try {
         console.log("delete API was called")
-        const result = await Shop.deleteOne({_id: req.params.shopId});
-        res.status(201).json({data: "User Deleted"});
+        const product = await Product.deleteMany({shopId: req.params.shopId});
+        const result = await Shop.deleteOne({_id: req.params.shopId});        
+        res.status(201).json({data: "Shops and Products Deleted"});
         //redirecting is done on the client side
     } catch (err) {
         const errors = handleErrors(err);
