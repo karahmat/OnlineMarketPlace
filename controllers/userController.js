@@ -3,7 +3,10 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const Shop = require('../models/shop');
+const Product = require('../models/product');
 const { requireAuth } = require('../middleware/authMiddleware');
+const { SchemaTypeOptions } = require('mongoose');
 
 //function to handle errors
 const handleErrors = (err) => {
@@ -116,9 +119,14 @@ router.put('/api/user/:userId', requireAuth, async (req, res) => {
 //delete a user
 router.delete('/api/user/:userId', async (req,res) => {
     try {
+        const shops = await Shop.find({userId: req.params.userId}, '_id');
+        shops.forEach( async (shop) => {
+            await Product.deleteMany({shopId: shop._id});
+            await Shop.deleteOne({_id: shop._id});
+        })
         const result = await User.deleteOne({_id: req.params.userId});
-        res.status(201).json({data: "User Deleted"});
-        //redirecting is done on the client side
+        res.status(201).json({data: "User, Shops and Products Deleted"});
+        
     } catch (err) {
         const errors = handleErrors(err);
         res.status(400).json({errors});

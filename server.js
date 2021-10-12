@@ -31,6 +31,9 @@ app.use(userRoute);
 const shopRoute = require('./controllers/shopController');
 app.use(shopRoute);
 
+const productRoute = require('./controllers/productController');
+app.use(productRoute);
+
 // app.get('/', (req,res) => {
 //     res.send('ok');
 // });

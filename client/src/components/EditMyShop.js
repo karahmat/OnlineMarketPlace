@@ -28,13 +28,24 @@ function EditMyShop(props) {
     const [frontEndErrors, setFrontEndErrors] = useState({});    
 
     const handleInputChange = (inputEvent) => {
-        dispatch({
-          type: "update",
-          payload: {
-            field: inputEvent.target.name,
-            value: inputEvent.target.value
-          }
-        })
+        
+        if (inputEvent.target.name == "shopimage") {
+            dispatch({
+                type: "update",
+                payload: {
+                    field: 'shopimage',
+                    value: inputEvent.target.files[0]
+                }
+            });  
+        } else {
+            dispatch({
+                type: "update",
+                payload: {
+                    field: inputEvent.target.name,
+                    value: inputEvent.target.value
+                }
+            });               
+        }
       }
     
     const findFormErrors = () => {
@@ -71,11 +82,17 @@ function EditMyShop(props) {
             setFrontEndErrors(newErrors);            
 
         } else {
+            const formData = new FormData();
+
+            for (const [key, value] of Object.entries(formInputs)) {                                
+                formData.append(key, value);
+            }            
 
             const response = await fetch(`/api/shops/shop/${props.shopdata._id}`, {
                 method: 'PUT',
-                headers: { 'content-type': 'application/json' },
-                body: JSON.stringify(formInputs)
+                //headers: { 'content-type': 'application/json' },
+                //body: JSON.stringify(formInputs)
+                body: formData
             })
             const data = await response.json();
             
@@ -147,7 +164,7 @@ function EditMyShop(props) {
 
                 <Form.Group controlId="formFile" className="mb-3">
                     <Form.Label>Upload Shop Image: </Form.Label>
-                    <Form.Control type="file" name="shopimage" />
+                    <Form.Control type="file" name="shopimage" onChange={handleInputChange} />
                 </Form.Group>
 
                 <Button variant="success rounded" type="submit" onClick={handleSubmit}>
