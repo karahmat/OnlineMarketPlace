@@ -9,6 +9,7 @@ import EditMyProfile from './pages/EditMyProfile';
 import CreateShopPage from './pages/CreateShopPage';
 import AllShops from './pages/AllShops';
 import MyShops from './pages/MyShops';
+import OneShop from './pages/OneShop';
 import { isAuthenticated } from './utils/authenticate';
 import Banner from './components/Banner';
 import ProductPage from './pages/ProductPage';
@@ -83,6 +84,9 @@ function App() {
           </Route>          
           <Route path="/shops/by/:userId">
             <MyShops />
+          </Route>
+          <Route path="/shops/shop/:shopId">
+            <OneShop />
           </Route>
         </Switch>
       </UserContext.Provider>
