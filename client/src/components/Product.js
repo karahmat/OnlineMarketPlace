@@ -14,7 +14,7 @@ const Product = ({ product }) => {
         <Card.Body>
           <Link to={`/products/${product.id}`}>
             <Card.Title as='div'>
-              <strong>{product.title.substring(0, 20)}...</strong>
+              <strong>{product.description.substring(0, 20)}...</strong>
             </Card.Title>
           </Link>
 

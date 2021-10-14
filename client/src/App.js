@@ -1,19 +1,19 @@
-import { createContext, useState, useEffect } from 'react';
-import { Route, Switch } from 'react-router';
-import Homepage from './pages/Homepage';
-import SignUpPage from './pages/SignUpPage';
-import LoginPage from './pages/LoginPage';
-import Header from './components/Header';
-import UsersPage from './pages/UsersPage';
-import EditMyProfile from './pages/EditMyProfile';
-import CreateShopPage from './pages/CreateShopPage';
-import AllShops from './pages/AllShops';
-import MyShops from './pages/MyShops';
-import OneShop from './pages/OneShop';
-import { isAuthenticated } from './utils/authenticate';
-import Banner from './components/Banner';
-import ProductPage from './pages/ProductPage';
-
+import { createContext, useState, useEffect } from 'react'
+import { Route, Switch } from 'react-router'
+import Homepage from './pages/Homepage'
+import SignUpPage from './pages/SignUpPage'
+import LoginPage from './pages/LoginPage'
+import Header from './components/Header'
+import UsersPage from './pages/UsersPage'
+import EditMyProfile from './pages/EditMyProfile'
+import CreateShopPage from './pages/CreateShopPage'
+import AllShops from './pages/AllShops'
+import MyShops from './pages/MyShops'
+import OneShop from './pages/OneShop'
+import { isAuthenticated } from './utils/authenticate'
+import Banner from './components/Banner'
+import ProductPage from './pages/ProductPage'
+import CartPage from './pages/CartPage'
 
 export const UserContext = createContext()
 
@@ -64,6 +64,9 @@ function App() {
           <Route path='/products/:id'>
             <ProductPage />
           </Route>
+          <Route path='/cart/:id?'>
+            <CartPage />
+          </Route>
           <Route path='/signup'>
             <SignUpPage />
           </Route>
@@ -76,16 +79,16 @@ function App() {
           <Route exact={true} path='/user/:userId'>
             <EditMyProfile />
           </Route>
-          <Route exact={true} path="/shops">
+          <Route exact={true} path='/shops'>
             <AllShops />
           </Route>
-          <Route path="/shops/createShop">
+          <Route path='/shops/createShop'>
             <CreateShopPage />
-          </Route>          
-          <Route path="/shops/by/:userId">
+          </Route>
+          <Route path='/shops/by/:userId'>
             <MyShops />
           </Route>
-          <Route path="/shops/shop/:shopId">
+          <Route path='/shops/shop/:shopId'>
             <OneShop />
           </Route>
         </Switch>
