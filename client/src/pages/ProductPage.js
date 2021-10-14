@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { mockData } from '../data/mockData'
 import { Link } from 'react-router-dom'
 import {
@@ -8,6 +9,7 @@ import {
   ListGroup,
   Card,
   Button,
+  Form,
 } from 'react-bootstrap'
 import Rating from '../components/Rating'
 import { useParams } from 'react-router'
@@ -15,7 +17,14 @@ import { useParams } from 'react-router'
 const ProductPage = () => {
   const params = useParams()
 
+  const [qty, setQty] = useState(1)
+
   const product = mockData.find((p) => p.id === Number(params.id))
+
+  // const addToCartHandler = () => {
+  //   history.push(`/cart/${params.id}?qty=${qty}`)
+  // }
+
   return (
     // <div>yes</div>
     <Container>
@@ -56,11 +65,38 @@ const ProductPage = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Status:</Col>
-                  <Col>In Stock</Col>
+                  <Col>
+                    {product.quantity > 0 ? 'In Stock' : 'Out of Stock'}
+                  </Col>
                 </Row>
               </ListGroup.Item>
+              {product.quantity > 0 && (
+                <ListGroup.Item>
+                  <Row>
+                    <Col>Qty</Col>
+                    <Col>
+                      <Form.Control
+                        as='select'
+                        value={qty}
+                        onChange={(e) => setQty(e.target.value)}
+                      >
+                        {[...Array(product.quantity).keys()].map((x) => (
+                          <option key={x + 1} value={x + 1}>
+                            {x + 1}
+                          </option>
+                        ))}
+                      </Form.Control>
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
+              )}
               <ListGroup.Item>
-                <Button className='btn-block' type='button'>
+                <Button
+                  // onClick={addToCartHandler}
+                  className='btn-block'
+                  type='button'
+                  disabled={product.quantity === 0}
+                >
                   Add to Cart
                 </Button>
               </ListGroup.Item>
