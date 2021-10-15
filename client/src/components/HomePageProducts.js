@@ -14,7 +14,7 @@ const HomePageProducts = () => {
   const products = useSelector((state) => state.products.products)
 
   useEffect(() => {
-    dispatch(fetchProductsData())
+    dispatch(fetchProductsData('/api/products'))
   }, [dispatch])
 
   console.log(products)
