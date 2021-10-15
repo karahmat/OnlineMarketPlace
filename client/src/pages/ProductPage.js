@@ -31,9 +31,9 @@ const ProductPage = () => {
 
   useEffect(() => {
     dispatch(fetchProductsData(`/api/products/product/${params.id}`))
-  }, [dispatch, params.id])
+  }, [dispatch])
 
-  console.log(product.rating)
+  // console.log(product.rating)
   // const product = mockData.find((p) => p.id === Number(params.id))
 
   const addToCartHandler = () => {
@@ -56,11 +56,14 @@ const ProductPage = () => {
               <h3>{product.title}</h3>
             </ListGroup.Item>
             <ListGroup.Item>
-              {/* <Rating
-                value={product.rating.rate}
-                text={`${product.rating.count} reviews`}
-                color='#f8E825'
-              /> */}
+              {/* {product.rating && <p>{product.rating.rate}</p>}{' '} */}
+              {product.rating && (
+                <Rating
+                  value={product.rating.rate}
+                  text={`${product.rating.count} reviews`}
+                  color='#f8E825'
+                />
+              )}
             </ListGroup.Item>
             <ListGroup.Item>Description:{product.description}</ListGroup.Item>
           </ListGroup>
