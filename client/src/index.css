@@ -17,7 +17,8 @@ h2 {
 }
 
 h1 {
-  padding: 1rem;
+  font-size: 24px;
+  padding: 2px;
 }
 
 .logo {
@@ -34,4 +35,8 @@ h1 {
 .card-image {
   height: 175px;
   width: 100px;
+}
+
+.rating span {
+  margin: 2px;
 }

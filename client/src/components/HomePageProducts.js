@@ -18,12 +18,13 @@ const HomePageProducts = () => {
   }, [dispatch])
 
   console.log(products)
+
   return (
     <>
       <h1>Latest Products</h1>
       <Row>
         {products.map((product) => (
-          <Col key={product.id} sm={6} md={4} lg={3} xl={2}>
+          <Col key={product._id} sm={6} md={4} lg={3} xl={2}>
             <Product product={product} />
           </Col>
         ))}
