@@ -1,5 +1,6 @@
-import { useState } from 'react'
-import { mockData } from '../data/mockData'
+import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+// import { mockData } from '../data/mockData'
 import { Link } from 'react-router-dom'
 import {
   Container,
@@ -12,18 +13,32 @@ import {
   Form,
 } from 'react-bootstrap'
 import Rating from '../components/Rating'
-import { useParams } from 'react-router'
+import { useParams, useHistory } from 'react-router'
+import { fetchProductsData } from '../store/productsAllAction'
 
 const ProductPage = () => {
   const params = useParams()
 
+  const history = useHistory()
+
+  console.log(params.id)
+
+  const dispatch = useDispatch()
+
   const [qty, setQty] = useState(1)
 
-  const product = mockData.find((p) => p.id === Number(params.id))
+  const product = useSelector((state) => state.products.products)
 
-  // const addToCartHandler = () => {
-  //   history.push(`/cart/${params.id}?qty=${qty}`)
-  // }
+  useEffect(() => {
+    dispatch(fetchProductsData(`/api/products/product/${params.id}`))
+  }, [dispatch])
+
+  // console.log(product.rating)
+  // const product = mockData.find((p) => p.id === Number(params.id))
+
+  const addToCartHandler = () => {
+    history.push(`/cart/${params.id}?qty=${qty}`)
+  }
 
   return (
     // <div>yes</div>
@@ -41,11 +56,14 @@ const ProductPage = () => {
               <h3>{product.title}</h3>
             </ListGroup.Item>
             <ListGroup.Item>
-              <Rating
-                value={product.rating.rate}
-                text={`${product.rating.count} reviews`}
-                color='#f8E825'
-              />
+              {/* {product.rating && <p>{product.rating.rate}</p>}{' '} */}
+              {product.rating && (
+                <Rating
+                  value={product.rating.rate}
+                  text={`${product.rating.count} reviews`}
+                  color='#f8E825'
+                />
+              )}
             </ListGroup.Item>
             <ListGroup.Item>Description:{product.description}</ListGroup.Item>
           </ListGroup>
@@ -92,7 +110,7 @@ const ProductPage = () => {
               )}
               <ListGroup.Item>
                 <Button
-                  // onClick={addToCartHandler}
+                  onClick={addToCartHandler}
                   className='btn-block'
                   type='button'
                   disabled={product.quantity === 0}
