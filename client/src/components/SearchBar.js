@@ -1,8 +1,18 @@
-import React from 'react'
+import React, {useState} from 'react';
+import { useHistory } from 'react-router-dom';
 
 export const SearchBar = () => {
+  const history = useHistory();
+
+  const [inputValue, setInputValue] = useState();
+
+  const handleSearch = (e) => {
+    e.preventDefault();    
+    window.location.assign(`/products/search/${inputValue}`);
+  }
+
   return (
-    <form action='/' method='get' className='search-bar'>
+    <form className='search-bar'>
       <label htmlFor='header-search'>
         <span className='visually-hidden'>Search your item here!</span>
       </label>
@@ -11,9 +21,10 @@ export const SearchBar = () => {
         id='header-search'
         placeholder='Search products'
         name='search-bar'
-        style={{ width: '500px' }}
+        style={{ width: '500px' }}        
+        onChange={(e) => setInputValue(e.target.value)}
       />
-      <button type='submit'>
+      <button type='submit' onClick={handleSearch}>
         <i className='fas fa-search'></i>
       </button>
     </form>

@@ -162,5 +162,23 @@ router.delete('/api/products/product/:productId', requireAuth, async(req,res) =>
     }
 });
 
+//search products
+router.get('/api/products/product/search/:searchValue', async (req,res) => {
+    try {
+        console.log("searchproducts is called", req.params.searchValue);
+
+        const result = await Product.find({$or: [
+            {'name': { $regex: req.params.searchValue, $options: 'i'} },
+            {'description': { $regex: req.params.searchValue, $options: 'i'} }            
+        ]});        
+
+        res.status(201).json({
+            data: result,
+            searchitem: req.params.searchValue
+        });
+    } catch (err) {
+        console.log(err);
+    }
+});
 
 module.exports = router;

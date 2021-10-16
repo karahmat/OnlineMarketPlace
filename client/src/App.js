@@ -14,6 +14,7 @@ import { isAuthenticated } from './utils/authenticate'
 import Banner from './components/Banner'
 import ProductPage from './pages/ProductPage'
 import CartPage from './pages/CartPage'
+import SearchResultPage from './pages/SearchResultPage'
 
 export const UserContext = createContext()
 
@@ -61,7 +62,7 @@ function App() {
           <Route exact={true} path='/'>
             <Homepage />
           </Route>
-          <Route path='/products/:id'>
+          <Route exact path='/products/:id'>
             <ProductPage />
           </Route>
           <Route path='/cart'>
@@ -90,6 +91,9 @@ function App() {
           </Route>
           <Route path='/shops/shop/:shopId'>
             <OneShop />
+          </Route>
+          <Route exact path='/products/search/:searchValue'>
+            <SearchResultPage />
           </Route>
         </Switch>
       </UserContext.Provider>
