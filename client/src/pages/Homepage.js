@@ -6,9 +6,9 @@ import HomePageProducts from '../components/HomePageProducts.js';
 const HomePage = () => {
     
   return (
-    <Container>      
+    <Container> 
+      <h2>Online Market Place</h2>     
       <HomePageImages />
-      <h2>Online Market Place</h2>
       <HomePageProducts />
     </Container>
   )
