@@ -6,6 +6,7 @@ import Product from '../components/Product';
 function SearchResultPage() {
 
     const { searchValue } = useParams();
+    
     console.log("search Value=",searchValue);
     const apiEndPt = `/api/products/product/search/${searchValue}`;
     const { result, isLoading } = useFetchAPI(apiEndPt);

@@ -42,7 +42,7 @@ const ProductPage = () => {
 
   const addToCartHandler = () => {
     console.log('this is the 2nd', cartItems)
-    dispatch(addToCartAction(product.id, qty))
+    dispatch(addToCartAction(params.id, qty))
     history.push(`/cart`)
   }
 
