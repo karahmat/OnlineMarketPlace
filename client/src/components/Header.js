@@ -4,6 +4,7 @@ import { isAuthenticated, logOut } from '../utils/authenticate'
 import { Navbar, Nav, Container } from 'react-bootstrap'
 //import { UserContext } from '../App.js';
 import MyProfile from './MyProfile'
+import Logo from '../components/Logo'
 
 const Header = () => {
   //const userData = useContext(UserContext);
@@ -53,20 +54,26 @@ const Header = () => {
       <Navbar bg='info' expand='lg' collapseOnSelect>
         <Container>
           <Link to='/'>
-            <Navbar.Brand>Logo</Navbar.Brand>
+            <Navbar.Brand>
+              <Logo />
+            </Navbar.Brand>
           </Link>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>
               {token && (
                 <>
-                  <Nav.Link href='/shops'>Shops</Nav.Link>
-                  <Nav.Link href='/users'>Users</Nav.Link>
-                  <Nav.Link href='/cart/:id?'>
+                  <Nav.Link href='/shops' style={{ color: 'black' }}>
+                    Shops
+                  </Nav.Link>
+                  <Nav.Link href='/users' style={{ color: 'black' }}>
+                    Users
+                  </Nav.Link>
+                  <Nav.Link href='/cart/:id?' style={{ color: 'black' }}>
                     <i className='fas fa-shopping-cart'>Cart</i>
                   </Nav.Link>
                   <MyProfile />
-                  <Nav.Link>
+                  <Nav.Link style={{ color: 'black' }}>
                     <i
                       onClick={handleLogout}
                       className='material-icons'
@@ -79,11 +86,13 @@ const Header = () => {
               )}
               {!token && (
                 <>
-                  <Nav.Link href='/shops'>Shops</Nav.Link>
-                  <Nav.Link href='/signup'>
+                  <Nav.Link href='/shops' style={{ color: 'black' }}>
+                    Shops
+                  </Nav.Link>
+                  <Nav.Link href='/signup' style={{ color: 'black' }}>
                     <i className='fas fa-user-plus'>SignUp</i>
                   </Nav.Link>
-                  <Nav.Link href='/login'>
+                  <Nav.Link href='/login' style={{ color: 'black' }}>
                     <i className='fas fa-user'>Login</i>
                   </Nav.Link>
                 </>

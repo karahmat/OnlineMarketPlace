@@ -1,12 +1,10 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
-import Logo from './Logo'
 import { SearchBar } from './SearchBar'
 
 const Banner = () => {
   return (
-    <Container>
-      <Logo />
+    <Container fluid className='search-bar'>
       <SearchBar />
     </Container>
   )
