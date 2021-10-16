@@ -69,7 +69,7 @@ const Header = () => {
                   <Nav.Link href='/users' style={{ color: 'black' }}>
                     Users
                   </Nav.Link>
-                  <Nav.Link href='/cart/:id?' style={{ color: 'black' }}>
+                  <Nav.Link href='/cart' style={{ color: 'black' }}>
                     <i className='fas fa-shopping-cart'>Cart</i>
                   </Nav.Link>
                   <MyProfile />
