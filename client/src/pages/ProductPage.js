@@ -15,6 +15,7 @@ import {
 import Rating from '../components/Rating'
 import { useParams, useHistory } from 'react-router'
 import { fetchProductsData } from '../store/productsAllAction'
+import { addToCartAction } from '../store/cartActions'
 
 const ProductPage = () => {
   const params = useParams()
@@ -41,7 +42,8 @@ const ProductPage = () => {
 
   const addToCartHandler = () => {
     console.log('this is the 2nd', cartItems)
-    history.push(`/cart/${params.id}?qty=${qty}`)
+    dispatch(addToCartAction(product.id, qty))
+    history.push(`/cart`)
   }
 
   return (

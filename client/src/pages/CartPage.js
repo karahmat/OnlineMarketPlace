@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useParams, useHistory } from 'react-router'
@@ -16,26 +16,13 @@ import {
 import { addToCartAction, removeFromCartAction } from '../store/cartActions'
 
 const CartPage = () => {
-  const params = useParams()
-
   const history = useHistory()
-
-  const id = params.id
 
   const dispatch = useDispatch()
 
   const cartItems = useSelector((state) => state.cart.cartItems)
 
-  const qty = history.location.search
-    ? Number(history.location.search.split('=')[1])
-    : 1
-
-  useEffect(() => {
-    if (id) {
-      dispatch(addToCartAction(id, qty))
-      console.log('this is rendered')
-    }
-  }, [dispatch, id, qty])
+  // const [qtyForm, setQtyForm] = useState(qty)
 
   const removerFromCartHandler = (itemId) => {
     dispatch(removeFromCartAction(itemId))
@@ -70,9 +57,14 @@ const CartPage = () => {
                     <Col md={2}>
                       <Form.Control
                         as='select'
-                        value={qty}
+                        value={item.qty}
                         onChange={(e) =>
-                          dispatch(addToCartAction(Number(e.target.value)))
+                          dispatch(
+                            addToCartAction(
+                              item.productId,
+                              Number(e.target.value)
+                            )
+                          )
                         }
                       >
                         {[...Array(item.stock).keys()].map((x) => (

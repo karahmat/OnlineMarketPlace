@@ -64,7 +64,7 @@ function App() {
           <Route path='/products/:id'>
             <ProductPage />
           </Route>
-          <Route path='/cart/:id?'>
+          <Route path='/cart'>
             <CartPage />
           </Route>
           <Route path='/signup'>
