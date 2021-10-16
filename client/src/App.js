@@ -91,6 +91,9 @@ function App() {
           <Route path='/shops/shop/:shopId'>
             <OneShop />
           </Route>
+          <Route exact path='/products/search/:searchValue'>
+            <SearchResultPage />
+          </Route>
         </Switch>
       </UserContext.Provider>
     </div>
