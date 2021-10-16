@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useParams, useHistory } from 'react-router'
@@ -13,31 +13,23 @@ import {
   Card,
   Container,
 } from 'react-bootstrap'
-import { addToCart } from '../store/cartActions'
+import { addToCartAction, removeFromCartAction } from '../store/cartActions'
 
 const CartPage = () => {
-  const params = useParams()
-
   const history = useHistory()
-
-  const id = params.id
 
   const dispatch = useDispatch()
 
   const cartItems = useSelector((state) => state.cart.cartItems)
 
-  const qty = history.location.search
-    ? Number(history.location.search.split('=')[1])
-    : 1
+  // const [qtyForm, setQtyForm] = useState(qty)
 
-  useEffect(() => {
-    if (id) {
-      dispatch(addToCart(id, qty))
-    }
-  }, [dispatch, id, qty])
+  const removerFromCartHandler = (itemId) => {
+    dispatch(removeFromCartAction(itemId))
+  }
 
-  const removerFromCartHandler = (id) => {
-    console.log('item removed')
+  const checkOutHandler = () => {
+    history.push('/login?redirect=payment')
   }
 
   return (
@@ -51,6 +43,7 @@ const CartPage = () => {
             </Alert>
           ) : (
             <ListGroup variant='flush'>
+              s
               {cartItems.map((item) => (
                 <ListGroup.Item key={item.productId}>
                   <Row>
@@ -66,7 +59,12 @@ const CartPage = () => {
                         as='select'
                         value={item.qty}
                         onChange={(e) =>
-                          dispatch(addToCart(item.id, Number(e.target.value)))
+                          dispatch(
+                            addToCartAction(
+                              item.productId,
+                              Number(e.target.value)
+                            )
+                          )
                         }
                       >
                         {[...Array(item.stock).keys()].map((x) => (
@@ -103,6 +101,14 @@ const CartPage = () => {
                 {cartItems
                   .reduce((acc, item) => acc + item.qty * item.price, 0)
                   .toFixed(2)}
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Button
+                  type='button'
+                  className='btn-block'
+                  disabled={cartItems.length === 0}
+                  onClick={checkOutHandler}
+                />
               </ListGroup.Item>
             </ListGroup>
           </Card>

@@ -11,13 +11,15 @@ export const cartSlicer = createSlice({
     addToCart(state, action) {
       const item = action.payload
 
-      const isItemInCart = state.cartItems.find((x) => x.id === item.id)
+      const isItemInCart = state.cartItems.find(
+        (x) => x.productId === item.productId
+      )
 
       if (isItemInCart) {
         return {
           ...state,
           cartItems: state.cartItems.map((x) =>
-            x.id === isItemInCart.id ? item : x
+            x.productId === isItemInCart.productId ? item : x
           ),
         }
       } else {
@@ -25,6 +27,15 @@ export const cartSlicer = createSlice({
           ...state,
           cartItems: [...state.cartItems, item],
         }
+      }
+    },
+
+    removeFromCart(state, action) {
+      const itemId = action.payload
+
+      return {
+        ...state,
+        cartItems: state.cartItems.filter((x) => x.productId !== itemId),
       }
     },
   },
