@@ -29,14 +29,18 @@ const ProductPage = () => {
 
   const product = useSelector((state) => state.products.products)
 
+  const cartItems = useSelector((state) => state.cart.cartItems)
+
   useEffect(() => {
+    console.log('this is the 1st', cartItems)
     dispatch(fetchProductsData(`/api/products/product/${params.id}`))
-  }, [dispatch])
+  }, [dispatch, cartItems, params.id])
 
   // console.log(product.rating)
   // const product = mockData.find((p) => p.id === Number(params.id))
 
   const addToCartHandler = () => {
+    console.log('this is the 2nd', cartItems)
     history.push(`/cart/${params.id}?qty=${qty}`)
   }
 

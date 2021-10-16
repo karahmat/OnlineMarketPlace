@@ -13,7 +13,7 @@ import {
   Card,
   Container,
 } from 'react-bootstrap'
-import { addToCart } from '../store/cartActions'
+import { addToCartAction, removeFromCartAction } from '../store/cartActions'
 
 const CartPage = () => {
   const params = useParams()
@@ -32,12 +32,17 @@ const CartPage = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(addToCart(id, qty))
+      dispatch(addToCartAction(id, qty))
+      console.log('this is rendered')
     }
   }, [dispatch, id, qty])
 
-  const removerFromCartHandler = (id) => {
-    console.log('item removed')
+  const removerFromCartHandler = (itemId) => {
+    dispatch(removeFromCartAction(itemId))
+  }
+
+  const checkOutHandler = () => {
+    history.push('/login?redirect=payment')
   }
 
   return (
@@ -51,6 +56,7 @@ const CartPage = () => {
             </Alert>
           ) : (
             <ListGroup variant='flush'>
+              s
               {cartItems.map((item) => (
                 <ListGroup.Item key={item.productId}>
                   <Row>
@@ -64,9 +70,9 @@ const CartPage = () => {
                     <Col md={2}>
                       <Form.Control
                         as='select'
-                        value={item.qty}
+                        value={qty}
                         onChange={(e) =>
-                          dispatch(addToCart(item.id, Number(e.target.value)))
+                          dispatch(addToCartAction(Number(e.target.value)))
                         }
                       >
                         {[...Array(item.stock).keys()].map((x) => (
@@ -103,6 +109,14 @@ const CartPage = () => {
                 {cartItems
                   .reduce((acc, item) => acc + item.qty * item.price, 0)
                   .toFixed(2)}
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Button
+                  type='button'
+                  className='btn-block'
+                  disabled={cartItems.length === 0}
+                  onClick={checkOutHandler}
+                />
               </ListGroup.Item>
             </ListGroup>
           </Card>
