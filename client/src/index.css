@@ -23,13 +23,14 @@ h1 {
 
 .logo {
   display: inline-block;
-  height: 150px;
-  margin-left: 200px;
+  height: 100px;
+  margin: auto;
 }
 
 .search-bar {
   display: inline-block;
   margin-left: 150px;
+  padding: 5px;
 }
 
 .card-image {
