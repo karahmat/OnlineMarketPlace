@@ -14,6 +14,7 @@ import { isAuthenticated } from './utils/authenticate'
 import Banner from './components/Banner'
 import ProductPage from './pages/ProductPage'
 import CartPage from './pages/CartPage'
+import SearchResultPage from './pages/SearchResultPage'
 
 export const UserContext = createContext()
 
