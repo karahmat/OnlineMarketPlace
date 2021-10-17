@@ -50,7 +50,7 @@ const Header = () => {
   // )
 
   return (
-    <header>
+    <header id='header'>
       <Navbar bg='info' expand='lg' collapseOnSelect>
         <Container>
           <Link to='/'>
