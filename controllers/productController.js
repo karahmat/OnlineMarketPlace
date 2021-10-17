@@ -5,6 +5,29 @@ const Product = require('../models/product');
 const fetch = require('node-fetch');
 const { requireAuth } = require('../middleware/authMiddleware');
 
+//dependencies needed for image saving
+const multer = require('multer');
+const imgur = require('imgur');
+const fs = require('fs');
+
+// ==== 
+// set up for multer diskstorage
+// ====
+const diskStorage = multer.diskStorage({
+    destination: (req, file, cb) => {        
+        cb(null, './uploads');
+    },
+    filename: (req, file, cb) => {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    }
+  });
+
+const uploadMiddleware = multer({
+    storage: diskStorage    
+}).any();
+
+//router.use(uploadMiddleware);
+
 //function to handle errors
 const handleErrors = (err) => {
     console.log("handleErrors function is called");  
@@ -89,21 +112,47 @@ router.get('/api/products', async(req,res) => {
 //add an array of products to a certain shop
 router.post("/api/products/by/:shopId", requireAuth, async(req, res) => {
 
-    try {       
+    try {               
+        // settings for IMGUR
+        // Change this cliend id to your own.
+        const clientId = process.env.IMGUR_ID;        
+        imgur.setClientId(clientId);
         
-        //some codes to parse image stuff
+        const numberOfNames = Object.keys(req.body).filter((item) => item.includes("name"));        
+        const products = new Array(numberOfNames.length);
 
-        //I assume there will be more than one product created at once, so req.body.data is an array
-        // body: JSON.stringify({data: allFormData }), whereby allFormData is an array of Objects
-        const newArray = [];
-        req.body.allFormData.forEach((eachItem) => {
-            newArray.push({
-                ...eachItem, 
-                shopId: req.params.shopId
-            })
-        });
-        const product = await Product.insertMany(newArray);       
-        res.status(201).json({ shopId: shop._id, name: shop.name });   
+        for (let i=0; i<products.length; i++) {
+            products[i] = {
+                name: '',
+                description: '',
+                category: '',
+                price: '',
+                quantity: '',
+                image: '',
+                rating: {
+                    rate: 1,
+                    count: 1
+                }
+            };
+            products[i].name = req.body[`name${i}`];
+            products[i].description = req.body[`description${i}`];
+            products[i].category = req.body[`category${i}`];
+            products[i].price = req.body[`price${i}`];
+            products[i].quantity = req.body[`quantity${i}`];  
+            products[i].shopId = req.params.shopId;   
+             
+
+            if (req.files[i]) {
+                const file = req.files[i];                
+                const urlImage = await imgur.uploadFile(`./uploads/${file.filename}`);
+                fs.unlinkSync(`./uploads/${file.filename}`);                
+                products[i].image = urlImage.link;
+            }
+        }
+        console.log('products', products)
+        
+        const product = await Product.insertMany(products);       
+        res.status(201).json({ data: "success" });   
     }
     catch (err) {                    
         const errors = handleErrors(err);        

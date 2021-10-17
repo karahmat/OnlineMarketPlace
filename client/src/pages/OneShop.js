@@ -50,10 +50,13 @@ function OneShop() {
             </>
             }
             <h2>List of Products</h2>
+            { userDataClient.userId === result[0].userData._id && 
+                <Button variant="info" href={`/products/create/${shopId}`}>Add More Products</Button>
+            }
             { result[1] && 
                 <Row>
                 {result[1].data.map((product) => (
-                  <Col key={product._id} sm={6} md={4} lg={3} xl={2}>
+                  <Col key={product._id} xs={6} sm={6} md={4} lg={3} xl={2}>
                     <Product product={product} />
                   </Col>
                 ))}
