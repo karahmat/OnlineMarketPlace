@@ -192,6 +192,7 @@ router.delete(
   }
 )
 
+
 //search products
 router.get('/api/products/product/search/:searchValue', async (req, res) => {
   try {
@@ -214,3 +215,19 @@ router.get('/api/products/product/search/:searchValue', async (req, res) => {
 })
 
 module.exports = router
+=======
+//list categories
+router.get('/api/categories', async (req, res) =>{
+
+    try {
+        const result = await Product.distinct('category');
+        res.status(201).json(result);
+
+    } catch (err) {
+        console.log(err);
+    }
+
+})
+
+module.exports = router;
+

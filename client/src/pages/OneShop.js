@@ -2,20 +2,22 @@ import { useState, useContext } from 'react';
 import { UserContext } from '../App';
 import { useParams } from 'react-router-dom';
 //custom hook
-import { useFetchAPI } from '../hooks/useFetchAPI';
+import { useMultipleFetchAPI } from '../hooks/useMultipleFetchAPI';
 //bootstrap
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 //components or pages
 import EditMyShop from '../components/EditMyShop';
 import DeleteMyShop from '../components/DeleteMyShop';
-
+import Product from '../components/Product';
 
 function OneShop() {
     const [modalShow, setModalShow] = useState(false);
     const userDataClient = useContext(UserContext);
     const { shopId } = useParams();
-    const { result, isLoading } = useFetchAPI(`/api/shops/shop/${ shopId }`);
+    const { result, isLoading } = useMultipleFetchAPI([`/api/shops/shop/${ shopId }`, `/api/products?shopId=${ shopId }`]);
 
     if (!result || isLoading) {
         return ( 
@@ -32,22 +34,31 @@ function OneShop() {
 
     return ( 
         <Container>
-            { result.data && 
+            { result[0] && 
             <>
-            <h1 className="mt-2">{ result.data.name } </h1>
-            <p>Description: { result.data.description }</p>
-            <p>Address: { result.data.address} </p>
-            <p>Postalcode: { result.data.postalcode} </p>
-            <p>Contact Number: { result.data.contactnumber} </p>
-            <p>By: { result.userData.username } </p>
-            { userDataClient.userId === result.userData._id && 
+            <h1 className="mt-2">{ result[0].data.name } </h1>
+            <p>Description: { result[0].data.description }</p>
+            <p>Address: { result[0].data.address} </p>
+            <p>Postalcode: { result[0].data.postalcode} </p>
+            <p>Contact Number: { result[0].data.contactnumber} </p>
+            <p>By: { result[0].userData.username } </p>
+            { userDataClient.userId === result[0].userData._id && 
             <>
                 <Button variant="success rounded" onClick={ () => setModalShow(true) } className="mb-2">Edit Shop</Button><br />     
-                <EditMyShop shopdata={result.data} show={modalShow} onHide={ () => setModalShow(false) }/>
-                <DeleteMyShop userId={result.userData._id} shopId={result.data._id}/>
+                <EditMyShop shopdata={result[0].data} show={modalShow} onHide={ () => setModalShow(false) }/>
+                <DeleteMyShop userId={result[0].userData._id} shopId={result[0].data._id}/>
             </>
             }
             <h2>List of Products</h2>
+            { result[1] && 
+                <Row>
+                {result[1].data.map((product) => (
+                  <Col key={product._id} sm={6} md={4} lg={3} xl={2}>
+                    <Product product={product} />
+                  </Col>
+                ))}
+              </Row>
+            }
             </>
             }
         </Container>
