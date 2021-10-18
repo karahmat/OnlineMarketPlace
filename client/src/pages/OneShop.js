@@ -51,7 +51,7 @@ function OneShop() {
             }
             <h2>List of Products</h2>
             { userDataClient.userId === result[0].userData._id && 
-                <Button variant="info" href={`/products/create/${shopId}`}>Add More Products</Button>
+                <Button variant="info" href={`/products/create/${shopId}/${result[0].userData._id}`}>Add More Products</Button>
             }
             { result[1] && 
                 <Row>

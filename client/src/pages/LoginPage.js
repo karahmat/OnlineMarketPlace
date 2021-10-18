@@ -96,8 +96,7 @@ function LoginPage() {
                     <Form.Control type="email" placeholder="Enter email" name="email" onChange={handleInputChange} isInvalid={ !!frontEndErrors.email } />
                     <Form.Control.Feedback type='invalid'>
                         { frontEndErrors.email }
-                    </Form.Control.Feedback>
-                    { errorMsg.email !== '' && <Form.Text className="text-danger">{errorMsg.email}</Form.Text>}
+                    </Form.Control.Feedback>                    
                 </Form.Group>
             
                 <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -106,7 +105,7 @@ function LoginPage() {
                     <Form.Control.Feedback type='invalid'>
                         { frontEndErrors.password }
                     </Form.Control.Feedback>
-                    { errorMsg.password !== '' && <Form.Text className="text-danger">{errorMsg.password}</Form.Text>}
+                    { (errorMsg.password !== '' || errorMsg.email !== '') && <Form.Text className="text-danger">{errorMsg.password}</Form.Text>}
                 </Form.Group>   
 
                 <Button variant="info rounded" type="submit" onClick={handleSubmit}>

@@ -96,7 +96,7 @@ function App() {
           <Route exact path='/products/search/:searchValue'>
             <SearchResultPage />
           </Route>
-          <Route path='/products/create/:shopId'>
+          <Route path='/products/create/:shopId/:userId'>
             <CreateProducts />
           </Route>
         </Switch>

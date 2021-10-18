@@ -20,13 +20,13 @@ const initialState = {};
     }
   }
 
-function CreateProductsPage() {
+function EditProductPage() {
     // const userData = useContext(UserContext);
-    const { shopId, userId } = useParams();
+    const { shopId, userId, productId } = useParams();
     const userDataClient = useContext(UserContext);
     const [formInputs, dispatch] = useReducer(reducer, initialState);
     const [frontEndErrors, setFrontEndErrors] = useState({});  
-    const [formIndex, setFormIndex]  = useState([0]);
+    const formIndex = 0;
     const [formImage, setFormImage] = useState([]);
     const [isUploading, setIsUploading] = useState(false);
 
@@ -52,29 +52,23 @@ function CreateProductsPage() {
         const { name0, description0, category0, price0, quantity0 } = formInputs;
         const newErrors = [];        
         // name error
-        if ( !name0 || name0 === '' ) newErrors.name = 'first product name cannot be blank!';        
+        if ( !name0 || name0 === '' ) newErrors.name = 'name cannot be blank!';        
         
         // description error
-        if ( !description0 || description0 === '' ) newErrors.description = 'first product description cannot be blank!';     
+        if ( !description0 || description0 === '' ) newErrors.description = 'description cannot be blank!';     
         
         // category error
-        if ( !category0 || category0 === '' ) newErrors.category = 'first product category cannot be blank!';      
+        if ( !category0 || category0 === '' ) newErrors.category = 'category cannot be blank!';      
 
         // price error
-        if ( !price0 || price0 === '' ) newErrors.price = 'first product price cannot be blank!';   
+        if ( !price0 || price0 === '' ) newErrors.price = 'price cannot be blank!';   
         
         // quantity error
-        if ( !quantity0 || quantity0 === '' ) newErrors.quantity = 'first product quantity cannot be blank!';              
+        if ( !quantity0 || quantity0 === '' ) newErrors.quantity = 'quantity cannot be blank!';              
                         
         return newErrors
     }
-
-    const addMoreFields = (e) => {
-        const newIndex = formIndex[formIndex.length-1] + 1
-        const newArray = [...formIndex, newIndex];
-        setFormIndex(newArray);
-    }
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         setFrontEndErrors({});         
@@ -99,18 +93,16 @@ function CreateProductsPage() {
             
             setIsUploading(true);
                         
-            const response = await fetch(`/api/products/by/${shopId}/${userId}`, {
-                method: 'POST',                               
+            const response = await fetch(`/api/products/by/${shopId}/${userId}/${productId}`, {
+                method: 'PUT',                               
                 body: formData
             }); 
 
             const data = await response.json();
             
             if (data.data === "success") {
-                setIsUploading(false);
-                //console.log('success');
-                //history.push('/');
-                window.location.assign(`/shops/shop/${shopId}`);
+                setIsUploading(false);                
+                window.location.assign(`/products/${productId}`);
                 // redirect user to /posts
             } else if (data.errors) {                
                 console.log(data.errors);
@@ -119,39 +111,10 @@ function CreateProductsPage() {
         
     }
 
-    return ( 
+    return (  <div>
         
-        <Container>
-            <h1>Create Products</h1>
-            { userDataClient.userId === userId && 
-            <Form>
-                
-                { formIndex.map((oneRow) => (
-                    <DynamicFormComponent key={oneRow} handleFileUpload={handleFileUpload} handleInputChange={handleInputChange} frontEndErrors={frontEndErrors} formIndex={oneRow} />
-                ))}
-                
-                
-                <Button variant="info rounded" type="button" onClick={addMoreFields}>Add More Fields</Button><br/><br/>
-                
-                { isUploading === false && 
-                <Button variant="primary rounded" type="submit" onClick={handleSubmit}>
-                    Submit
-                </Button>
-                }
-
-                { isUploading && 
-                    <Spinner animation="border" role="status" className="ml-2">
-                        <span className="visually-hidden">Loading...</span>
-                    </Spinner>
-                }
-
-            </Form>
-            }
-            { userDataClient.userId !== userId && <Alert variant="danger">You are not authorised to create product!</Alert> }                   
-        </Container>
-
-
-     );
+    </div>);
 }
 
-export default CreateProductsPage;
+
+export default EditProductPage;

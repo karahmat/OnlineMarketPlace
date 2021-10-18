@@ -138,7 +138,7 @@ router.get('/api/products/bypage', async (req, res) => {
 
 //add an array of products to a certain shop
 
-router.post("/api/products/by/:shopId", requireAuth, async(req, res) => {
+router.post("/api/products/by/:shopId/:userId", requireAuth, async(req, res) => {
 
     try {               
         // settings for IMGUR
@@ -177,10 +177,13 @@ router.post("/api/products/by/:shopId", requireAuth, async(req, res) => {
                 products[i].image = urlImage.link;
             }
         }
-        console.log('products', products)
         
-        const product = await Product.insertMany(products);       
-        res.status(201).json({ data: "success" });   
+        if (req.profile.id === req.params.userId) {
+            const product = await Product.insertMany(products);       
+            res.status(201).json({ data: "success" }); 
+        }  else {
+            res.status(400).json({errorMsg: "You are not authorised"})
+        }
     }
     catch (err) {                    
         const errors = handleErrors(err);        
