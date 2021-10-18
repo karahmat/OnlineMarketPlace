@@ -11,8 +11,8 @@ function MyProfile() {
     return (
         
     <Dropdown>
-        <Dropdown.Toggle id="userdropdown" variant="link-primary">
-            <i className="material-icons">account_circle</i>
+        <Dropdown.Toggle id="userdropdown" variant="link rounded-circle">
+            <i className="fas fa-user fa-lg"></i>
         </Dropdown.Toggle>
 
         <Dropdown.Menu>

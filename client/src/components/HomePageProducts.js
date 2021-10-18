@@ -40,7 +40,7 @@ const HomePageProducts = () => {
   return (
     <>
       <h1>Latest Products</h1>
-      {products.length > 1 && (
+      {products.length > 1 && (         
         <div
           id='scrollableDiv'
           // style={{
@@ -57,13 +57,15 @@ const HomePageProducts = () => {
           >
             <Row>
               {products.map((product) => (
-                <Col key={product._id} sm={6} md={4} lg={3} xl={2}>
+                <Col key={product._id} xs={6} sm={6} md={4} lg={3} xl={2}>
                   <Product product={product} />
                 </Col>
               ))}
             </Row>
           </InfiniteScroll>
         </div>
+
+
       )}
     </>
   )
