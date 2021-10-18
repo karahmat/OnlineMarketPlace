@@ -1,7 +1,8 @@
 require('dotenv').config()
 const express = require('express')
 const router = express.Router()
-const Product = require('../models/product')
+const Product = require('../models/product');
+const Shop = require('../models/shop');
 const fetch = require('node-fetch')
 const { requireAuth } = require('../middleware/authMiddleware')
 
@@ -196,10 +197,15 @@ router.post("/api/products/by/:shopId/:userId", requireAuth, async(req, res) => 
 //get each product details
 router.get('/api/products/product/:productId', async (req, res) => {
   try {
-    //some codes to parse image stuff
-
-    const result = await Product.findOne({ _id: req.params.productId })
-    res.status(201).json({ data: result })
+    
+    const result = await Product.findOne({ _id: req.params.productId });
+    const shop = await Shop.findOne({_id: result.shopId}, 'userId');    
+    const finalResult = {
+        ...result._doc, 
+        userId: shop.userId
+    }
+    
+    res.status(201).json({ data: finalResult });
   } catch (err) {
     const errors = handleErrors(err)
     res.status(400).json({ errors })
@@ -208,29 +214,43 @@ router.get('/api/products/product/:productId', async (req, res) => {
 
 //edit each product details
 router.put(
-  '/api/products/product/:productId',
+  '/api/products/product/:productId/:shopId/:userId',
   requireAuth,
   async (req, res) => {
     try {
-      //some codes to parse image stuff
+        // settings for IMGUR
+        // Change this cliend id to your own.
+        const clientId = process.env.IMGUR_ID;        
+        imgur.setClientId(clientId);
+        
 
-      const updatedField = {
-        name: req.body.name,
-        price: req.body.price,
-        description: req.body.description,
-        category: req.body.category,
-        quantity: req.body.quantity,
-      }
-      const updatedProduct = await Product.findOneAndUpdate(
-        { _id: req.params.productId },
-        updatedField,
-        { new: true }
-      )
+        const updatedField = {
+            name: req.body.name,
+            price: req.body.price,
+            description: req.body.description,
+            category: req.body.category,
+            quantity: req.body.quantity,
+        }
 
-      res.status(201).json({ data: updatedProduct })
+        const file = req.files[0];                
+        const urlImage = await imgur.uploadFile(`./uploads/${file.filename}`);
+        fs.unlinkSync(`./uploads/${file.filename}`);                
+        updatedField.image = urlImage.link;
+
+        const updatedProduct = await Product.findOneAndUpdate(
+            { _id: req.params.productId },
+            updatedField,
+            { new: true }
+        )
+        if (req.profile.id === req.params.userId) {
+            res.status(201).json({ data: "success" })
+        } else {
+            res.status(400).json({errorMsg: "You are not authorised"})
+        }
+
     } catch (err) {
-      const errors = handleErrors(err)
-      res.status(400).json({ errors })
+        const errors = handleErrors(err)
+        res.status(400).json({ errors })
     }
   }
 )
@@ -241,8 +261,14 @@ router.delete(
   requireAuth,
   async (req, res) => {
     try {
-      const result = await Product.deleteOne({ _id: req.params.productId })
-      res.status(201).json({ data: 'Product Deleted' })
+      
+      if (req.profile.id === req.body.userId) {
+        const result = await Product.deleteOne({ _id: req.params.productId })
+        res.status(201).json({ data: 'success' })
+      } else {
+          res.status(400).json({errorMsg: 'You are not authorised'})
+      }
+      
     } catch (err) {
       const errors = handleErrors(err)
       res.status(400).json({ errors })
@@ -253,8 +279,7 @@ router.delete(
 
 //search products
 router.get('/api/products/product/search/:searchValue', async (req, res) => {
-  try {
-    console.log('searchproducts is called', req.params.searchValue)
+  try {    
 
     const result = await Product.find({
       $or: [

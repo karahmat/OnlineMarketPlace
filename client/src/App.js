@@ -15,7 +15,8 @@ import Banner from './components/Banner'
 import ProductPage from './pages/ProductPage'
 import CartPage from './pages/CartPage'
 import SearchResultPage from './pages/SearchResultPage'
-import CreateProducts from './pages/CreateProductsPage'
+import CreateProductsPage from './pages/CreateProductsPage'
+import EditProductPage from './pages/EditProductPage'
 
 export const UserContext = createContext()
 
@@ -97,7 +98,10 @@ function App() {
             <SearchResultPage />
           </Route>
           <Route path='/products/create/:shopId/:userId'>
-            <CreateProducts />
+            <CreateProductsPage />
+          </Route>
+          <Route path='/products/product/:productId/:shopId/:userId'>
+            <EditProductPage />
           </Route>
         </Switch>
       </UserContext.Provider>

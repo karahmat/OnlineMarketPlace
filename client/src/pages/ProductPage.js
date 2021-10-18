@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-// import { mockData } from '../data/mockData'
-import { Link } from 'react-router-dom'
+import { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../App';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import {
   Container,
   Row,
@@ -11,26 +11,27 @@ import {
   Card,
   Button,
   Form,
-} from 'react-bootstrap'
-import Rating from '../components/Rating'
-import { useParams, useHistory } from 'react-router'
-import { fetchProductsData } from '../store/productsAllAction'
-import { addToCartAction } from '../store/cartActions'
+} from 'react-bootstrap';
+import Rating from '../components/Rating';
+import { useParams, useHistory } from 'react-router';
+import { fetchProductsData } from '../store/productsAllAction';
+import { addToCartAction } from '../store/cartActions';
+import DeleteMyProduct from '../components/DeleteMyProduct'
 
 const ProductPage = () => {
-  const params = useParams()
+  const userData = useContext(UserContext);
 
-  const history = useHistory()
+  const params = useParams();
 
-  console.log(params.id)
+  const history = useHistory(); 
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const [qty, setQty] = useState(1)
+  const [qty, setQty] = useState(1);
 
-  const product = useSelector((state) => state.products.products)
+  const product = useSelector((state) => state.products.products);
 
-  const cartItems = useSelector((state) => state.cart.cartItems)
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
   useEffect(() => {
     console.log('this is the 1st', cartItems)
@@ -124,6 +125,24 @@ const ProductPage = () => {
                   Add to Cart
                 </Button>
               </ListGroup.Item>
+              { console.log('userData', userData.userId)}
+              { console.log('product', product) }
+              { userData.userId === product.userId && 
+              <>
+              <ListGroup.Item>
+                <Button
+                  variant="info rounded"
+                  href={`/products/product/${params.id}/${product.shopId}/${product.userId}`}                  
+                  type='button'                  
+                >
+                  Edit Product
+                </Button>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <DeleteMyProduct userId={product.userId} shopId={product.shopId} productId={params.id} />                  
+              </ListGroup.Item>
+              </>
+              }
             </ListGroup>
           </Card>
         </Col>
