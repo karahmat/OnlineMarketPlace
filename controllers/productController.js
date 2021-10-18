@@ -6,25 +6,25 @@ const fetch = require('node-fetch')
 const { requireAuth } = require('../middleware/authMiddleware')
 
 //dependencies needed for image saving
-const multer = require('multer');
-const imgur = require('imgur');
-const fs = require('fs');
+const multer = require('multer')
+const imgur = require('imgur')
+const fs = require('fs')
 
-// ==== 
+// ====
 // set up for multer diskstorage
 // ====
 const diskStorage = multer.diskStorage({
-    destination: (req, file, cb) => {        
-        cb(null, './uploads');
-    },
-    filename: (req, file, cb) => {
-      cb(null, `${Date.now()}_${file.originalname}`);
-    }
-  });
+  destination: (req, file, cb) => {
+    cb(null, './uploads')
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}_${file.originalname}`)
+  },
+})
 
 const uploadMiddleware = multer({
-    storage: diskStorage    
-}).any();
+  storage: diskStorage,
+}).any()
 
 //router.use(uploadMiddleware);
 
@@ -112,7 +112,7 @@ router.get('/api/products', async (req, res) => {
 
 //return all products w/ pagination
 router.get('/api/products/bypage', async (req, res) => {
-  const { page = 1, limit = 36 } = req.query
+  const { page = 1, limit = 24 } = req.query
 
   try {
     // execute query with page and limit values
@@ -138,57 +138,54 @@ router.get('/api/products/bypage', async (req, res) => {
 
 //add an array of products to a certain shop
 
-router.post("/api/products/by/:shopId", requireAuth, async(req, res) => {
+router.post('/api/products/by/:shopId', requireAuth, async (req, res) => {
+  try {
+    // settings for IMGUR
+    // Change this cliend id to your own.
+    const clientId = process.env.IMGUR_ID
+    imgur.setClientId(clientId)
 
-    try {               
-        // settings for IMGUR
-        // Change this cliend id to your own.
-        const clientId = process.env.IMGUR_ID;        
-        imgur.setClientId(clientId);
-        
-        const numberOfNames = Object.keys(req.body).filter((item) => item.includes("name"));        
-        const products = new Array(numberOfNames.length);
+    const numberOfNames = Object.keys(req.body).filter((item) =>
+      item.includes('name')
+    )
+    const products = new Array(numberOfNames.length)
 
-        for (let i=0; i<products.length; i++) {
-            products[i] = {
-                name: '',
-                description: '',
-                category: '',
-                price: '',
-                quantity: '',
-                image: '',
-                rating: {
-                    rate: 1,
-                    count: 1
-                }
-            };
-            products[i].name = req.body[`name${i}`];
-            products[i].description = req.body[`description${i}`];
-            products[i].category = req.body[`category${i}`];
-            products[i].price = req.body[`price${i}`];
-            products[i].quantity = req.body[`quantity${i}`];  
-            products[i].shopId = req.params.shopId;   
-             
+    for (let i = 0; i < products.length; i++) {
+      products[i] = {
+        name: '',
+        description: '',
+        category: '',
+        price: '',
+        quantity: '',
+        image: '',
+        rating: {
+          rate: 1,
+          count: 1,
+        },
+      }
+      products[i].name = req.body[`name${i}`]
+      products[i].description = req.body[`description${i}`]
+      products[i].category = req.body[`category${i}`]
+      products[i].price = req.body[`price${i}`]
+      products[i].quantity = req.body[`quantity${i}`]
+      products[i].shopId = req.params.shopId
 
-            if (req.files[i]) {
-                const file = req.files[i];                
-                const urlImage = await imgur.uploadFile(`./uploads/${file.filename}`);
-                fs.unlinkSync(`./uploads/${file.filename}`);                
-                products[i].image = urlImage.link;
-            }
-        }
-        console.log('products', products)
-        
-        const product = await Product.insertMany(products);       
-        res.status(201).json({ data: "success" });   
+      if (req.files[i]) {
+        const file = req.files[i]
+        const urlImage = await imgur.uploadFile(`./uploads/${file.filename}`)
+        fs.unlinkSync(`./uploads/${file.filename}`)
+        products[i].image = urlImage.link
+      }
     }
-    catch (err) {                    
-        const errors = handleErrors(err);        
-        res.status(400).json({errors});
-    }
+    console.log('products', products)
 
-    
-});
+    const product = await Product.insertMany(products)
+    res.status(201).json({ data: 'success' })
+  } catch (err) {
+    const errors = handleErrors(err)
+    res.status(400).json({ errors })
+  }
+})
 
 //get each product details
 router.get('/api/products/product/:productId', async (req, res) => {
@@ -247,7 +244,6 @@ router.delete(
   }
 )
 
-
 //search products
 router.get('/api/products/product/search/:searchValue', async (req, res) => {
   try {
@@ -269,19 +265,14 @@ router.get('/api/products/product/search/:searchValue', async (req, res) => {
   }
 })
 
-
 //list categories
-router.get('/api/categories', async (req, res) =>{
-
-    try {
-        const result = await Product.distinct('category');
-        res.status(201).json(result);
-
-    } catch (err) {
-        console.log(err);
-    }
-
+router.get('/api/categories', async (req, res) => {
+  try {
+    const result = await Product.distinct('category')
+    res.status(201).json(result)
+  } catch (err) {
+    console.log(err)
+  }
 })
 
-module.exports = router;
-
+module.exports = router
