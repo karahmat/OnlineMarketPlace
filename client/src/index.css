@@ -41,3 +41,16 @@ h1 {
 .rating span {
   margin: 2px;
 }
+
+.all-shops-button {
+  position: absolute;
+  bottom: 30px;
+}
+
+.all-shops-image {
+  height: 200px;
+}
+
+.all-shops-name {
+  height: 200px;
+}
