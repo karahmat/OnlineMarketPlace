@@ -43,7 +43,6 @@ const CartPage = () => {
             </Alert>
           ) : (
             <ListGroup variant='flush'>
-              s
               {cartItems.map((item) => (
                 <ListGroup.Item key={item.productId}>
                   <Row>
