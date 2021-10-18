@@ -1,6 +1,7 @@
-import { Container, Form, Button, Spinner } from 'react-bootstrap';
+import { Container, Form, Button, Spinner, Alert } from 'react-bootstrap';
 // import { UserContext } from '../App';
-import { useState, useReducer } from 'react';
+import { useState, useReducer, useContext } from 'react';
+import { UserContext } from '../App';
 import { useParams } from 'react-router-dom';
 import DynamicFormComponent from '../components/DynamicFormComponent';
 
@@ -21,7 +22,8 @@ const initialState = {};
 
 function CreateProductsPage() {
     // const userData = useContext(UserContext);
-    const { shopId } = useParams();
+    const { shopId, userId } = useParams();
+    const userDataClient = useContext(UserContext);
     const [formInputs, dispatch] = useReducer(reducer, initialState);
     const [frontEndErrors, setFrontEndErrors] = useState({});  
     const [formIndex, setFormIndex]  = useState([0]);
@@ -97,7 +99,7 @@ function CreateProductsPage() {
             
             setIsUploading(true);
                         
-            const response = await fetch(`/api/products/by/${shopId}`, {
+            const response = await fetch(`/api/products/by/${shopId}/${userId}`, {
                 method: 'POST',                               
                 body: formData
             }); 
@@ -121,6 +123,7 @@ function CreateProductsPage() {
         
         <Container>
             <h1>Create Products</h1>
+            { userDataClient.userId === userId && 
             <Form>
                 
                 { formIndex.map((oneRow) => (
@@ -142,7 +145,9 @@ function CreateProductsPage() {
                     </Spinner>
                 }
 
-            </Form>                   
+            </Form>
+            }
+            { userDataClient.userId !== userId && <Alert variant="danger">You are not authorised to create product!</Alert> }                   
         </Container>
 
 

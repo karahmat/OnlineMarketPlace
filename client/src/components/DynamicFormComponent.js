@@ -51,7 +51,7 @@ function DynamicFormComponent({handleInputChange, handleFileUpload, frontEndErro
     
         <Form.Group className="mb-3" controlId="formBasicPrice">
             <Form.Label>Price</Form.Label>
-            <Form.Control type="number" placeholder="Price in SGD" index={formIndex} required name={`price${formIndex}`} onChange={handleInputChange} isInvalid={ !!frontEndErrors.price }/>
+            <Form.Control type="number" placeholder="Price in SGD" step="0.01" index={formIndex} required name={`price${formIndex}`} onChange={handleInputChange} isInvalid={ !!frontEndErrors.price }/>
             <Form.Control.Feedback type='invalid'>
                 { frontEndErrors.price }
             </Form.Control.Feedback>                    
