@@ -75,8 +75,7 @@ function LoginPage() {
                 //history.push('/');            
                 // redirect user to /posts
                 window.location.assign('/');
-            } else if (data.errors) {
-                console.log(data.errors);            
+            } else if (data.errors) {                        
                 setErrorMsg(data.errors);
             }
 
@@ -105,7 +104,7 @@ function LoginPage() {
                     <Form.Control.Feedback type='invalid'>
                         { frontEndErrors.password }
                     </Form.Control.Feedback>
-                    { (errorMsg.password !== '' || errorMsg.email !== '') && <Form.Text className="text-danger">{errorMsg.password}</Form.Text>}
+                    { (errorMsg.password !== '' || errorMsg.email !== '') && <Form.Text className="text-danger">{errorMsg.password}{errorMsg.email}</Form.Text>}
                 </Form.Group>   
 
                 <Button variant="info rounded" type="submit" onClick={handleSubmit}>

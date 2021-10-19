@@ -19,6 +19,7 @@ import { useParams, useHistory } from 'react-router'
 import { fetchProductsData } from '../store/productsAllAction'
 import { addToCartAction, removeFromCartAction } from '../store/cartActions'
 import DeleteMyProduct from '../components/DeleteMyProduct'
+import StartChat from '../components/StartChat';
 
 const ProductPage = () => {
   const userData = useContext(UserContext)
@@ -160,6 +161,11 @@ const ProductPage = () => {
                     </ListGroup.Item>
                   </>
                 )}
+                {(userData.userId && (userData.userId !== product.userId)) &&
+                  <ListGroup.Item>
+                    <StartChat userId={userData.userId} sellerId={product.userId} />
+                  </ListGroup.Item>
+                }
               </ListGroup>
             </Card>
           </Col>

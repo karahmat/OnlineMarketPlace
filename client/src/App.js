@@ -16,6 +16,7 @@ import CartPage from './pages/CartPage'
 import SearchResultPage from './pages/SearchResultPage'
 import CreateProductsPage from './pages/CreateProductsPage'
 import EditProductPage from './pages/EditProductPage'
+import Messenger from './pages/Messenger';
 
 export const UserContext = createContext()
 
@@ -100,6 +101,9 @@ function App() {
           </Route>
           <Route path='/products/product/:productId/:shopId/:userId'>
             <EditProductPage />
+          </Route>
+          <Route path="/messenger" >
+            <Messenger />
           </Route>
         </Switch>
       </UserContext.Provider>

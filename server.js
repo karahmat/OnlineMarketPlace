@@ -34,6 +34,13 @@ app.use(shopRoute);
 const productRoute = require('./controllers/productController');
 app.use(productRoute);
 
+const conversationRoute = require('./controllers/conversationController');
+app.use("/api/conversations", conversationRoute);
+
+const messageRoute = require('./controllers/messageController');
+app.use("/api/messages", messageRoute);
+
+
 // app.get('/', (req,res) => {
 //     res.send('ok');
 // });
