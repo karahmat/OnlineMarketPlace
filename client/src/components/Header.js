@@ -5,6 +5,7 @@ import { Navbar, Nav, Container } from 'react-bootstrap'
 //import { UserContext } from '../App.js';
 import MyProfile from './MyProfile'
 import Logo from '../components/Logo'
+import { SearchBar } from './SearchBar'
 
 const Header = () => {
   //const userData = useContext(UserContext);
@@ -51,13 +52,14 @@ const Header = () => {
 
   return (
     <header id='header'>
-      <Navbar bg='info' expand='lg' collapseOnSelect>
+      <Navbar bg='info' expand='lg' collapseOnSelect className='p-0'>
         <Container>
           <Link to='/'>
             <Navbar.Brand>
               <Logo />
             </Navbar.Brand>
           </Link>
+          <SearchBar />
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>

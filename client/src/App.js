@@ -11,7 +11,6 @@ import AllShops from './pages/AllShops'
 import MyShops from './pages/MyShops'
 import OneShop from './pages/OneShop'
 import { isAuthenticated } from './utils/authenticate'
-import Banner from './components/Banner'
 import ProductPage from './pages/ProductPage'
 import CartPage from './pages/CartPage'
 import SearchResultPage from './pages/SearchResultPage'
@@ -58,7 +57,6 @@ function App() {
     <div className='App'>
       <UserContext.Provider value={userData}>
         <Header />
-        <Banner />
         <Switch>
           <Route exact={true} path='/'>
             <Homepage />
