@@ -1,8 +1,8 @@
 require('dotenv').config()
 const express = require('express')
 const router = express.Router()
-const Product = require('../models/product');
-const Shop = require('../models/shop');
+const Product = require('../models/product')
+const Shop = require('../models/shop')
 const fetch = require('node-fetch')
 const { requireAuth } = require('../middleware/authMiddleware')
 
@@ -113,12 +113,12 @@ router.get('/api/products', async (req, res) => {
 
 //return all products w/ pagination
 router.get('/api/products/bypage', async (req, res) => {
-  const { page = 1, limit = 24 } = req.query
+  const { page, limit } = req.query
 
   try {
     // execute query with page and limit values
     const products = await Product.find()
-      .sort({ timestamps: -1 })
+      .sort({ createdAt: -1 })
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()
@@ -129,7 +129,7 @@ router.get('/api/products/bypage', async (req, res) => {
     // return response with posts, total pages, and current page
     res.status(201).json({
       data: products,
-      //   totalPages: Math.ceil(count / limit),
+      //   totalPages: Math.ceil(count / limit),S
       //   currentPage: page,
     })
   } catch (err) {
@@ -140,72 +140,73 @@ router.get('/api/products/bypage', async (req, res) => {
 
 //add an array of products to a certain shop
 
-router.post("/api/products/by/:shopId/:userId", requireAuth, async(req, res) => {
+router.post(
+  '/api/products/by/:shopId/:userId',
+  requireAuth,
+  async (req, res) => {
+    try {
+      // settings for IMGUR
+      // Change this cliend id to your own.
+      const clientId = process.env.IMGUR_ID
+      imgur.setClientId(clientId)
 
-    try {               
-        // settings for IMGUR
-        // Change this cliend id to your own.
-        const clientId = process.env.IMGUR_ID;        
-        imgur.setClientId(clientId);
-        
-        const numberOfNames = Object.keys(req.body).filter((item) => item.includes("name"));        
-        const products = new Array(numberOfNames.length);
+      const numberOfNames = Object.keys(req.body).filter((item) =>
+        item.includes('name')
+      )
+      const products = new Array(numberOfNames.length)
 
-        for (let i=0; i<products.length; i++) {
-            products[i] = {
-                name: '',
-                description: '',
-                category: '',
-                price: '',
-                quantity: '',
-                image: '',
-                rating: {
-                    rate: 1,
-                    count: 1
-                }
-            };
-            products[i].name = req.body[`name${i}`];
-            products[i].description = req.body[`description${i}`];
-            products[i].category = req.body[`category${i}`];
-            products[i].price = req.body[`price${i}`];
-            products[i].quantity = req.body[`quantity${i}`];  
-            products[i].shopId = req.params.shopId;   
-             
-
-            if (req.files[i]) {
-                const file = req.files[i];                
-                const urlImage = await imgur.uploadFile(`./uploads/${file.filename}`);
-                fs.unlinkSync(`./uploads/${file.filename}`);                
-                products[i].image = urlImage.link;
-            }
+      for (let i = 0; i < products.length; i++) {
+        products[i] = {
+          name: '',
+          description: '',
+          category: '',
+          price: '',
+          quantity: '',
+          image: '',
+          rating: {
+            rate: 1,
+            count: 1,
+          },
         }
-        
-        if (req.profile.id === req.params.userId) {
-            const product = await Product.insertMany(products);       
-            res.status(201).json({ data: "success" }); 
-        }  else {
-            res.status(400).json({errorMsg: "You are not authorised"})
+        products[i].name = req.body[`name${i}`]
+        products[i].description = req.body[`description${i}`]
+        products[i].category = req.body[`category${i}`]
+        products[i].price = req.body[`price${i}`]
+        products[i].quantity = req.body[`quantity${i}`]
+        products[i].shopId = req.params.shopId
+
+        if (req.files[i]) {
+          const file = req.files[i]
+          const urlImage = await imgur.uploadFile(`./uploads/${file.filename}`)
+          fs.unlinkSync(`./uploads/${file.filename}`)
+          products[i].image = urlImage.link
         }
+      }
+
+      if (req.profile.id === req.params.userId) {
+        const product = await Product.insertMany(products)
+        res.status(201).json({ data: 'success' })
+      } else {
+        res.status(400).json({ errorMsg: 'You are not authorised' })
+      }
+    } catch (err) {
+      const errors = handleErrors(err)
+      res.status(400).json({ errors })
     }
-    catch (err) {                    
-        const errors = handleErrors(err);        
-        res.status(400).json({errors});
-    }
-    
-})
+  }
+)
 
 //get each product details
 router.get('/api/products/product/:productId', async (req, res) => {
   try {
-    
-    const result = await Product.findOne({ _id: req.params.productId });
-    const shop = await Shop.findOne({_id: result.shopId}, 'userId');    
+    const result = await Product.findOne({ _id: req.params.productId })
+    const shop = await Shop.findOne({ _id: result.shopId }, 'userId')
     const finalResult = {
-        ...result._doc, 
-        userId: shop.userId
+      ...result._doc,
+      userId: shop.userId,
     }
-    
-    res.status(201).json({ data: finalResult });
+
+    res.status(201).json({ data: finalResult })
   } catch (err) {
     const errors = handleErrors(err)
     res.status(400).json({ errors })
@@ -218,39 +219,37 @@ router.put(
   requireAuth,
   async (req, res) => {
     try {
-        // settings for IMGUR
-        // Change this cliend id to your own.
-        const clientId = process.env.IMGUR_ID;        
-        imgur.setClientId(clientId);
-        
+      // settings for IMGUR
+      // Change this cliend id to your own.
+      const clientId = process.env.IMGUR_ID
+      imgur.setClientId(clientId)
 
-        const updatedField = {
-            name: req.body.name,
-            price: req.body.price,
-            description: req.body.description,
-            category: req.body.category,
-            quantity: req.body.quantity,
-        }
+      const updatedField = {
+        name: req.body.name,
+        price: req.body.price,
+        description: req.body.description,
+        category: req.body.category,
+        quantity: req.body.quantity,
+      }
 
-        const file = req.files[0];                
-        const urlImage = await imgur.uploadFile(`./uploads/${file.filename}`);
-        fs.unlinkSync(`./uploads/${file.filename}`);                
-        updatedField.image = urlImage.link;
+      const file = req.files[0]
+      const urlImage = await imgur.uploadFile(`./uploads/${file.filename}`)
+      fs.unlinkSync(`./uploads/${file.filename}`)
+      updatedField.image = urlImage.link
 
-        const updatedProduct = await Product.findOneAndUpdate(
-            { _id: req.params.productId },
-            updatedField,
-            { new: true }
-        )
-        if (req.profile.id === req.params.userId) {
-            res.status(201).json({ data: "success" })
-        } else {
-            res.status(400).json({errorMsg: "You are not authorised"})
-        }
-
+      const updatedProduct = await Product.findOneAndUpdate(
+        { _id: req.params.productId },
+        updatedField,
+        { new: true }
+      )
+      if (req.profile.id === req.params.userId) {
+        res.status(201).json({ data: 'success' })
+      } else {
+        res.status(400).json({ errorMsg: 'You are not authorised' })
+      }
     } catch (err) {
-        const errors = handleErrors(err)
-        res.status(400).json({ errors })
+      const errors = handleErrors(err)
+      res.status(400).json({ errors })
     }
   }
 )
@@ -261,14 +260,12 @@ router.delete(
   requireAuth,
   async (req, res) => {
     try {
-      
       if (req.profile.id === req.body.userId) {
         const result = await Product.deleteOne({ _id: req.params.productId })
         res.status(201).json({ data: 'success' })
       } else {
-          res.status(400).json({errorMsg: 'You are not authorised'})
+        res.status(400).json({ errorMsg: 'You are not authorised' })
       }
-      
     } catch (err) {
       const errors = handleErrors(err)
       res.status(400).json({ errors })
@@ -278,8 +275,7 @@ router.delete(
 
 //search products
 router.get('/api/products/product/search/:searchValue', async (req, res) => {
-  try {    
-
+  try {
     const result = await Product.find({
       $or: [
         { name: { $regex: req.params.searchValue, $options: 'i' } },

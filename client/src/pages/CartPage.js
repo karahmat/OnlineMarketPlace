@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { useParams, useHistory } from 'react-router'
+import { useHistory } from 'react-router'
 import {
   Row,
   Col,
@@ -33,7 +32,7 @@ const CartPage = () => {
   }
 
   return (
-    <Container>
+    <Container className='my-5'>
       <Row>
         <Col md={8}>
           <h1>Shopping Cart</h1>
@@ -56,6 +55,7 @@ const CartPage = () => {
                     <Col md={2}>
                       <Form.Control
                         as='select'
+                        size='sm'
                         value={item.qty}
                         onChange={(e) =>
                           dispatch(
@@ -77,7 +77,7 @@ const CartPage = () => {
                       <Button
                         type='button'
                         variant='light'
-                        onClick={() => removerFromCartHandler(item.id)}
+                        onClick={() => removerFromCartHandler(item.productId)}
                       >
                         <i className='fas fa-trash'></i>
                       </Button>
@@ -104,10 +104,13 @@ const CartPage = () => {
               <ListGroup.Item>
                 <Button
                   type='button'
-                  className='btn-block'
+                  variant='info'
                   disabled={cartItems.length === 0}
                   onClick={checkOutHandler}
-                />
+                >
+                  {' '}
+                  Check Out{' '}
+                </Button>
               </ListGroup.Item>
             </ListGroup>
           </Card>
