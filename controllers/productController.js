@@ -102,7 +102,7 @@ router.get('/api/products', async (req, res) => {
       })
       res.status(201).json({ data: result })
     } else {
-      const result = await Product.find()
+      const result = await Product.find().sort({ timestamp: -1 })
       res.status(201).json({ data: result })
     }
   } catch (err) {
@@ -118,6 +118,7 @@ router.get('/api/products/bypage', async (req, res) => {
   try {
     // execute query with page and limit values
     const products = await Product.find()
+      .sort({ timestamps: -1 })
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()

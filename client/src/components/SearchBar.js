@@ -1,14 +1,14 @@
-import React, {useState} from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 
 export const SearchBar = () => {
-  const history = useHistory();
+  const history = useHistory()
 
-  const [inputValue, setInputValue] = useState();
+  const [inputValue, setInputValue] = useState()
 
   const handleSearch = (e) => {
-    e.preventDefault();    
-    window.location.assign(`/products/search/${inputValue}`);
+    e.preventDefault()
+    window.location.assign(`/products/search/${inputValue}`)
   }
 
   return (
@@ -21,7 +21,7 @@ export const SearchBar = () => {
         id='header-search'
         placeholder='Search products'
         name='search-bar'
-        style={{ width: '500px' }}        
+        style={{ width: '500px' }}
         onChange={(e) => setInputValue(e.target.value)}
       />
       <button type='submit' onClick={handleSearch}>

@@ -23,14 +23,12 @@ h1 {
 
 .logo {
   display: inline-block;
-  height: 100px;
-  margin: auto;
+  height: 125px;
+  margin-right: 150px;
 }
 
 .search-bar {
   display: inline-block;
-  margin-left: 150px;
-  padding: 5px;
 }
 
 .card-image {
@@ -40,4 +38,25 @@ h1 {
 
 .rating span {
   margin: 2px;
+}
+
+.all-shops-button {
+  position: absolute;
+  bottom: 30px;
+}
+
+.all-shops-image {
+  height: 200px;
+}
+
+.all-shops-name {
+  height: 200px;
+}
+
+.product-card {
+  min-height: 430px;
+}
+
+.home-image-col {
+  margin: 5em 0;
 }

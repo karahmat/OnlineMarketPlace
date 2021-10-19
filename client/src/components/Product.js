@@ -1,12 +1,12 @@
 import React from 'react'
-import { Card } from 'react-bootstrap'
+import { Card, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import Rating from './Rating'
 import { Link } from 'react-router-dom'
 
 const Product = ({ product }) => {
   return (
     <div>
-      <Card className='my-3 p-3 rounded'>
+      <Card className='my-3 p-3 rounded product-card'>
         <Link to={`/products/${product._id}`}>
           <Card.Img src={product.image} variant='top' className='card-image' />
         </Link>
@@ -14,7 +14,16 @@ const Product = ({ product }) => {
         <Card.Body>
           <Link to={`/products/${product._id}`}>
             <Card.Title as='div'>
-              <strong>{product.name}...</strong>
+              <OverlayTrigger
+                placement='right'
+                overlay={<Tooltip>{product.name}</Tooltip>}
+              >
+                <strong className='home-page-product-name'>
+                  {product.name.length > 25
+                    ? product.name.substring(0, 40) + '...'
+                    : product.name.substring(0, 40)}
+                </strong>
+              </OverlayTrigger>
             </Card.Title>
           </Link>
 
