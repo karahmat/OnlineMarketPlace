@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { useParams, useHistory } from 'react-router'
+import { useHistory } from 'react-router'
 import {
   Row,
   Col,
@@ -19,8 +18,6 @@ const CartPage = () => {
   const history = useHistory()
 
   const dispatch = useDispatch()
-
-  const formRef = useRef()
 
   const cartItems = useSelector((state) => state.cart.cartItems)
 
@@ -56,15 +53,7 @@ const CartPage = () => {
                     </Col>
                     <Col md={2}>${item.price}</Col>
                     <Col md={2}>
-                      <Button
-                        type='button'
-                        variant='light'
-                        onClick={() => formRef.current.value++}
-                      >
-                        +
-                      </Button>
                       <Form.Control
-                        ref={formRef}
                         as='select'
                         size='sm'
                         value={item.qty}
