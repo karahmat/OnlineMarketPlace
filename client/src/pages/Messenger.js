@@ -12,6 +12,7 @@ function Messenger() {
     const [newMessage, setNewMessage] = useState('');    
     const userData = useContext(UserContext);
     const scrollRef = useRef();
+    const chosenConversation = useRef();
     const searchParams = new URLSearchParams(window.location.search);
 
     const userIdUrl = searchParams.get('userId');
@@ -30,7 +31,7 @@ function Messenger() {
                 console.log(err);
             }
         }
-        if(userData) {
+        if(userData.userId !== '') {
             getConversation();
         }
     }, [userData, currentChat]);
@@ -42,6 +43,8 @@ function Messenger() {
                 const data = await res.json();              
                 if (data) {
                     setCurrentChat(data);
+                    console.log("chosen", chosenConversation.current);
+                    //chosenConversation.current.style.color = "blue";
                 } else {                    
                     const postedData = {
                         senderId: userArg, 
@@ -56,6 +59,7 @@ function Messenger() {
                     });
                     const data1 = await res1.json();
                     setCurrentChat(data1);
+                    //chosenConversation.current.style.color = "blue";
                 }
                 
               } catch (err) {
@@ -63,8 +67,7 @@ function Messenger() {
               }
         }
 
-        if (userIdUrl && sellerIdUrl) {   
-            console.log("initialiseChat", userIdUrl)         
+        if (userIdUrl && sellerIdUrl) {                       
             initialiseChat(userIdUrl, sellerIdUrl)
         } 
 
@@ -134,7 +137,7 @@ function Messenger() {
                     
                     
                     { conversations.length > 0 && conversations.map((conversation) => (
-                        <div onClick={(e) => handleCurrentChat(e, conversation)} style={{cursor: 'pointer'}}>                            
+                        <div ref={chosenConversation} onClick={(e) => handleCurrentChat(e, conversation)} style={{cursor: 'pointer'}}>                            
                             <Conversation key={conversation.members[1]} conversation={conversation} currentUser={userData} />
                         </div>
                     ))}
