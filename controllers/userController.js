@@ -55,7 +55,7 @@ router.post('/api/signup', async (req,res) => {
         const user = await User.create(req.body);
         const token = createToken(user._id, user.usertype);
         //send cookie to browser, but it cannot be accessed by clicking document.cookie due to httpOnly: true
-        res.cookie('jwt', token, {httpOnly: false, maxAge: maxAge * 1000}); //maxAge in milliseconds here
+        res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000}); //maxAge in milliseconds here
         res.status(201).json({ userId: user._id, usertype: user.usertype });   
     }
     catch (err) {                    
@@ -80,6 +80,26 @@ router.get('/api/users', requireAuth, async (req,res) => {
     
 });
 
+//fetch a user through jwt
+router.get('/api/users/jwt', requireAuth, async (req,res) => {
+    console.log(req.profile);
+
+    try {
+        
+        const user = await User.findOne({_id: req.profile.id});
+        res.status(201).json({
+            userId: user._id,
+            username: user.username,
+            email: user.email, 
+            usertype: user.usertype
+        });
+
+    } catch (err) {
+        const errors = handleErrors(err);
+        res.status(400).json({errors});
+    }
+})
+
 //fetch a user
 router.get('/api/users/:userId', requireAuth, async (req,res) => {
 
@@ -98,6 +118,8 @@ router.get('/api/users/:userId', requireAuth, async (req,res) => {
     }
 })
 
+
+
 //update a user
 router.put('/api/user/:userId', requireAuth, async (req, res) => {
     
@@ -108,7 +130,7 @@ router.put('/api/user/:userId', requireAuth, async (req, res) => {
         }
         const user = await User.findOneAndUpdate({_id: req.params.userId}, updatedField, {new: true});        
         const token = createToken(user._id, user.usertype);
-        res.cookie('jwt', token, {httpOnly: false, maxAge: maxAge * 1000}); //maxAge in milliseconds here        
+        res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000}); //maxAge in milliseconds here        
         res.status(201).json({data: "success"});
     } catch (err) {
         const errors = handleErrors(err);
@@ -140,7 +162,7 @@ router.post('/api/login', async (req,res) => {
     try {
         const user = await User.login(email,password); //static method
         const token = createToken(user._id, user.usertype);
-        res.cookie('jwt', token, {httpOnly: false, maxAge: maxAge * 1000}); //maxAge in milliseconds here
+        res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000}); //maxAge in milliseconds here
         res.status(200).json( { userId: user._id, username: user.username, email: user.email, usertype: user.usertype } )
     }
     catch (err) {

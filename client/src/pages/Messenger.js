@@ -4,7 +4,7 @@ import Conversation from '../components/Conversation';
 import { useContext, useEffect, useState, useRef } from 'react';
 import { UserContext } from '../App';
 import { useLocation, useHistory } from 'react-router-dom';
-
+import { io } from "socket.io-client";
 
 function Messenger() {
     const [conversations, setConversations] = useState([]);
@@ -15,9 +15,42 @@ function Messenger() {
     const userData = useContext(UserContext);
     const scrollRef = useRef();    
     const location = useLocation();
+    const [arrivalMessage, setArrivalMessage] = useState(null);
+    //const [onlineUsers, setOnlineUsers] = useState([]);
+    const socket = useRef();
     const history = useHistory();    
     
+    //useEffect to get and set live chat messages
+    useEffect(() => {
+        socket.current = io("ws://localhost:8900");
+        socket.current.on("getMessage", (data) => {
+          setArrivalMessage({
+            sender: data.senderId,
+            text: data.text,
+            createdAt: Date.now(),
+          });
+        });
+      }, []);
     
+    useEffect(() => {
+    arrivalMessage &&
+        currentChat?.members.includes(arrivalMessage.sender) &&
+        setMessages((prev) => [...prev, arrivalMessage]);
+    }, [arrivalMessage, currentChat]);
+
+    useEffect(() => {
+        if(userData.userId !== '') {
+            console.log("here is called!!!")
+            socket.current.emit("addUser", userData.userId);
+            socket.current.on("getUsers", (users) => {
+            console.log("socket users", users);
+            });
+        }
+
+        
+      }, [userData]);
+    
+    //Chat section controlled by Mongoose
     useEffect(()=> {
         const getConversation = async() => {
             try {                
@@ -75,6 +108,7 @@ function Messenger() {
 
     }, [location]);
 
+    //useEffect to render Msg related to product that comes in if User clicks from product page
     useEffect(() => {
         const getProductMsg = async(userArg1, chat) => {            
             const message2 = {
@@ -100,10 +134,22 @@ function Messenger() {
         if(location.state && currentChat) {
             const userIdUrl = location.state.userId;                                
             getProductMsg(userIdUrl, currentChat);
+
+            const receiverId = currentChat.members.find(
+                (otherUser) => otherUser !== userData.userId
+              );
+      
+            socket.current.emit("sendMessage", {
+                senderId: userData.userId,
+                receiverId,
+                text: newMessage,
+            });
+
             history.replace();   
         }
 
     }, [productMsg]);
+
 
     useEffect(() => {
         const getMessages = async () => {
@@ -126,16 +172,18 @@ function Messenger() {
             conversationId: currentChat._id,
         };
 
-        // const receiverId = currentChat.members.find(
-        //   (member) => member !== user._id
-        // );
+        //SOCKET SECTION
+        const receiverId = currentChat.members.find(
+          (otherUser) => otherUser !== userData.userId
+        );
 
-        // socket.current.emit("sendMessage", {
-        //   senderId: user._id,
-        //   receiverId,
-        //   text: newMessage,
-        // });
+        socket.current.emit("sendMessage", {
+          senderId: userData.userId,
+          receiverId,
+          text: newMessage,
+        });
 
+        //MONGOOSE SECTION
         try {
             const res = await fetch("/api/messages", {
             method: 'POST',
@@ -161,7 +209,7 @@ function Messenger() {
     return ( 
     <Container>
         <Row className="mt-4">     
-            <Col xs={6} md={3} lg={3}>
+            <Col key={1234} xs={6} md={3} lg={3}>
                 <h3>Chat Menu</h3>
                 <Row>
                     
@@ -175,10 +223,10 @@ function Messenger() {
                     
                 </Row>                                              
             </Col>
-            <Col xs={6} md={8} lg={8} >
+            <Col key={1231} xs={6} md={8} lg={8} >
                 { currentChat ? (
                 <>    
-                <Row style={{
+                <Row key={'row1'} style={{
                     height: '100%',
                     overflowY: 'scroll',
                     paddingRight: '10px'
@@ -189,8 +237,8 @@ function Messenger() {
                         </div>
                     ))}               
                 </Row>
-                <Row>
-                    <Col xs={10} sm={8} md={8} lg={8} className="mb-4">
+                <Row key={'row2'}>
+                    <Col key={'col1'} xs={10} sm={8} md={8} lg={8} className="mb-4">
                         <Form.Control 
                             as="textarea" 
                             placeholder="Comments"
@@ -198,14 +246,14 @@ function Messenger() {
                             value={newMessage} 
                         />
                     </Col>
-                    <Col xs={4} sm={2} md={2} lg={2}>
+                    <Col key={'col2'} xs={4} sm={2} md={2} lg={2}>
                         <Button type='submit' variant="warning" onClick={handleSubmit}>Submit</Button>
                     </Col>          
 
                 </Row>
                 </>
                 ) : (
-                <Row>
+                <Row key={'row2'}>
                     <p>Open a conversation to start a chat.</p>
                 </Row>
                 )}

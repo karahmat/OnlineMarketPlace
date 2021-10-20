@@ -17,6 +17,14 @@ export const isAuthenticated = () => {
   return session
 }
 
-export const logOut = () => {
-  Cookies.remove('jwt')
+export const logOut = async() => {
+  
+  const res = await fetch('/api/logout');
+  const data = await res.json();
+  if (data.data === "signed out") {
+
+    return "signed out"
+  }
+  
+  // Cookies.remove('jwt')
 }
