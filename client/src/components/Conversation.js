@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function Conversation({ conversation, currentUser }) {
+function Conversation({ currentChat, handleCurrentChat, conversation, currentUser }) {
   const [user, setUser] = useState(null);  
 
   useEffect(() => {
@@ -22,7 +22,7 @@ function Conversation({ conversation, currentUser }) {
   return (
     <>           
         { user && 
-        <i className="fas fa-user fa-sm mt-4" >{user.username}</i>
+        <i onClick={(e) => handleCurrentChat(e, conversation)} style={ currentChat?._id === conversation?._id ? {cursor: 'pointer', color: "blue"} : {cursor: 'pointer', color: "#55595c"} } className="fas fa-user fa-sm mt-4" >{user.username}</i>
         }
     </>    
   );
