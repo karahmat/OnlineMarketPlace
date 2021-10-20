@@ -1,30 +1,34 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { isAuthenticated, logOut } from '../utils/authenticate'
+import { logOut } from '../utils/authenticate'
 import { Navbar, Nav, Container } from 'react-bootstrap'
-//import { UserContext } from '../App.js';
+import { UserContext } from '../App.js';
 import MyProfile from './MyProfile'
 import Logo from '../components/Logo'
 import { SearchBar } from './SearchBar'
 
 const Header = () => {
-  //const userData = useContext(UserContext);
-  //const history = useHistory();
-  const [token, setToken] = useState(null)
+  const userData = useContext(UserContext);
+  //const history = useHistory(); 
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
-    const decodedToken = isAuthenticated()
-    if (decodedToken) {
-      setToken(decodedToken)
-    }
-  }, [])
+    if(userData.userId !== ''){
+      setLoggedIn(true);
+    } 
+  }, [userData])
 
   // console.log("decodedToken", decodedToken);
   const handleLogout = () => {
-    setToken(null)
-    logOut()
-    //history.push("/");
-    window.location.assign('/')
+    window.localStorage.removeItem("cartItems");
+    logOut().then((res) => {      
+      if(res === "signed out") {        
+        setLoggedIn(false);
+        window.location.assign('/');
+      }      
+      
+    });   
+    
   }
 
   // return (
@@ -63,7 +67,7 @@ const Header = () => {
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>
-              {token && (
+              {loggedIn && (
                 <>
                   <Nav.Link href='/shops' style={{ color: 'black' }}>
                     Shops
@@ -89,7 +93,7 @@ const Header = () => {
                   </Nav.Link>
                 </>
               )}
-              {!token && (
+              {loggedIn === false && (
                 <>
                   <Nav.Link href='/shops' style={{ color: 'black' }}>
                     Shops

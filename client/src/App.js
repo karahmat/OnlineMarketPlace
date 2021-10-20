@@ -10,7 +10,6 @@ import CreateShopPage from './pages/CreateShopPage'
 import AllShops from './pages/AllShops'
 import MyShops from './pages/MyShops'
 import OneShop from './pages/OneShop'
-import { isAuthenticated } from './utils/authenticate'
 import ProductPage from './pages/ProductPage'
 import CartPage from './pages/CartPage'
 import SearchResultPage from './pages/SearchResultPage'
@@ -26,13 +25,15 @@ function App() {
     username: '',
     email: '',
     usertype: '',
-  })
+  });
+
+  const [login, setLogin] = useState(false);
 
   useEffect(() => {
-    const session = isAuthenticated()
-
-    const getUserData = async (userId) => {
-      const response = await fetch(`/api/users/${userId}`, {
+    //const session = isAuthenticated()
+    const getUserData = async() => {
+      //console.log("this is called", login);
+      const response = await fetch(`/api/users/jwt`, {
         method: 'GET',
         headers: { 'content-type': 'application/json' },
       })
@@ -40,25 +41,27 @@ function App() {
 
       if (data.userId) {
         setUserData(data)
+        console.log("userData", userData);
       } else if (data.errors) {
         setUserData(data.errors)
       }
     }
 
-    if (session) {
-      console.log(session)
-      getUserData(session.id)
-    }
+    getUserData();
+    //if (session) {
+      //console.log(session)
+      //getUserData(session.id)
+    //}
 
     return function cleanup() {
-      setUserData({})
+      setUserData({});
     }
-  }, [])
+  }, [login])
 
   return (
     <div className='App'>
       <UserContext.Provider value={userData}>
-        <Header />
+        <Header login={login} setLogin={setLogin} />
         <Switch>
           <Route exact={true} path='/'>
             <Homepage />
@@ -73,7 +76,7 @@ function App() {
             <SignUpPage />
           </Route>
           <Route path='/login'>
-            <LoginPage />
+            <LoginPage setLogin={setLogin} />
           </Route>
           <Route path='/users'>
             <UsersPage />

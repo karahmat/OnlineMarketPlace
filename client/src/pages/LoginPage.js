@@ -20,7 +20,7 @@ switch (type) {
 }
 }
 
-function LoginPage() {
+function LoginPage({setLogin}) {
     const [formInputs, dispatch] = useReducer(reducer, initialState);
     const [errorMsg, setErrorMsg] = useState({
         email: '',
@@ -71,7 +71,8 @@ function LoginPage() {
             });
 
             const data = await response.json();
-            if (data.userId) {                            
+            if (data.userId) {
+                setLogin(true);                            
                 //history.push('/');            
                 // redirect user to /posts
                 window.location.assign('/');

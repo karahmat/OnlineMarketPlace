@@ -29,7 +29,7 @@ function EditMyShop(props) {
 
     const handleInputChange = (inputEvent) => {
         
-        if (inputEvent.target.name == "shopimage") {
+        if (inputEvent.target.name === "shopimage") {
             dispatch({
                 type: "update",
                 payload: {

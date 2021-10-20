@@ -3,6 +3,7 @@ import { UserContext } from '../App';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import Spinner from 'react-bootstrap/Spinner';
 
 const initialState = {
     name: '',
@@ -31,6 +32,7 @@ function CreateShopPage() {
     const [uniqueErr, setUniqueErr] = useState();
     const [frontEndErrors, setFrontEndErrors] = useState({});
     const userData = useContext(UserContext);
+    const [isUploading, setIsUploading] = useState(false);
 
     const handleInputChange = (inputEvent) => {
 
@@ -93,6 +95,7 @@ function CreateShopPage() {
                 formData.append(key, value);
             }            
 
+            setIsUploading(true);
             const response = await fetch(`/api/shops/by/${userData.userId}`, {
                 method: 'POST',
                 // headers: { 'content-type': 'application/json' },
@@ -101,6 +104,7 @@ function CreateShopPage() {
             const data = await response.json();
             
             if (data.shopId) {
+                setIsUploading(false);
                 //history.push('/');
                 window.location.assign(`/shops/by/${userData.userId}`);
                 // redirect user to /posts
@@ -159,9 +163,17 @@ function CreateShopPage() {
                     <Form.Control className="mt-2" type="file" name="shopimage" onChange={handleInputChange} />
                 </Form.Group>
 
+                { isUploading === false && 
                 <Button variant="info rounded" type="submit" onClick={handleSubmit}>
                     Create Shop
                 </Button>
+                }
+
+                { isUploading && 
+                    <Spinner animation="border" role="status" className="ml-2">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                }
 
             </Form>
         </Container>

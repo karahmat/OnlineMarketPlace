@@ -129,6 +129,7 @@ const ProductPage = () => {
                     </Row>
                   </ListGroup.Item>
                 )}
+                {userData.userId !== '' && 
                 <ListGroup.Item>
                   <Button
                     onClick={addToCartHandler}
@@ -139,8 +140,15 @@ const ProductPage = () => {
                     Add to Cart
                   </Button>
                 </ListGroup.Item>
-                {console.log('userData', userData.userId)}
-                {console.log('product', product)}
+                }
+                {userData.userId === '' &&
+                <ListGroup.Item>
+                  <div>
+                    <Link to="/login">Log in</Link> to purchase item
+                  </div>
+              </ListGroup.Item>
+                
+                }
                 {userData.userId === product.userId && (
                   <>
                     <ListGroup.Item>
