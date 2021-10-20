@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
 
 export const SearchBar = () => {
-  const history = useHistory()
-
+  
   const [inputValue, setInputValue] = useState()
 
   const handleSearch = (e) => {
@@ -21,7 +19,7 @@ export const SearchBar = () => {
         id='header-search'
         placeholder='Search products'
         name='search-bar'
-        style={{ width: '500px' }}
+        style={{ width: '400px' }}
         onChange={(e) => setInputValue(e.target.value)}
       />
       <button type='submit' onClick={handleSearch}>

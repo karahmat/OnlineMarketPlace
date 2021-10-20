@@ -29,7 +29,7 @@ function MyShops() {
     return ( 
         
         <Container>              
-            <h1 className="mt-3">{userData.username}'s Shops</h1>
+            { result.username && <h1 className="mt-3">{result.username}'s Shops</h1>}
             <Row>
             { result.data && result.data.map((eachShop) => ( 
                 <Col xs={12} sm={6} lg={3} key={eachShop._id}>               

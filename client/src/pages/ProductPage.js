@@ -163,7 +163,7 @@ const ProductPage = () => {
                 )}
                 {(userData.userId && (userData.userId !== product.userId)) &&
                   <ListGroup.Item>
-                    <StartChat userId={userData.userId} sellerId={product.userId} />
+                    <StartChat userId={userData.userId} sellerId={product.userId} productId={product._id} productName={product.name} />
                   </ListGroup.Item>
                 }
               </ListGroup>

@@ -3,27 +3,24 @@ import Message from '../components/Message';
 import Conversation from '../components/Conversation';
 import { useContext, useEffect, useState, useRef } from 'react';
 import { UserContext } from '../App';
+import { useLocation, useHistory } from 'react-router-dom';
 
 
 function Messenger() {
     const [conversations, setConversations] = useState([]);
     const [currentChat, setCurrentChat] = useState(null);
     const [messages, setMessages] = useState([]);
-    const [newMessage, setNewMessage] = useState('');    
+    const [newMessage, setNewMessage] = useState(''); 
+    const [productMsg, setProductMsg] = useState('');
     const userData = useContext(UserContext);
-    const scrollRef = useRef();
-    const chosenConversation = useRef();
-    const searchParams = new URLSearchParams(window.location.search);
-
-    const userIdUrl = searchParams.get('userId');
-    const sellerIdUrl = searchParams.get('sellerId');
+    const scrollRef = useRef();    
+    const location = useLocation();
+    const history = useHistory();    
     
-
-
+    
     useEffect(()=> {
         const getConversation = async() => {
-            try {
-                console.log("userData here", userData.userId)
+            try {                
                 const res = await fetch(`/api/conversations/${userData.userId}`);
                 const data = await res.json();                
                 setConversations(data);
@@ -37,20 +34,21 @@ function Messenger() {
     }, [userData, currentChat]);
 
     useEffect(()=> {
-        const initialiseChat = async(userArg, sellerArg) => {
+                
+        const initialiseChat = async(userArg, sellerArg, productArg) => {
             try {
-                const res = await fetch(`/api/conversations/find/${userArg}/${sellerArg}`);
+                
+                const res = await fetch(`/api/conversations/find/${userArg.userId}/${sellerArg.sellerId}`);
                 const data = await res.json();              
                 if (data) {
                     setCurrentChat(data);
-                    console.log("chosen", chosenConversation.current);
-                    //chosenConversation.current.style.color = "blue";
+                    setProductMsg(`I have a question on: ${productArg.productName}`);
+
                 } else {                    
                     const postedData = {
-                        senderId: userArg, 
-                        receiverId: sellerArg
-                    }
-                    console.log(postedData);
+                        senderId: userArg.userId, 
+                        receiverId: sellerArg.sellerId
+                    }                    
                     //create new conversation
                     const res1 = await fetch(`/api/conversations`, {
                         method: 'POST',
@@ -58,8 +56,8 @@ function Messenger() {
                         body: JSON.stringify(postedData)
                     });
                     const data1 = await res1.json();
-                    setCurrentChat(data1);
-                    //chosenConversation.current.style.color = "blue";
+                    setCurrentChat(data1); 
+                    setProductMsg(`I have a question on: ${productArg.productName}`)                    
                 }
                 
               } catch (err) {
@@ -67,11 +65,45 @@ function Messenger() {
               }
         }
 
-        if (userIdUrl && sellerIdUrl) {                       
-            initialiseChat(userIdUrl, sellerIdUrl)
-        } 
+        if (location.state) {            
+            const userIdUrl = location.state.userId;
+            const sellerIdUrl = location.state.sellerId;
+            const productName = location.state.productName;                
+            initialiseChat(userIdUrl, sellerIdUrl, productName);  
+                   
+        }       
 
-    }, [userIdUrl]);
+    }, [location]);
+
+    useEffect(() => {
+        const getProductMsg = async(userArg1, chat) => {            
+            const message2 = {
+                sender: userArg1.userId,
+                text: productMsg,
+                conversationId: chat._id,
+            };
+
+            try {
+                const res2 = await fetch("/api/messages", {
+                    method: 'POST',
+                    headers: { 'content-type': 'application/json' },
+                    body: JSON.stringify(message2)
+                    });
+                const data2 = await res2.json();
+                setMessages([...messages, data2]);
+            } catch (err) {
+                console.log(err);
+            }
+            
+        }
+
+        if(location.state && currentChat) {
+            const userIdUrl = location.state.userId;                                
+            getProductMsg(userIdUrl, currentChat);
+            history.replace();   
+        }
+
+    }, [productMsg]);
 
     useEffect(() => {
         const getMessages = async () => {
@@ -84,7 +116,7 @@ function Messenger() {
           }
         };
         getMessages();
-      }, [currentChat]);
+      }, [currentChat, productMsg]);
 
     const handleSubmit = async(e) => {
         e.preventDefault();
@@ -118,9 +150,7 @@ function Messenger() {
         }
     };
 
-    const handleCurrentChat = (e, argConversation) => {
-        e.target.parentNode.parentNode.childNodes.forEach(node => node.firstChild.style.color="#55595c");        
-        e.target.style.color = "blue";        
+    const handleCurrentChat = (e, argConversation) => {        
         setCurrentChat(argConversation);
     }
 
@@ -137,16 +167,13 @@ function Messenger() {
                     
                     
                     { conversations.length > 0 && conversations.map((conversation) => (
-                        <div ref={chosenConversation} onClick={(e) => handleCurrentChat(e, conversation)} style={{cursor: 'pointer'}}>                            
-                            <Conversation key={conversation.members[1]} conversation={conversation} currentUser={userData} />
+                        <div>                            
+                            <Conversation key={conversation._id} currentChat={currentChat} handleCurrentChat={handleCurrentChat} conversation={conversation} currentUser={userData} />
                         </div>
                     ))}
                     
                     
-                </Row>
-                <Row className="mt-5">
-                    <p>Product Name</p>
-                </Row>                                  
+                </Row>                                              
             </Col>
             <Col xs={6} md={8} lg={8} >
                 { currentChat ? (
@@ -158,12 +185,12 @@ function Messenger() {
                 }}>
                     {messages.map((msg) => (
                         <div ref={scrollRef}>
-                        <Message message={msg} own={msg.sender === userData.userId} />
+                        <Message key={msg._id} message={msg} own={msg.sender === userData.userId} />
                         </div>
                     ))}               
                 </Row>
                 <Row>
-                    <Col xs={10} sm={8} md={8} lg={8}>
+                    <Col xs={10} sm={8} md={8} lg={8} className="mb-4">
                         <Form.Control 
                             as="textarea" 
                             placeholder="Comments"

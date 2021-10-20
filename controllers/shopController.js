@@ -97,9 +97,10 @@ router.get('/api/shops', async (req,res) => {
 router.get('/api/shops/by/:userId', requireAuth, async (req,res) => {
     try {         
         //some codes to parse image stuff
-        const result = await Shop.find({userId: req.params.userId});  
+        const result = await Shop.find({userId: req.params.userId}); 
+        const user = await User.findOne({_id: req.params.userId}, 'username'); 
         
-        res.status(201).json({data: result});   
+        res.status(201).json({data: result, username: user.username});   
     }
     catch (err) {                    
         const errors = handleErrors(err);        

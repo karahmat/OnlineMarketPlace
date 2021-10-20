@@ -54,7 +54,7 @@ const Header = () => {
     <header id='header'>
       <Navbar bg='info' expand='lg' collapseOnSelect className='p-0'>
         <Container>
-          <Link to='/'>
+          <Link xs={2} sm={2} mg={2} lg={2} to='/'>
             <Navbar.Brand>
               <Logo />
             </Navbar.Brand>
@@ -73,6 +73,9 @@ const Header = () => {
                   </Nav.Link>
                   <Nav.Link href='/cart' style={{ color: 'black' }}>
                     <i className='fas fa-shopping-cart'>Cart</i>
+                  </Nav.Link>
+                  <Nav.Link href='/messenger' style={{ color: 'black' }}>
+                    <i class="fas fa-inbox">Inbox</i>
                   </Nav.Link>
                   <MyProfile />
                   <Nav.Link style={{ color: 'black' }}>

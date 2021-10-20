@@ -1,10 +1,19 @@
 import Button from 'react-bootstrap/Button'
+import { Link } from 'react-router-dom'
 
-function StartChat({userId, sellerId}) {
+function StartChat({userId, sellerId, productId, productName}) {
 
     return ( 
-    <Button variant="warning rounded" href={`/messenger?userId=${userId}&sellerId=${sellerId}`}>
-        Start Chat
+    <Button variant="warning rounded">
+        <Link style={{textDecoration: 'inherit'}} to={{ 
+              pathname: "/messenger", 
+              state: {
+                userId: {userId},
+                sellerId: {sellerId},
+                productId: {productId},
+                productName: {productName}                    
+              }
+            }}>Ask Seller</Link>
     </Button> );
 }
 
