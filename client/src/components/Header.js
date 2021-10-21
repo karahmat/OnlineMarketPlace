@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { logOut } from '../utils/authenticate'
-import { Navbar, Nav, Container } from 'react-bootstrap'
+import { Navbar, Nav, Container, Col } from 'react-bootstrap'
 import { UserContext } from '../App.js';
 import MyProfile from './MyProfile'
 import Logo from '../components/Logo'
@@ -58,12 +58,16 @@ const Header = () => {
     <header id='header'>
       <Navbar bg='info' expand='lg' collapseOnSelect className='p-0'>
         <Container>
-          <Link xs={2} sm={2} mg={2} lg={2} to='/'>
-            <Navbar.Brand>
-              <Logo />
-            </Navbar.Brand>
-          </Link>
-          <SearchBar />
+          <Col xs={2} sm={2} md={2} lg={2} xl={2}>
+            <Link to='/'>
+              <Navbar.Brand>
+                <Logo />            
+              </Navbar.Brand>                            
+            </Link>
+          </Col>
+          <Col xs={8} sm={8} md={6} lg={6} xl={6}>
+            <SearchBar  />
+          </Col>                
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>

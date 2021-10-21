@@ -10,7 +10,7 @@ export const SearchBar = () => {
   }
 
   return (
-    <form className='search-bar'>
+    <form className='search-bar' style={{ width: '100%' }}>
       <label htmlFor='header-search'>
         <span className='visually-hidden'>Search your item here!</span>
       </label>
@@ -19,7 +19,7 @@ export const SearchBar = () => {
         id='header-search'
         placeholder='Search products'
         name='search-bar'
-        style={{ width: '400px' }}
+        style={{ width: '80%' }}
         onChange={(e) => setInputValue(e.target.value)}
       />
       <button type='submit' onClick={handleSearch}>

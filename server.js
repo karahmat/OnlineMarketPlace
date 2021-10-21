@@ -2,10 +2,31 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-
-// CONFIGURATION
+const path = require('path');
 const app = express();
+const server = require('http').Server(app);
 const PORT = process.env.PORT;
+
+const userRoute = require('./controllers/userController');
+const shopRoute = require('./controllers/shopController');
+const productRoute = require('./controllers/productController');
+const conversationRoute = require('./controllers/conversationController');
+const messageRoute = require('./controllers/messageController');
+
+//Socket configuration
+let io;
+if (process.env.NODE_ENV === 'production') {
+  io = require("socket.io")(server);
+} else {
+  //Socket
+  io = require("socket.io")(server, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"]
+    }
+  });
+}
+
 const db = mongoose.connection;
 const mongoURI = process.env.MONGO_URI;
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true}, () => {
@@ -17,39 +38,33 @@ db.on('error', (err) => console.log(err.message + ' is Mongod not running?'))
 db.on('connected', () => console.log('mongo connected: ', mongoURI))
 db.on('disconnected', () => console.log('mongo disconnected'))
 
-//Set Static File
-app.use(express.static('public'));
+// //Set Static File
+// app.use(express.static('public'));
 
 //Middleware
 app.use(express.json({ extended: false }));
 app.use(cookieParser());
 
 //Routes
-const userRoute = require('./controllers/userController');
 app.use(userRoute);
-
-const shopRoute = require('./controllers/shopController');
 app.use(shopRoute);
-
-const productRoute = require('./controllers/productController');
 app.use(productRoute);
-
-const conversationRoute = require('./controllers/conversationController');
 app.use("/api/conversations", conversationRoute);
-
-const messageRoute = require('./controllers/messageController');
 app.use("/api/messages", messageRoute);
 
+if (process.env.NODE_ENV === 'production') {  
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, 'client/build')));
+// Handle React routing, return all requests to React app
+  app.get('/*', function(req, res) {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  });  
+}
+
 // Listen on port 3000
-app.listen(PORT, () => console.info("Listening on port "+ PORT));
+server.listen(PORT, () => console.info("Listening on port "+ PORT));
 
-//Socket
-const io = require("socket.io")(8900, {
-  cors: {
-    origin: "http://localhost:3000",
-  },
-});
-
+//Sockets stuff
 let users = [];
 
 const addUser = (userId, socketId) => {

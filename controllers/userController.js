@@ -6,7 +6,7 @@ const User = require('../models/user');
 const Shop = require('../models/shop');
 const Product = require('../models/product');
 const { requireAuth } = require('../middleware/authMiddleware');
-const { SchemaTypeOptions } = require('mongoose');
+//const { SchemaTypeOptions } = require('mongoose');
 
 //function to handle errors
 const handleErrors = (err) => {
