@@ -2,7 +2,7 @@ import React from 'react'
 import { Nav } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
-const CartOutStages = ({ stage1, stage2, stage3, stage4 }) => {
+const CartOutStages = ({ stage1, stage2, stage3 }) => {
   return (
     <Nav className='justify-content-center mb-4'>
       <Nav.Item>
