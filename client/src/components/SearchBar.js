@@ -10,10 +10,10 @@ export const SearchBar = () => {
   }
 
   return (
-    <form className='search-bar' style={{ width: '100%' }}>
-      <label htmlFor='header-search'>
+    <form className='search-bar' style={{ marginLeft:'20px', width: '100%' }}>
+      {/* <label htmlFor='header-search'>
         <span className='visually-hidden'>Search your item here!</span>
-      </label>
+      </label> */}
       <input
         type='text'
         id='header-search'
