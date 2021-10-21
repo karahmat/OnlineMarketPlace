@@ -22,7 +22,7 @@ function Messenger() {
     
     //useEffect to get and set live chat messages
     useEffect(() => {
-        socket.current = io("ws://localhost:8900");
+        socket.current = io("ws://localhost:3001");
         socket.current.on("getMessage", (data) => {
           setArrivalMessage({
             sender: data.senderId,
