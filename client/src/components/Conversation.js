@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function Conversation({ currentChat, handleCurrentChat, conversation, currentUser }) {
+function Conversation({ currentChat, handleCurrentChat, conversation, currentUser, onlineUsers }) {
   const [user, setUser] = useState(null);  
 
   useEffect(() => {
@@ -22,7 +22,14 @@ function Conversation({ currentChat, handleCurrentChat, conversation, currentUse
   return (
     <>           
         { user && 
-        <i onClick={(e) => handleCurrentChat(e, conversation)} style={ currentChat?._id === conversation?._id ? {cursor: 'pointer', color: "blue"} : {cursor: 'pointer', color: "#55595c"} } className="fas fa-user fa-sm mt-4" >{user.username}</i>
+        <div>          
+          <i onClick={(e) => handleCurrentChat(e, conversation)} style={ currentChat?._id === conversation?._id ? {cursor: 'pointer', color: "blue"} : {cursor: 'pointer', color: "#55595c"} } className="fas fa-user fa-sm mt-4" >{user.username}</i>
+          { onlineUsers.filter( (onlineUser) => onlineUser.userId === user.userId ).length > 0 && 
+          <span style={{marginLeft: '2px', color: 'green'}}>
+            <i className="fa-solid fa-circle fa-2xs"></i>
+          </span>
+          }
+        </div>
         }
     </>    
   );

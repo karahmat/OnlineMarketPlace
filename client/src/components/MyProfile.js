@@ -3,7 +3,7 @@ import {UserContext} from '../App.js';
 import {Dropdown} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-function MyProfile() {
+function MyProfile({handleLogout}) {
 
     const userData = useContext(UserContext);
     console.log(userData.usertype);
@@ -11,7 +11,7 @@ function MyProfile() {
     return (
         
     <Dropdown>
-        <Dropdown.Toggle id="userdropdown" variant="link rounded-circle">
+        <Dropdown.Toggle id="userdropdown" variant="link rounded-circle" className="nav-link">
             <i className="fas fa-user fa-lg"></i>
         </Dropdown.Toggle>
 
@@ -22,6 +22,7 @@ function MyProfile() {
             { userData.usertype === "seller" && <Dropdown.Item as="button"><Link to={`/shops/by/${userData.userId}`}>My Shops</Link></Dropdown.Item> }
             { userData.usertype === "seller" && <Dropdown.Item as="button"><Link to={`/shops/CreateShop`}>Create Shop</Link></Dropdown.Item> }            
             <Dropdown.Item as="button"><Link to={`/user/${userData.userId}`}>Edit Profile</Link></Dropdown.Item>        
+            <Dropdown.Item as="button" onClick={handleLogout}>Logout</Dropdown.Item>
         </Dropdown.Menu>
     </Dropdown>  
     );

@@ -16,7 +16,7 @@ function Messenger() {
     const scrollRef = useRef();    
     const location = useLocation();
     const [arrivalMessage, setArrivalMessage] = useState(null);
-    //const [onlineUsers, setOnlineUsers] = useState([]);
+    const [onlineUsers, setOnlineUsers] = useState([]);
     const socket = useRef();
     const history = useHistory();    
     
@@ -43,7 +43,8 @@ function Messenger() {
             console.log("here is called!!!")
             socket.current.emit("addUser", userData.userId);
             socket.current.on("getUsers", (users) => {
-            console.log("socket users", users);
+                console.log("socket users", users);
+                setOnlineUsers(users);
             });
         }
 
@@ -216,7 +217,7 @@ function Messenger() {
                     
                     { conversations.length > 0 && conversations.map((conversation) => (
                         <div>                            
-                            <Conversation key={conversation._id} currentChat={currentChat} handleCurrentChat={handleCurrentChat} conversation={conversation} currentUser={userData} />
+                            <Conversation key={conversation._id} currentChat={currentChat} handleCurrentChat={handleCurrentChat} conversation={conversation} currentUser={userData} onlineUsers={onlineUsers} />
                         </div>
                     ))}
                     
