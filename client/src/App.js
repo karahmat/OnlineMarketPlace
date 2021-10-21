@@ -17,7 +17,7 @@ import CreateProductsPage from './pages/CreateProductsPage'
 import EditProductPage from './pages/EditProductPage'
 import Messenger from './pages/Messenger'
 import CartOutPage from './pages/CartOutPage'
-import PaymentPage from './pages/PaymentPage'
+import OrderSummary from './pages/OrderSummary'
 
 export const UserContext = createContext()
 
@@ -77,8 +77,8 @@ function App() {
           <Route path='/cartout'>
             <CartOutPage />
           </Route>
-          <Route path='/payment'>
-            <PaymentPage />
+          <Route path='/ordersummary'>
+            <OrderSummary />
           </Route>
           <Route path='/signup'>
             <SignUpPage />

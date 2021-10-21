@@ -50,3 +50,11 @@ export const saveShippingAddressAction = (data) => {
     localStorage.setItem('shippingAddress', JSON.stringify(data))
   }
 }
+
+export const savePaymentMethodAction = (data) => {
+  return (dispatch) => {
+    dispatch(cartActions.savePaymentMethod(data))
+
+    localStorage.setItem('paymentMethod', JSON.stringify(data))
+  }
+}

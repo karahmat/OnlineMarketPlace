@@ -52,6 +52,13 @@ export const cartSlicer = createSlice({
         shippingAddress: action.payload,
       }
     },
+
+    savePaymentMethod(state, action) {
+      return {
+        ...state,
+        paymentMethod: action.payload,
+      }
+    },
   },
 })
 
