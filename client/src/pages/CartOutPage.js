@@ -25,49 +25,51 @@ const CartOutPage = () => {
   }
 
   return (
-    <FormContainer>
+    <>
       <CartOutStages stage1 stage2 />
-      <h1>Shipping</h1>
-      <Form onSubmit={onSubmitHandler}>
-        <Form.Group controlId='address'>
-          <Form.Label>Address</Form.Label>
-          <Form.Control
-            type='text'
-            placeholder='Enter address'
-            value={address}
-            required
-            onChange={(e) => setAddress(e.target.value)}
-          ></Form.Control>
-        </Form.Group>{' '}
-        <Form.Group controlId='postalCode'>
-          <Form.Label>Postal Code</Form.Label>
-          <Form.Control
-            type='text'
-            placeholder='Enter postal code'
-            value={postalCode}
-            required
-            onChange={(e) => setPostalCode(e.target.value)}
-          ></Form.Control>
-        </Form.Group>{' '}
-        <Form.Group>
-          <Form.Label as='legend'>Select Method</Form.Label>
-          <Col>
-            <Form.Check
-              type='radio'
-              label='PayPal or Credit Card'
-              id='PayPal'
-              name='paymentMethod'
-              value='PayPal'
-              checked
-              onChange={(e) => setPaymentMethod(e.target.value)}
-            ></Form.Check>
-          </Col>
-        </Form.Group>
-        <Button type='submit' variant='info'>
-          Continue to Order Summary
-        </Button>
-      </Form>
-    </FormContainer>
+      <FormContainer>
+        <h1>Shipping</h1>
+        <Form onSubmit={onSubmitHandler}>
+          <Form.Group controlId='address'>
+            <Form.Label>Address</Form.Label>
+            <Form.Control
+              type='text'
+              placeholder='Enter address'
+              value={address}
+              required
+              onChange={(e) => setAddress(e.target.value)}
+            ></Form.Control>
+          </Form.Group>{' '}
+          <Form.Group controlId='postalCode'>
+            <Form.Label>Postal Code</Form.Label>
+            <Form.Control
+              type='text'
+              placeholder='Enter postal code'
+              value={postalCode}
+              required
+              onChange={(e) => setPostalCode(e.target.value)}
+            ></Form.Control>
+          </Form.Group>{' '}
+          <Form.Group>
+            <Form.Label as='legend'>Select Method</Form.Label>
+            <Col>
+              <Form.Check
+                type='radio'
+                label='PayPal or Credit Card'
+                id='PayPal'
+                name='paymentMethod'
+                value='PayPal'
+                checked
+                onChange={(e) => setPaymentMethod(e.target.value)}
+              ></Form.Check>
+            </Col>
+          </Form.Group>
+          <Button type='submit' variant='info'>
+            Continue to Order Summary
+          </Button>
+        </Form>
+      </FormContainer>
+    </>
   )
 }
 
