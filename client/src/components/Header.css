@@ -1,0 +1,10 @@
+.cartItems { 
+    display: 'flex';
+    position: 'absolute';
+    top: '10px';
+    justify-content: center;
+    align-items: center;
+    font-size: '50px';
+    background-color: red;    
+    border-radius: '6px';     
+}

@@ -1,5 +1,7 @@
 
+import './Header.css';
 import React, { useContext, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { logOut } from '../utils/authenticate'
 import { Navbar, Nav, Container, Row, Col } from 'react-bootstrap'
@@ -9,15 +11,26 @@ import Logo from '../components/Logo'
 import { SearchBar } from './SearchBar'
 
 const Header = () => {
-  const userData = useContext(UserContext)
+  const userData = useContext(UserContext);
+  const cartItems = useSelector((state) => state.cart.cartItems)
   //const history = useHistory();
-  const [loggedIn, setLoggedIn] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [numberItems, setNumberItems] = useState(0);
 
   useEffect(() => {
     if (userData.userId !== '') {
       setLoggedIn(true)
     }
   }, [userData])
+
+  
+
+  useEffect(() => {
+    const cartItemsStored = localStorage.getItem('cartItems');
+    if (cartItemsStored) {
+      setNumberItems(JSON.parse(cartItemsStored).length);
+    } 
+  }, [cartItems])
 
   // console.log("decodedToken", decodedToken);
   const handleLogout = () => {
@@ -39,7 +52,7 @@ const Header = () => {
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav>
               <Nav.Link href='https://www.instagram.com/langzeitlerner/'>
-                Follow us
+                Follow us<i className="fab fa-instagram fa-lg ms-1"></i>
               </Nav.Link>
             </Nav>
             <Nav className='ms-auto'>
@@ -89,12 +102,22 @@ const Header = () => {
             <SearchBar />
           </Col>
           
-          <Col xs={1} sm={1} md={1} lg={1} xl={1}>          
+          <Col xs={2} sm={2} md={2} lg={1} xl={1}>          
             <Nav>
-              <Nav.Link href="/cart">
+              <Nav.Link href={ loggedIn ? "/cart" : "/login"} >
                 <i className='fas fa-shopping-cart fa-xl'></i>
-              </Nav.Link>
-            </Nav>          
+                <span style={{
+                  position: 'relative',
+                  backgroundColor: '#ff7f7f',
+                  top: '-15px',
+                  left: '-10px',
+                  borderRadius: '8px',
+                  fontSize: '10px',
+                  padding: '5px'
+                }}>{numberItems}</span>                     
+              </Nav.Link>              
+            </Nav>       
+                
           </Col>          
                   
         </Container>

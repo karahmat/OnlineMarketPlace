@@ -129,7 +129,7 @@ const ProductPage = () => {
                     </Row>
                   </ListGroup.Item>
                 )}
-                {userData.userId !== '' && (
+                {userData.userId !== product.userId && (
                   <ListGroup.Item>
                     <Button
                       onClick={addToCartHandler}
