@@ -15,7 +15,9 @@ import CartPage from './pages/CartPage'
 import SearchResultPage from './pages/SearchResultPage'
 import CreateProductsPage from './pages/CreateProductsPage'
 import EditProductPage from './pages/EditProductPage'
-import Messenger from './pages/Messenger';
+import Messenger from './pages/Messenger'
+import CartOutPage from './pages/CartOutPage'
+import PaymentPage from './pages/PaymentPage'
 
 export const UserContext = createContext()
 
@@ -25,13 +27,13 @@ function App() {
     username: '',
     email: '',
     usertype: '',
-  });
+  })
 
-  const [login, setLogin] = useState(false);
+  const [login, setLogin] = useState(false)
 
   useEffect(() => {
     //const session = isAuthenticated()
-    const getUserData = async() => {
+    const getUserData = async () => {
       //console.log("this is called", login);
       const response = await fetch(`/api/users/jwt`, {
         method: 'GET',
@@ -41,20 +43,20 @@ function App() {
 
       if (data.userId) {
         setUserData(data)
-        console.log("userData", userData);
+        console.log('userData', userData)
       } else if (data.errors) {
         setUserData(data.errors)
       }
     }
 
-    getUserData();
+    getUserData()
     //if (session) {
-      //console.log(session)
-      //getUserData(session.id)
+    //console.log(session)
+    //getUserData(session.id)
     //}
 
     return function cleanup() {
-      setUserData({});
+      setUserData({})
     }
   }, [login])
 
@@ -71,6 +73,12 @@ function App() {
           </Route>
           <Route path='/cart'>
             <CartPage />
+          </Route>
+          <Route path='/cartout'>
+            <CartOutPage />
+          </Route>
+          <Route path='/payment'>
+            <PaymentPage />
           </Route>
           <Route path='/signup'>
             <SignUpPage />
@@ -105,7 +113,7 @@ function App() {
           <Route path='/products/product/:productId/:shopId/:userId'>
             <EditProductPage />
           </Route>
-          <Route path="/messenger" >
+          <Route path='/messenger'>
             <Messenger />
           </Route>
         </Switch>
