@@ -60,16 +60,15 @@ const Header = () => {
             <Nav className='ms-auto'>
               {loggedIn && (
                 <>
-                  <Nav.Link href='/shops' >
+                  <Link to="/shops" className="nav-link">
                     Shops
-                  </Nav.Link>
-                  <Nav.Link href='/users' >
+                  </Link>
+                  <Link to="/users" className="nav-link">
                     Users
-                  </Nav.Link>
-                  
-                  <Nav.Link href='/messenger' >
+                  </Link>
+                  <Link to="/messenger" className="nav-link">
                     <i class="far fa-bell fa-sm ml-2">Notifications</i>
-                  </Nav.Link>
+                  </Link>
                   <Nav>
                   <MyProfile handleLogout={handleLogout} />                  
                   </Nav>
@@ -77,15 +76,15 @@ const Header = () => {
               )}
               {loggedIn === false && (
                 <>
-                  <Nav.Link href='/shops' >
+                  <Link to="/shops" className="nav-link">
                     Shops
-                  </Nav.Link>
-                  <Nav.Link href='/signup' >
+                  </Link>
+                  <Link to="/signup" className="nav-link">
                     <i className='fas fa-user-plus'>SignUp</i>
-                  </Nav.Link>
-                  <Nav.Link href='/login' >
+                  </Link>
+                  <Link to='/login' className="nav-link">
                     <i className='fas fa-user'>Login</i>
-                  </Nav.Link>
+                  </Link>
                 </>
               )}
             </Nav>
@@ -108,6 +107,7 @@ const Header = () => {
             <Nav>
               <Nav.Link href={ loggedIn ? "/cart" : "/login"} >
                 <i className='fas fa-shopping-cart fa-xl'></i>
+                {numberItems > 0 && 
                 <span style={{
                   position: 'relative',
                   backgroundColor: '#ff7f7f',
@@ -116,7 +116,8 @@ const Header = () => {
                   borderRadius: '8px',
                   fontSize: '10px',
                   padding: '5px'
-                }}>{numberItems}</span>                     
+                }}>{numberItems}</span>
+              }                     
               </Nav.Link>              
             </Nav>       
                 

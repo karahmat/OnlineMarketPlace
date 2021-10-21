@@ -6,7 +6,7 @@ export const SearchBar = () => {
 
   const handleSearch = (e) => {
     e.preventDefault()
-    window.location.assign(`/products/search/${inputValue}`)
+    window.location.assign(`/products/search/search/${inputValue}`)    
   }
 
   return (

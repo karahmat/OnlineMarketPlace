@@ -104,7 +104,7 @@ function App() {
           <Route path='/shops/shop/:shopId'>
             <OneShop />
           </Route>
-          <Route exact path='/products/search/:searchValue'>
+          <Route exact path='/products/search/:searchCat/:searchValue'>
             <SearchResultPage />
           </Route>
           <Route path='/products/create/:shopId/:userId'>
