@@ -28,7 +28,7 @@ const CartPage = () => {
   }
 
   const checkOutHandler = () => {
-    history.push('/login?redirect=payment')
+    history.push('/cartout')
   }
 
   return (

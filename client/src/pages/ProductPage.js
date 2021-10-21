@@ -19,7 +19,7 @@ import { useParams, useHistory } from 'react-router'
 import { fetchProductsData } from '../store/productsAllAction'
 import { addToCartAction, removeFromCartAction } from '../store/cartActions'
 import DeleteMyProduct from '../components/DeleteMyProduct'
-import StartChat from '../components/StartChat';
+import StartChat from '../components/StartChat'
 
 const ProductPage = () => {
   const userData = useContext(UserContext)
@@ -58,7 +58,7 @@ const ProductPage = () => {
   }
 
   const checkOutHandler = () => {
-    history.push('/login?redirect=payment')
+    history.push('/cartout')
   }
 
   return (
@@ -129,26 +129,25 @@ const ProductPage = () => {
                     </Row>
                   </ListGroup.Item>
                 )}
-                {userData.userId !== '' && 
-                <ListGroup.Item>
-                  <Button
-                    onClick={addToCartHandler}
-                    className='btn-block'
-                    type='button'
-                    disabled={product.quantity === 0}
-                  >
-                    Add to Cart
-                  </Button>
-                </ListGroup.Item>
-                }
-                {userData.userId === '' &&
-                <ListGroup.Item>
-                  <div>
-                    <Link to="/login">Log in</Link> to purchase item
-                  </div>
-              </ListGroup.Item>
-                
-                }
+                {userData.userId !== '' && (
+                  <ListGroup.Item>
+                    <Button
+                      onClick={addToCartHandler}
+                      className='btn-block'
+                      type='button'
+                      disabled={product.quantity === 0}
+                    >
+                      Add to Cart
+                    </Button>
+                  </ListGroup.Item>
+                )}
+                {userData.userId === '' && (
+                  <ListGroup.Item>
+                    <div>
+                      <Link to='/login'>Log in</Link> to purchase item
+                    </div>
+                  </ListGroup.Item>
+                )}
                 {userData.userId === product.userId && (
                   <>
                     <ListGroup.Item>
@@ -169,11 +168,16 @@ const ProductPage = () => {
                     </ListGroup.Item>
                   </>
                 )}
-                {(userData.userId && (userData.userId !== product.userId)) &&
+                {userData.userId && userData.userId !== product.userId && (
                   <ListGroup.Item>
-                    <StartChat userId={userData.userId} sellerId={product.userId} productId={product._id} productName={product.name} />
+                    <StartChat
+                      userId={userData.userId}
+                      sellerId={product.userId}
+                      productId={product._id}
+                      productName={product.name}
+                    />
                   </ListGroup.Item>
-                }
+                )}
               </ListGroup>
             </Card>
           </Col>

@@ -2,33 +2,32 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { logOut } from '../utils/authenticate'
 import { Navbar, Nav, Container, Col } from 'react-bootstrap'
-import { UserContext } from '../App.js';
+import { UserContext } from '../App.js'
 import MyProfile from './MyProfile'
 import Logo from '../components/Logo'
 import { SearchBar } from './SearchBar'
 
 const Header = () => {
-  const userData = useContext(UserContext);
-  //const history = useHistory(); 
-  const [loggedIn, setLoggedIn] = useState(false);
+  const userData = useContext(UserContext)
+  //const history = useHistory();
+  const [loggedIn, setLoggedIn] = useState(false)
 
   useEffect(() => {
-    if(userData.userId !== ''){
-      setLoggedIn(true);
-    } 
+    if (userData.userId !== '') {
+      setLoggedIn(true)
+    }
   }, [userData])
 
   // console.log("decodedToken", decodedToken);
   const handleLogout = () => {
-    window.localStorage.removeItem("cartItems");
-    logOut().then((res) => {      
-      if(res === "signed out") {        
-        setLoggedIn(false);
-        window.location.assign('/');
-      }      
-      
-    });   
-    
+    window.localStorage.removeItem('cartItems')
+    window.localStorage.removeItem('shippingAddress')
+    logOut().then((res) => {
+      if (res === 'signed out') {
+        setLoggedIn(false)
+        window.location.assign('/')
+      }
+    })
   }
 
   // return (
@@ -61,13 +60,13 @@ const Header = () => {
           <Col xs={2} sm={2} md={2} lg={2} xl={2}>
             <Link to='/'>
               <Navbar.Brand>
-                <Logo />            
-              </Navbar.Brand>                            
+                <Logo />
+              </Navbar.Brand>
             </Link>
           </Col>
           <Col xs={8} sm={8} md={6} lg={6} xl={6}>
-            <SearchBar  />
-          </Col>                
+            <SearchBar />
+          </Col>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>
@@ -83,7 +82,7 @@ const Header = () => {
                     <i className='fas fa-shopping-cart'>Cart</i>
                   </Nav.Link>
                   <Nav.Link href='/messenger' style={{ color: 'black' }}>
-                    <i class="fas fa-inbox">Inbox</i>
+                    <i class='fas fa-inbox'>Inbox</i>
                   </Nav.Link>
                   <MyProfile />
                   <Nav.Link style={{ color: 'black' }}>
