@@ -65,7 +65,7 @@ const Header = () => {
                   </LinkContainer>
                   <LinkContainer to='/messenger'>
                     <Nav.Link>
-                      <i class='far fa-bell fa-sm ml-2'>Notifications</i>
+                      <i className='far fa-bell fa-sm ml-2'>Notifications</i>
                     </Nav.Link>
                   </LinkContainer>
                   <Nav>
@@ -94,7 +94,7 @@ const Header = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <Navbar bg='info' className='p-0' fill>
+      <Navbar bg='info' className='p-0'>
         <Container>
           <Col xs={2} sm={2} md={2} lg={1} xl={1}>
             <Link to='/'>

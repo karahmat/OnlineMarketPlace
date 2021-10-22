@@ -1,6 +1,6 @@
 import React from 'react'
-import { LinkContainer } from 'react-router-bootstrap'
 import { Image, Container } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 export const OrderSuccess = () => {
   return (
@@ -10,9 +10,9 @@ export const OrderSuccess = () => {
       </Container>
 
       <Container className='success-content my-5'>
-        <LinkContainer to='/'>
-          <a>Back to Home Page for more shopping!</a>
-        </LinkContainer>
+        <Link to='/'>
+          <h3>Back to Home Page for more shopping!</h3>
+        </Link>
       </Container>
       <Container className='success-content my-3'>
         <Image

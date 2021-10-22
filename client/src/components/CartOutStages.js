@@ -16,7 +16,7 @@ const CartOutStages = ({ stage1, stage2, stage3 }) => {
       </Nav.Item>{' '}
       <Nav.Item>
         <Nav.Link>
-          <i class='fa-solid fa-right-long'></i>{' '}
+          <i className='fa-solid fa-right-long'></i>{' '}
         </Nav.Link>
       </Nav.Item>
       <Nav.Item>
@@ -30,7 +30,7 @@ const CartOutStages = ({ stage1, stage2, stage3 }) => {
       </Nav.Item>{' '}
       <Nav.Item>
         <Nav.Link>
-          <i class='fa-solid fa-right-long'></i>{' '}
+          <i className='fa-solid fa-right-long'></i>{' '}
         </Nav.Link>
       </Nav.Item>
       <Nav.Item>
