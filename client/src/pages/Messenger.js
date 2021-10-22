@@ -39,16 +39,13 @@ function Messenger() {
     }, [arrivalMessage, currentChat]);
 
     useEffect(() => {
-        if(userData.userId !== '') {
-            console.log("here is called!!!")
+        if(userData.userId !== '') {            
             socket.current.emit("addUser", userData.userId);
             socket.current.on("getUsers", (users) => {
                 console.log("socket users", users);
                 setOnlineUsers(users);
             });
-        }
-
-        
+        }        
       }, [userData]);
     
     //Chat section controlled by Mongoose
@@ -165,6 +162,7 @@ function Messenger() {
         getMessages();
       }, [currentChat, productMsg]);
 
+    //how to deal with messages keyed in from the textbox
     const handleSubmit = async(e) => {
         e.preventDefault();
         const message = {
@@ -208,9 +206,9 @@ function Messenger() {
     }, [messages])
 
     return ( 
-    <Container>
+    <Container style={{height: '100%'}}>
         <Row className="mt-4">     
-            <Col key={1234} xs={6} md={3} lg={3}>
+            <Col key={1234} xs={5} md={3} lg={3} style={{height: "300px"}}>
                 <h3>Chat Menu</h3>
                 <Row>
                     
@@ -224,14 +222,14 @@ function Messenger() {
                     
                 </Row>                                              
             </Col>
-            <Col key={1231} xs={6} md={8} lg={8} >
-                { currentChat ? (
-                <>    
-                <Row key={'row1'} style={{
-                    height: '100%',
+            <Col key={1231} xs={7} md={8} lg={8} style={{                    
+                    height: '600px',
                     overflowY: 'scroll',
                     paddingRight: '10px'
-                }}>
+                }} >
+                { currentChat ? (
+                <>    
+                <Row key={'row1'}>
                     {messages.map((msg) => (
                         <div ref={scrollRef}>
                         <Message key={msg._id} message={msg} own={msg.sender === userData.userId} />

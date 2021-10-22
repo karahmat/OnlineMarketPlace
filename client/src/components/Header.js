@@ -66,7 +66,7 @@ const Header = () => {
                   </LinkContainer>
                   <LinkContainer to='/messenger'>
                     <Nav.Link>
-                      <i className='far fa-bell fa-sm ml-2'>Notifications</i>
+                      <i className='far fa-bell fa-sm ml-2 nav-link'>Notifications</i>
                     </Nav.Link>
                   </LinkContainer>
 
@@ -100,17 +100,17 @@ const Header = () => {
       </Navbar>
       <Navbar bg='info' className='p-0'>
         <Container>
-          <Col xs={2} sm={2} md={2} lg={1} xl={1}>
+          <Col xs={3} sm={2} md={2} lg={2} xl={2}>
             <Link to='/'>
               <Logo />
             </Link>
           </Col>
           <Col
-            xs={9}
+            xs={8}
             sm={9}
             md={9}
-            lg={8}
-            xl={8}
+            lg={7}
+            xl={7}
             className='justify-content-center'
           >
             <SearchBar />
@@ -122,6 +122,7 @@ const Header = () => {
               <LinkContainer to={loggedIn ? '/cart' : '/login'}>
                 <Nav.Link>
                   <i className='fas fa-shopping-cart fa-xl'></i>
+                  { cartItems.length > 0 && 
                   <span
                     style={{
                       position: 'relative',
@@ -135,6 +136,7 @@ const Header = () => {
                   >
                     {cartItems.length}
                   </span>
+                  }
                 </Nav.Link>
               </LinkContainer>
             </Nav>

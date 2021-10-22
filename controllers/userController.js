@@ -127,10 +127,15 @@ router.put('/api/user/:userId', requireAuth, async (req, res) => {
             username: req.body.username, 
             usertype: req.body.usertype
         }
+        
         const user = await User.findOneAndUpdate({_id: req.params.userId}, updatedField, {new: true});        
         const token = createToken(user._id, user.usertype);
-        res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000}); //maxAge in milliseconds here        
-        res.status(201).json({data: "success"});
+        if (req.profile.id === req.params.userId) {
+            res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000}); //maxAge in milliseconds here        
+            res.status(201).json({data: "success"});
+        } else {
+            res.status(201).json({errorMsg: "you are not authorised"});
+        }
     } catch (err) {
         const errors = handleErrors(err);
         res.status(400).json({errors});
@@ -138,7 +143,7 @@ router.put('/api/user/:userId', requireAuth, async (req, res) => {
 }); 
 
 //delete a user
-router.delete('/api/user/:userId', async (req,res) => {
+router.delete('/api/user/:userId', requireAuth, async (req,res) => {
     try {
         const shops = await Shop.find({userId: req.params.userId}, '_id');
         shops.forEach( async (shop) => {
