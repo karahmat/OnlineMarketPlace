@@ -54,7 +54,11 @@ h1 {
 }
 
 .product-card {
-  min-height: 430px;
+  min-height: 400px;
+}
+
+.category-card {
+  min-height: 120px;  
 }
 
 .home-image-col {

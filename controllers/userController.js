@@ -82,8 +82,7 @@ router.get('/api/users', requireAuth, async (req,res) => {
 
 //fetch a user through jwt
 router.get('/api/users/jwt', requireAuth, async (req,res) => {
-    console.log(req.profile);
-
+    
     try {
         
         const user = await User.findOne({_id: req.profile.id});

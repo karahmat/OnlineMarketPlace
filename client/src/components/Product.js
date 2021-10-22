@@ -6,13 +6,13 @@ import { Link } from 'react-router-dom'
 const Product = ({ product }) => {
   return (
     <div>
-      <Card className='my-3 p-3 rounded product-card'>
+      <Card key={product._id} className='my-3 p-3 rounded product-card'>
         <Link to={`/products/${product._id}`}>
           <Card.Img src={product.image} variant='top' className='card-image' />
         </Link>
 
-        <Card.Body>
-          <Link to={`/products/${product._id}`}>
+        <Card.Body className="pb-0">
+          <Link to={`/products/${product._id}`} className="link-dark text-decoration-none">
             <Card.Title as='div'>
               <OverlayTrigger
                 placement='right'
@@ -20,8 +20,8 @@ const Product = ({ product }) => {
               >
                 <strong className='home-page-product-name'>
                   {product.name.length > 25
-                    ? product.name.substring(0, 40) + '...'
-                    : product.name.substring(0, 40)}
+                    ? product.name.substring(0, 26) + '...'
+                    : product.name.substring(0, 25)}
                 </strong>
               </OverlayTrigger>
             </Card.Title>

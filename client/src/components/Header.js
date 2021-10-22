@@ -57,6 +57,7 @@ const Header = () => {
             <Nav className='ms-auto'>
               {loggedIn && (
                 <>
+
                   <LinkContainer to='/shops'>
                     <Nav.Link>Shops</Nav.Link>
                   </LinkContainer>
@@ -68,6 +69,7 @@ const Header = () => {
                       <i className='far fa-bell fa-sm ml-2'>Notifications</i>
                     </Nav.Link>
                   </LinkContainer>
+
                   <Nav>
                     <MyProfile handleLogout={handleLogout} />
                   </Nav>
@@ -75,6 +77,7 @@ const Header = () => {
               )}
               {loggedIn === false && (
                 <>
+
                   <LinkContainer to='/shops'>
                     <Nav.Link>Shops</Nav.Link>
                   </LinkContainer>
@@ -88,6 +91,7 @@ const Header = () => {
                       <i className='fas fa-user'>Login</i>
                     </Nav.Link>
                   </LinkContainer>
+
                 </>
               )}
             </Nav>
@@ -114,6 +118,7 @@ const Header = () => {
 
           <Col xs={2} sm={2} md={2} lg={1} xl={1}>
             <Nav>
+
               <LinkContainer to={loggedIn ? '/cart' : '/login'}>
                 <Nav.Link>
                   <i className='fas fa-shopping-cart fa-xl'></i>
@@ -134,6 +139,8 @@ const Header = () => {
               </LinkContainer>
             </Nav>
           </Col>
+
+
         </Container>
       </Navbar>
     </header>
