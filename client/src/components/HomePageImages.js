@@ -3,7 +3,7 @@ import { Container, Row, Col, Image } from 'react-bootstrap'
 
 const HomePageImages = () => {
   return (
-    <Container my-5>
+    <Container className='my-5'>
       <Row>
         <Col className='home-image-col'>
           <Image src='/images/homepage1.jpg' thumbnail />
