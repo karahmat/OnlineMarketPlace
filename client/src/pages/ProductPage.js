@@ -49,7 +49,6 @@ const ProductPage = () => {
   const addToCartHandler = () => {
     console.log('this is the 2nd', cartItems)
     dispatch(addToCartAction(params.id, qty))
-    // history.push(`/cart`)
     setShowCart(true)
   }
 
@@ -220,16 +219,8 @@ const ProductPage = () => {
                             </Link>
                           </Col>
                           <Col md={2}>${item.price}</Col>
-                          <Col md={2}>
-                            {/* <Button
-                              type='button'
-                              variant='light'
-                              onClick={() => formRef.current.value++}
-                            >
-                              +
-                            </Button> */}
+                          <Col md={3}>
                             <Form.Control
-                              // ref={formRef}
                               as='select'
                               size='sm'
                               value={item.qty}

@@ -59,6 +59,13 @@ export const cartSlicer = createSlice({
         paymentMethod: action.payload,
       }
     },
+
+    clearCartInfo(state, action) {
+      return {
+        cartItems: [],
+        shippingAddress: {},
+      }
+    },
   },
 })
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { Nav } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
-const CartOutStages = ({ stage1, stage2, stage3, stage4 }) => {
+const CartOutStages = ({ stage1, stage2, stage3 }) => {
   return (
     <Nav className='justify-content-center mb-4'>
       <Nav.Item>
@@ -16,7 +16,7 @@ const CartOutStages = ({ stage1, stage2, stage3, stage4 }) => {
       </Nav.Item>{' '}
       <Nav.Item>
         <Nav.Link>
-          <i class='fa-solid fa-right-long'></i>{' '}
+          <i className='fa-solid fa-right-long'></i>{' '}
         </Nav.Link>
       </Nav.Item>
       <Nav.Item>
@@ -30,7 +30,7 @@ const CartOutStages = ({ stage1, stage2, stage3, stage4 }) => {
       </Nav.Item>{' '}
       <Nav.Item>
         <Nav.Link>
-          <i class='fa-solid fa-right-long'></i>{' '}
+          <i className='fa-solid fa-right-long'></i>{' '}
         </Nav.Link>
       </Nav.Item>
       <Nav.Item>

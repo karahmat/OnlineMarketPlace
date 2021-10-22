@@ -28,7 +28,7 @@ h1 {
 }
 
 .search-bar {
-  display: inline-block;  
+  display: inline-block;
 }
 
 .card-image {
@@ -63,4 +63,8 @@ h1 {
 
 .home-image-col {
   margin: 5em 0;
+}
+
+.success-content {
+  text-align: center;
 }

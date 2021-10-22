@@ -86,7 +86,7 @@ const HomePageProducts = () => {
             <Row className="p-0">
               {products.map((product) => (
                 <Col key={product._id} xs={6} sm={6} md={4} lg={3} xl={2}>
-                  <Product product={product} />
+                  <Product product={product} key={product._id} />
                 </Col>
               ))}
             </Row>

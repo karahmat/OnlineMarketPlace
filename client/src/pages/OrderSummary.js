@@ -1,14 +1,40 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import FormContainer from '../components/FormContainer'
 import CartOutStages from '../components/CartOutStages'
+import { createOrder } from '../store/orderActions'
+import { cartActions } from '../store/cartSlicer'
+import { UserContext } from '../App'
 
 const OrderSummary = () => {
+  const dispatch = useDispatch()
+
+  const history = useHistory()
+
+  const userData = useContext(UserContext)
+
+  console.log(userData)
+
   const cart = useSelector((state) => state.cart)
 
-  const placeOrderHandler = () => {}
+  // const orderCreate = useSelector((state) => state.order)
+
+  const placeOrderHandler = () => {
+    dispatch(
+      createOrder({
+        user: userData.userId,
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+      })
+    )
+
+    dispatch(cartActions.clearCartInfo())
+    window.localStorage.removeItem('cartItems')
+    window.localStorage.removeItem('shippingAddress')
+    history.push('/ordersuccess')
+  }
 
   return (
     <>
@@ -48,12 +74,12 @@ const OrderSummary = () => {
                           />
                         </Col>
                         <Col>
-                          <Link to={'/product/${item.product}'}>
+                          <Link to={`/product/${item.product}`}>
                             {item.name}
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x $(item.price} = ${item.qty * item.price}
+                          {item.qty} x ${item.price} = ${item.qty * item.price}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -86,7 +112,7 @@ const OrderSummary = () => {
                   variant='info'
                   type='button'
                   className='btn-block'
-                  disabled={cart.cartItems === 0}
+                  disabled={cart.cartItems.length === 0}
                   onClick={placeOrderHandler}
                 >
                   Place Order
