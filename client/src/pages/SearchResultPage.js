@@ -5,10 +5,10 @@ import Product from '../components/Product';
 
 function SearchResultPage() {
 
-    const { searchValue } = useParams();
+    const { searchCat, searchValue } = useParams();
     
-    console.log("search Value=",searchValue);
-    const apiEndPt = `/api/products/product/search/${searchValue}`;
+    console.log("search Value=",searchValue);    
+    const apiEndPt = searchCat === "category" ? `/api/products?category=${searchValue}` : `/api/products/product/${searchCat}/${searchValue}`;
     const { result, isLoading } = useFetchAPI(apiEndPt);
     
     if (!result || isLoading) {
@@ -26,7 +26,7 @@ function SearchResultPage() {
 
     return ( 
         <Container>              
-            <h1 className="mt-3">Search Results</h1>
+            <h2 className="mt-3">Search Results for {searchValue}</h2>
             <Row>
             {result.data && result.data.map((product) => (
                 <Col key={product._id} sm={6} md={4} lg={3} xl={2}>
