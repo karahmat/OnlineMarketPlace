@@ -28,8 +28,8 @@ const CartOutPage = () => {
     <>
       <CartOutStages stage1 stage2 />
       <FormContainer>
-        <h1>Shipping</h1>
         <Form onSubmit={onSubmitHandler}>
+          <h1>Shipping</h1>
           <Form.Group controlId='address'>
             <Form.Label>Address</Form.Label>
             <Form.Control
@@ -50,8 +50,9 @@ const CartOutPage = () => {
               onChange={(e) => setPostalCode(e.target.value)}
             ></Form.Control>
           </Form.Group>{' '}
+          <h1 className='mt-5'>Payment</h1>
           <Form.Group>
-            <Form.Label as='legend'>Select Method</Form.Label>
+            <Form.Label as='legend'>Select Payment Method</Form.Label>
             <Col>
               <Form.Check
                 type='radio'

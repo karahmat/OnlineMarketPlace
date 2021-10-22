@@ -18,6 +18,7 @@ import EditProductPage from './pages/EditProductPage'
 import Messenger from './pages/Messenger'
 import CartOutPage from './pages/CartOutPage'
 import OrderSummary from './pages/OrderSummary'
+import { OrderSuccess } from './pages/OrderSuccess'
 
 export const UserContext = createContext()
 
@@ -79,6 +80,9 @@ function App() {
           </Route>
           <Route path='/ordersummary'>
             <OrderSummary />
+          </Route>
+          <Route path='/ordersuccess'>
+            <OrderSuccess />
           </Route>
           <Route path='/signup'>
             <SignUpPage />

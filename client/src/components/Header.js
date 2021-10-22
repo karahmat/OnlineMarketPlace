@@ -34,7 +34,6 @@ const Header = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('cartItems')
     window.localStorage.removeItem('shippingAddress')
-    window.localStorage.removeItem('paymentMethod')
 
     logOut().then((res) => {
       if (res === 'signed out') {
