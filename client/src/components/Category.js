@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom';
 import { useFetchAPI } from '../hooks/useFetchAPI';
 
 function Category() {
-    const { result } = useFetchAPI('/api/products/categories');
+    const { result, isLoading } = useFetchAPI('/api/products/categories');
+  
     const pics = [
         "7f0cf11ac33fbdf00ddac030efff44ce_tn",
         "caac3ce14e76b331198c3cef8d85b779_tn",
@@ -19,6 +20,13 @@ function Category() {
         "a7a7242a87b1febc2f70df97fecde728_tn",
         "567b6dc3d7ebd8d1a3fd18b84ea47d9a_tn"
     ];
+
+    if (!result || isLoading) {
+        return ( 
+        <Container>
+            <h2>Loading.....</h2>
+        </Container>)
+    } 
 
     return ( 
     <Container className="mb-3 mt-0" >        

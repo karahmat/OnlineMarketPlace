@@ -12,7 +12,7 @@ function MyShops() {
     // const userData = useContext(UserContext);
     const {userId} = useParams();  
     const apiEndPoint = `/api/shops/by/${userId}`;
-    const {result, isLoading } = useFetchAPI(apiEndPoint);   
+    const {result, isLoading} = useFetchAPI(apiEndPoint);   
 
     if (!result || isLoading) {
         return ( 
