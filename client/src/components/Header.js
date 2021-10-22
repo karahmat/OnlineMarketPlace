@@ -15,7 +15,7 @@ const Header = () => {
   const cartItems = useSelector((state) => state.cart.cartItems)
   //const history = useHistory();
   const [loggedIn, setLoggedIn] = useState(false)
-  const [numberItems, setNumberItems] = useState(0)
+  // const [numberItems, setNumberItems] = useState(0)
 
   useEffect(() => {
     if (userData.userId !== '') {
@@ -23,12 +23,12 @@ const Header = () => {
     }
   }, [userData])
 
-  useEffect(() => {
-    const cartItemsStored = localStorage.getItem('cartItems')
-    if (cartItemsStored) {
-      setNumberItems(JSON.parse(cartItemsStored).length)
-    }
-  }, [cartItems])
+  // useEffect(() => {
+  //   const cartItemsStored = localStorage.getItem('cartItems')
+  //   if (cartItemsStored) {
+  //     setNumberItems(JSON.parse(cartItemsStored).length)
+  //   }
+  // }, [cartItems])
 
   // console.log("decodedToken", decodedToken);
   const handleLogout = () => {
@@ -128,7 +128,7 @@ const Header = () => {
                       padding: '5px',
                     }}
                   >
-                    {numberItems}
+                    {cartItems.length}
                   </span>
                 </Nav.Link>
               </LinkContainer>

@@ -3,7 +3,7 @@ import { orderActions } from './orderSlicer'
 export const createOrder = (order) => {
   return async (dispatch) => {
     try {
-      const { data } = await fetch(`/api/order`, {
+      const response = await fetch(`/api/order`, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
@@ -11,9 +11,9 @@ export const createOrder = (order) => {
         body: JSON.stringify(order),
       })
 
-      console.log(order)
+      const { data } = await response
 
-      dispatch(orderActions.addOrder(order))
+      dispatch(orderActions.addOrder(data))
     } catch (error) {
       console.error(error)
     }
