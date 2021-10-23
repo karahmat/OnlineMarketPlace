@@ -12,6 +12,7 @@ function Messenger() {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState(''); 
     const [productMsg, setProductMsg] = useState('');
+    const [deletedMsg, setDeletedMsg] = useState(false);
     const userData = useContext(UserContext);
     const scrollRef = useRef();    
     const location = useLocation();
@@ -60,9 +61,9 @@ function Messenger() {
             }
         }
         if(userData.userId !== '') {
-            getConversation();
+            getConversation();            
         }
-    }, [userData, currentChat]);
+    }, [userData, currentChat, deletedMsg]);
 
     useEffect(()=> {
                 
@@ -160,7 +161,7 @@ function Messenger() {
           }
         };
         getMessages();
-      }, [currentChat, productMsg]);
+      }, [currentChat, productMsg, deletedMsg]);
 
     //how to deal with messages keyed in from the textbox
     const handleSubmit = async(e) => {
@@ -215,7 +216,14 @@ function Messenger() {
                     
                     { conversations.length > 0 && conversations.map((conversation) => (
                         <div>                            
-                            <Conversation key={conversation._id} currentChat={currentChat} handleCurrentChat={handleCurrentChat} conversation={conversation} currentUser={userData} onlineUsers={onlineUsers} />
+                            <Conversation 
+                                key={conversation._id} 
+                                currentChat={currentChat} 
+                                handleCurrentChat={handleCurrentChat} 
+                                conversation={conversation} 
+                                currentUser={userData} 
+                                onlineUsers={onlineUsers}
+                                setDeletedMsg={setDeletedMsg} />
                         </div>
                     ))}
                     

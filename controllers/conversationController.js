@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Conversation = require("../models/conversation");
+const Message = require('../models/message');
 
 //new conv
 
@@ -44,5 +45,16 @@ router.get("/find/:firstUserId/:secondUserId", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+// deleting a conversation
+router.delete("/delete/:conversationId", async(req,res)=>{
+  try {    
+    const message = await Message.deleteMany({conversationId: req.params.conversationId});
+    const conversation = await Conversation.deleteOne({_id: req.params.conversationId});
+    res.status(200).json({data: "delete success"});
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
 
 module.exports = router;
