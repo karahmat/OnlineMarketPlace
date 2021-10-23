@@ -33,12 +33,14 @@ function Messenger() {
         });
       }, []);
     
+    //re-render list of messages when a new msg comes in from the sockets
     useEffect(() => {
     arrivalMessage &&
         currentChat?.members.includes(arrivalMessage.sender) &&
         setMessages((prev) => [...prev, arrivalMessage]);
     }, [arrivalMessage, currentChat]);
 
+    //to find out which users are online (only works on Heroku)
     useEffect(() => {
         if(userData.userId !== '') {            
             socket.current.emit("addUser", userData.userId);
@@ -50,6 +52,7 @@ function Messenger() {
       }, [userData]);
     
     //Chat section controlled by Mongoose
+    //First: Load all the conversations
     useEffect(()=> {
         const getConversation = async() => {
             try {                
@@ -65,6 +68,7 @@ function Messenger() {
         }
     }, [userData, currentChat, deletedMsg]);
 
+    //Second: This is to render chat coming in after we click on a certain product
     useEffect(()=> {
                 
         const initialiseChat = async(userArg, sellerArg, productArg) => {
@@ -149,7 +153,7 @@ function Messenger() {
 
     }, [productMsg]);
 
-
+    //Third: Render messages from the past 
     useEffect(() => {
         const getMessages = async () => {
           try {
