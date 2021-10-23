@@ -184,6 +184,7 @@ router.post(
       }
 
       if (req.profile.id === req.params.userId) {
+        console.log(products);
         const product = await Product.insertMany(products)
         res.status(201).json({ data: 'success' })
       } else {
@@ -232,10 +233,12 @@ router.put(
         quantity: req.body.quantity,
       }
 
-      const file = req.files[0]
-      const urlImage = await imgur.uploadFile(`./uploads/${file.filename}`)
-      fs.unlinkSync(`./uploads/${file.filename}`)
-      updatedField.image = urlImage.link
+      if (req.files[0]) {
+          const file = req.files[0]
+          const urlImage = await imgur.uploadFile(`./uploads/${file.filename}`)
+          fs.unlinkSync(`./uploads/${file.filename}`)
+          updatedField.image = urlImage.link
+      }
 
       const updatedProduct = await Product.findOneAndUpdate(
         { _id: req.params.productId },
@@ -254,7 +257,7 @@ router.put(
   }
 )
 
-//delete shop
+//delete product
 router.delete(
   '/api/products/product/:productId',
   requireAuth,

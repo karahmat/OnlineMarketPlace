@@ -38,8 +38,7 @@ const checkUser = (req, res, next) => {
             if (err) {
               console.log(err.message);              
               next();
-            } else {
-              console.log("decodedtoken", decodedToken);
+            } else {              
               let user = await User.findById(decodedToken.id);
               req.profile = user;
               next();

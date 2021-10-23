@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function Conversation({ currentChat, handleCurrentChat, conversation, currentUser, onlineUsers }) {
+function Conversation({ currentChat, handleCurrentChat, conversation, currentUser, onlineUsers, setDeletedMsg }) {
   const [user, setUser] = useState(null);  
 
   useEffect(() => {
@@ -19,6 +19,23 @@ function Conversation({ currentChat, handleCurrentChat, conversation, currentUse
     getUser();
   }, []);
 
+  
+  const handleDeleteConvo = async () => {
+    try {      
+      setDeletedMsg(false);
+      const res = await fetch(`/api/conversations/delete/${conversation._id}`, {
+        method: "DELETE"
+      });
+      const data = await res.json();
+      if (data.data= "delete success") {
+        setDeletedMsg(true);
+        console.log('delete success');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <>           
         { user && 
@@ -29,6 +46,9 @@ function Conversation({ currentChat, handleCurrentChat, conversation, currentUse
             <i className="fa-solid fa-circle fa-2xs"></i>
           </span>
           }
+          <span onClick={handleDeleteConvo} className="ms-1" style={{cursor: 'pointer'}}>
+            <i class="far fa-trash-alt fa-sm"></i>
+          </span>
         </div>
         }
     </>    

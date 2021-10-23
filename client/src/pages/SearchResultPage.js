@@ -29,7 +29,7 @@ function SearchResultPage() {
             <h2 className="mt-3">Search Results for {searchValue}</h2>
             <Row>
             {result.data && result.data.map((product) => (
-                <Col key={product._id} sm={6} md={4} lg={3} xl={2}>
+                <Col key={product._id} xs={6} sm={6} md={4} lg={3} xl={2}>
                     <Product product={product} />
                 </Col>
             ))}

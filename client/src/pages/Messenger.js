@@ -12,6 +12,7 @@ function Messenger() {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState(''); 
     const [productMsg, setProductMsg] = useState('');
+    const [deletedMsg, setDeletedMsg] = useState(false);
     const userData = useContext(UserContext);
     const scrollRef = useRef();    
     const location = useLocation();
@@ -32,26 +33,26 @@ function Messenger() {
         });
       }, []);
     
+    //re-render list of messages when a new msg comes in from the sockets
     useEffect(() => {
     arrivalMessage &&
         currentChat?.members.includes(arrivalMessage.sender) &&
         setMessages((prev) => [...prev, arrivalMessage]);
     }, [arrivalMessage, currentChat]);
 
+    //to find out which users are online (only works on Heroku)
     useEffect(() => {
-        if(userData.userId !== '') {
-            console.log("here is called!!!")
+        if(userData.userId !== '') {            
             socket.current.emit("addUser", userData.userId);
             socket.current.on("getUsers", (users) => {
                 console.log("socket users", users);
                 setOnlineUsers(users);
             });
-        }
-
-        
+        }        
       }, [userData]);
     
     //Chat section controlled by Mongoose
+    //First: Load all the conversations
     useEffect(()=> {
         const getConversation = async() => {
             try {                
@@ -63,10 +64,11 @@ function Messenger() {
             }
         }
         if(userData.userId !== '') {
-            getConversation();
+            getConversation();            
         }
-    }, [userData, currentChat]);
+    }, [userData, currentChat, deletedMsg]);
 
+    //Second: This is to render chat coming in after we click on a certain product
     useEffect(()=> {
                 
         const initialiseChat = async(userArg, sellerArg, productArg) => {
@@ -151,7 +153,7 @@ function Messenger() {
 
     }, [productMsg]);
 
-
+    //Third: Render messages from the past 
     useEffect(() => {
         const getMessages = async () => {
           try {
@@ -163,8 +165,9 @@ function Messenger() {
           }
         };
         getMessages();
-      }, [currentChat, productMsg]);
+      }, [currentChat, productMsg, deletedMsg]);
 
+    //how to deal with messages keyed in from the textbox
     const handleSubmit = async(e) => {
         e.preventDefault();
         const message = {
@@ -208,30 +211,37 @@ function Messenger() {
     }, [messages])
 
     return ( 
-    <Container>
+    <Container style={{height: '100%'}}>
         <Row className="mt-4">     
-            <Col key={1234} xs={6} md={3} lg={3}>
+            <Col key={1234} xs={5} md={3} lg={3} style={{height: "300px"}}>
                 <h3>Chat Menu</h3>
                 <Row>
                     
                     
                     { conversations.length > 0 && conversations.map((conversation) => (
                         <div>                            
-                            <Conversation key={conversation._id} currentChat={currentChat} handleCurrentChat={handleCurrentChat} conversation={conversation} currentUser={userData} onlineUsers={onlineUsers} />
+                            <Conversation 
+                                key={conversation._id} 
+                                currentChat={currentChat} 
+                                handleCurrentChat={handleCurrentChat} 
+                                conversation={conversation} 
+                                currentUser={userData} 
+                                onlineUsers={onlineUsers}
+                                setDeletedMsg={setDeletedMsg} />
                         </div>
                     ))}
                     
                     
                 </Row>                                              
             </Col>
-            <Col key={1231} xs={6} md={8} lg={8} >
-                { currentChat ? (
-                <>    
-                <Row key={'row1'} style={{
-                    height: '100%',
+            <Col key={1231} xs={7} md={8} lg={8} style={{                    
+                    height: '600px',
                     overflowY: 'scroll',
                     paddingRight: '10px'
-                }}>
+                }} >
+                { currentChat ? (
+                <>    
+                <Row key={'row1'}>
                     {messages.map((msg) => (
                         <div ref={scrollRef}>
                         <Message key={msg._id} message={msg} own={msg.sender === userData.userId} />

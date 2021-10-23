@@ -85,7 +85,9 @@ const ProductPage = () => {
                   />
                 )}
               </ListGroup.Item>
-              <ListGroup.Item>Description:{product.description}</ListGroup.Item>
+              <ListGroup.Item as="h3">{product.name}</ListGroup.Item>
+              <ListGroup.Item>Description: {product.description}</ListGroup.Item>
+              <ListGroup.Item>Other products in <Link to={`/shops/shop/${product.shopId}`}>shop</Link></ListGroup.Item>
             </ListGroup>
           </Col>
           <Col md={3}>
@@ -95,7 +97,7 @@ const ProductPage = () => {
                   <Row>
                     <Col>Price:</Col>
                     <Col>
-                      <strong>${product.price}</strong>
+                      <strong>${Number(product.price).toFixed(2)}</strong>
                     </Col>
                   </Row>
                 </ListGroup.Item>
