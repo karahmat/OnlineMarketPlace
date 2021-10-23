@@ -18,6 +18,11 @@ const CartOutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState('PayPal')
 
   const onSubmitHandler = (e) => {
+    if (postalCode.length < 6) {
+      return alert(
+        'postal code is less than 6 digits! Please enter a valid postal code.'
+      )
+    }
     e.preventDefault()
     dispatch(saveShippingAddressAction({ address, postalCode }))
     dispatch(savePaymentMethodAction(paymentMethod))

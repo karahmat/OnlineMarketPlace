@@ -56,6 +56,9 @@ app.use(productRoute)
 app.use('/api/conversations', conversationRoute)
 app.use('/api/messages', messageRoute)
 app.use(orderRoute)
+app.get('/api/config/paypal', (req, res) => {
+  res.send(process.env.PAYPAL_CLIENT_ID)
+})
 
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files

@@ -83,10 +83,10 @@ const HomePageProducts = () => {
             loader={<h4>Loading...</h4>}
             endMessage={<h4>End of Page</h4>}
           >
-            <Row className="p-0">
+            <Row className='p-0'>
               {products.map((product) => (
                 <Col key={product._id} xs={6} sm={6} md={4} lg={3} xl={2}>
-                  <Product product={product} key={product._id} />
+                  <Product product={product} />
                 </Col>
               ))}
             </Row>
