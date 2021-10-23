@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,6 +6,8 @@ import CartOutStages from '../components/CartOutStages'
 import { createOrder } from '../store/orderActions'
 import { cartActions } from '../store/cartSlicer'
 import { UserContext } from '../App'
+import axios from 'axios'
+import { PayPalButton } from 'react-paypal-button-v2'
 
 const OrderSummary = () => {
   const dispatch = useDispatch()
@@ -14,13 +16,45 @@ const OrderSummary = () => {
 
   const userData = useContext(UserContext)
 
+  const [sdkReady, setSdkReady] = useState(false)
+
   console.log(userData)
 
   const cart = useSelector((state) => state.cart)
 
+  useEffect(() => {
+    const addPayPalScript = async () => {
+      const { data } = await axios.get('/api/config/paypal')
+      console.log(data)
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.src = `https://www.paypal.com/sdk/js?client-id=${data}`
+      script.async = true
+      script.onload = () => {
+        setSdkReady(true)
+      }
+      document.body.appendChild(script)
+    }
+  }, [])
+
   // const orderCreate = useSelector((state) => state.order)
 
   const placeOrderHandler = () => {
+    const addPayPalScript = async () => {
+      const { data } = await axios.get('/api/config/paypal')
+      console.log(data)
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.src = `https://www.paypal.com/sdk/js?client-id=${data}`
+      script.async = true
+      script.onload = () => {
+        setSdkReady(true)
+      }
+      document.body.appendChild(script)
+    }
+
+    addPayPalScript()
+
     dispatch(
       createOrder({
         user: userData.userId,
@@ -108,7 +142,7 @@ const OrderSummary = () => {
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                <Button
+                {/* <Button
                   variant='info'
                   type='button'
                   className='btn-block'
@@ -116,7 +150,13 @@ const OrderSummary = () => {
                   onClick={placeOrderHandler}
                 >
                   Place Order
-                </Button>
+                </Button> */}
+                <PayPalButton
+                  amount={cart.cartItems
+                    .reduce((acc, item) => acc + item.qty * item.price, 0)
+                    .toFixed(2)}
+                  onSuccess={placeOrderHandler}
+                />
               </ListGroup.Item>
             </ListGroup>
           </Card>
