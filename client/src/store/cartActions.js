@@ -2,7 +2,7 @@ import { cartActions } from './cartSlicer'
 export const addToCartAction = (id, qty) => {
   return async (dispatch, getState) => {
     const fetchProductData = async (id) => {
-      const response = await fetch(`/api/products/product/${id}`)
+      const response = await fetch(`/api/products/${id}`)
 
       if (!response.ok) {
         throw new Error('could not fetch Products Data')

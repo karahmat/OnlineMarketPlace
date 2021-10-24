@@ -46,10 +46,42 @@ const handleErrors = (err) => {
     return errors;
 }
 
-//for create shop route
-router.post('/api/shops/by/:userId', requireAuth, async (req,res) => {
-    try {       
+
+
+//list all shops (not protected, for all to see)
+router.get('/', async (req,res) => {
+
+    try {                  
+        //some codes to parse image stuff
+        //
+        const result = await Shop.find();               
+        res.status(201).json({data: result});   
+    }
+    catch (err) {                    
+        const errors = handleErrors(err);        
+        res.status(400).json({errors});
+    }
+});
+
+//List MyShops
+router.get('/users/:userId', requireAuth, async (req,res) => {
+    try {         
+        //some codes to parse image stuff
+        const result = await Shop.find({userId: req.params.userId}); 
+        const user = await User.findOne({_id: req.params.userId}, 'username'); 
         
+        res.status(201).json({data: result, username: user.username});   
+    }
+    catch (err) {                    
+        const errors = handleErrors(err);        
+        res.status(400).json({errors});
+    }
+})
+
+//for create shop route
+router.post('/users/:userId', requireAuth, async (req,res) => {
+    try {       
+        if (req.profile.usertype === "seller") {
         // settings for IMGUR
         // Change this cliend id to your own.
         const clientId = process.env.IMGUR_ID;        
@@ -70,37 +102,11 @@ router.post('/api/shops/by/:userId', requireAuth, async (req,res) => {
         }
 
         const shop = await Shop.create(inputField);       
-        res.status(201).json({ shopId: shop._id, name: shop.name });   
-    }
-    catch (err) {                    
-        const errors = handleErrors(err);        
-        res.status(400).json({errors});
-    }
-})
+        res.status(201).json({ shopId: shop._id, name: shop.name });
+        } else {
+            res.status(400).json({errorMsg: "you are not a seller"});
+        }
 
-//list all shops (not protected, for all to see)
-router.get('/api/shops', async (req,res) => {
-
-    try {                  
-        //some codes to parse image stuff
-        //
-        const result = await Shop.find();               
-        res.status(201).json({data: result});   
-    }
-    catch (err) {                    
-        const errors = handleErrors(err);        
-        res.status(400).json({errors});
-    }
-});
-
-//List MyShops
-router.get('/api/shops/by/:userId', requireAuth, async (req,res) => {
-    try {         
-        //some codes to parse image stuff
-        const result = await Shop.find({userId: req.params.userId}); 
-        const user = await User.findOne({_id: req.params.userId}, 'username'); 
-        
-        res.status(201).json({data: result, username: user.username});   
     }
     catch (err) {                    
         const errors = handleErrors(err);        
@@ -109,7 +115,7 @@ router.get('/api/shops/by/:userId', requireAuth, async (req,res) => {
 })
 
 //get each shop details
-router.get('/api/shops/shop/:shopId', async(req,res) => {
+router.get('/:shopId', async(req,res) => {
     try {                  
         //some codes to parse image stuff
         
@@ -124,7 +130,7 @@ router.get('/api/shops/shop/:shopId', async(req,res) => {
 });
 
 //edit each shop details
-router.put('/api/shops/shop/:shopId', requireAuth, async (req,res) => {
+router.put('/:shopId', requireAuth, async (req,res) => {
     try {                          
         // settings for IMGUR
         // Change this cliend id to your own.
@@ -159,9 +165,8 @@ router.put('/api/shops/shop/:shopId', requireAuth, async (req,res) => {
 });
 
 //delete shop
-router.delete('/api/shops/shop/:shopId', requireAuth, async(req,res) => {
-    try {
-        console.log("delete API was called")
+router.delete('/:shopId', requireAuth, async(req,res) => {
+    try {        
         const product = await Product.deleteMany({shopId: req.params.shopId});
         const result = await Shop.deleteOne({_id: req.params.shopId});        
         res.status(201).json({data: "Shops and Products Deleted"});

@@ -11,7 +11,7 @@ import Row from 'react-bootstrap/Row';
 function MyShops() {    
     // const userData = useContext(UserContext);
     const {userId} = useParams();  
-    const apiEndPoint = `/api/shops/by/${userId}`;
+    const apiEndPoint = `/api/shops/users/${userId}`;
     const {result, isLoading} = useFetchAPI(apiEndPoint);   
 
     if (!result || isLoading) {

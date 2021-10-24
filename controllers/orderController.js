@@ -5,7 +5,7 @@ const Product = require('../models/product')
 const { requireAuth } = require('../middleware/authMiddleware')
 
 //add orders from cart to DB
-router.post('/api/order', requireAuth, async (req, res) => {
+router.post('/', requireAuth, async (req, res) => {
   const { user, orderItems, shippingAddress, paymentMethod } = req.body
 
   //to delete quantity in product model
@@ -46,7 +46,7 @@ router.post('/api/order', requireAuth, async (req, res) => {
   }
 })
 
-router.get('/api/order', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const result = await Order.find()
     res.status(201).json({ data: result })
@@ -56,7 +56,7 @@ router.get('/api/order', async (req, res) => {
   }
 })
 
-router.get('/api/order/deleteall', async (req, res) => {
+router.get('/deleteall', async (req, res) => {
   try {
     await Order.deleteMany({})
     res.send('orders deleted')

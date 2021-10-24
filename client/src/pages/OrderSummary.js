@@ -22,20 +22,20 @@ const OrderSummary = () => {
 
   const cart = useSelector((state) => state.cart)
 
-  useEffect(() => {
-    const addPayPalScript = async () => {
-      const { data } = await axios.get('/api/config/paypal')
-      console.log(data)
-      const script = document.createElement('script')
-      script.type = 'text/javascript'
-      script.src = `https://www.paypal.com/sdk/js?client-id=${data}`
-      script.async = true
-      script.onload = () => {
-        setSdkReady(true)
-      }
-      document.body.appendChild(script)
-    }
-  }, [])
+  // useEffect(() => {
+  //   const addPayPalScript = async () => {
+  //     const { data } = await axios.get('/api/config/paypal')
+  //     console.log(data)
+  //     const script = document.createElement('script')
+  //     script.type = 'text/javascript'
+  //     script.src = `https://www.paypal.com/sdk/js?client-id=${data}`
+  //     script.async = true
+  //     script.onload = () => {
+  //       setSdkReady(true)
+  //     }
+  //     document.body.appendChild(script)
+  //   }
+  // }, [])
 
   // const orderCreate = useSelector((state) => state.order)
 

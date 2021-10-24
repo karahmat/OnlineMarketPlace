@@ -30,8 +30,7 @@ const HomePageProducts = () => {
       )
 
       const items = await response.json()
-      const { data } = items
-      console.log(data)
+      const { data } = items      
       setProducts(data)
     }
     fetchData()
@@ -68,8 +67,7 @@ const HomePageProducts = () => {
 
   //   setPage((state) => state + 1)
   // }
-
-  console.log(products)
+  
 
   return (
     <>

@@ -4,7 +4,7 @@ function DeleteMyProduct({productId, userId, shopId}) {
   
     const handleDelete = async () => {
        
-        const response = await fetch(`/api/products/product/${productId}`, {
+        const response = await fetch(`/api/products/${productId}`, {
             method: 'DELETE',
             headers: { 'content-type': 'application/json' }, 
             body: JSON.stringify({ userId })            

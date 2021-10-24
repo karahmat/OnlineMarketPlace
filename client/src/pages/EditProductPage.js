@@ -43,7 +43,7 @@ function EditProductPage() {
     useEffect(() => {
 
         const getProductDetails = async() => {
-            const response = await fetch(`/api/products/product/${productId}`);
+            const response = await fetch(`/api/products/${productId}`);
             const data = await response.json();            
             for (const [key1, value1] of Object.entries(data.data)) {
 
@@ -146,7 +146,7 @@ function EditProductPage() {
             
             setIsUploading(true);
                         
-            const response = await fetch(`/api/products/product/${productId}/${shopId}/${userId}`, {
+            const response = await fetch(`/api/products/${productId}/shops/${shopId}/users/${userId}`, {
                 method: 'PUT',                               
                 body: formData
             }); 

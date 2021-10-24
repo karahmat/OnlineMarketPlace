@@ -29,6 +29,18 @@ const requireAuth = (req, res, next) => {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 //check current user middleware
 const checkUser = (req, res, next) => {
     const token = req.cookies.jwt;

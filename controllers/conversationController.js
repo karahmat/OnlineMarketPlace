@@ -22,7 +22,7 @@ router.post("/", async(req, res) => {
 
 //get conv of a user
 
-router.get("/:userId", async (req, res) => {
+router.get("/users/:userId", async (req, res) => {
   try {
     const conversation = await Conversation.find({
       members: { $in: [req.params.userId] },
@@ -47,7 +47,7 @@ router.get("/find/:firstUserId/:secondUserId", async (req, res) => {
 });
 
 // deleting a conversation
-router.delete("/delete/:conversationId", async(req,res)=>{
+router.delete("/:conversationId", async(req,res)=>{
   try {    
     const message = await Message.deleteMany({conversationId: req.params.conversationId});
     const conversation = await Conversation.deleteOne({_id: req.params.conversationId});

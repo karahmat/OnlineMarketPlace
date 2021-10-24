@@ -88,7 +88,7 @@ function EditMyShop(props) {
                 formData.append(key, value);
             }            
 
-            const response = await fetch(`/api/shops/shop/${props.shopdata._id}`, {
+            const response = await fetch(`/api/shops/${props.shopdata._id}`, {
                 method: 'PUT',
                 //headers: { 'content-type': 'application/json' },
                 //body: JSON.stringify(formInputs)

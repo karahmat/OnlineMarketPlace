@@ -64,7 +64,7 @@ function LoginPage({setLogin}) {
 
         } else {
 
-            const response = await fetch("/api/login", {
+            const response = await fetch("/api/users/login", {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(formInputs)

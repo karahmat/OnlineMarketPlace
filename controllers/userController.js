@@ -47,8 +47,23 @@ const createToken = (id, usertype) => {
     });
 };
 
+//list all users
+router.get('/', requireAuth, async (req,res) => {
+        
+    try {  
+        
+        const users = await User.find();
+        res.status(201).json({data: users});
+    }
+    catch (err) {                    
+        const errors = handleErrors(err);            
+        res.status(400).json({errors});
+    }
+
+});
+
 //create a user
-router.post('/api/signup', async (req,res) => {
+router.post('/', async (req,res) => {
     
     try {          
         
@@ -65,23 +80,10 @@ router.post('/api/signup', async (req,res) => {
 
 });
 
-//list all users
-router.get('/api/users', requireAuth, async (req,res) => {
-        
-        try {  
-            
-            const users = await User.find();
-            res.status(201).json({data: users});
-        }
-        catch (err) {                    
-            const errors = handleErrors(err);            
-            res.status(400).json({errors});
-        }
-    
-});
+
 
 //fetch a user through jwt
-router.get('/api/users/jwt', requireAuth, async (req,res) => {
+router.get('/jwt', requireAuth, async (req,res) => {
     
     try {
         
@@ -99,8 +101,15 @@ router.get('/api/users/jwt', requireAuth, async (req,res) => {
     }
 })
 
+
+//user signout
+router.get('/logout', (req, res) => {
+    res.cookie('jwt', '', { maxAge: 1} );
+    res.status(200).json({data: 'signed out'})
+});
+
 //fetch a user
-router.get('/api/users/:userId', requireAuth, async (req,res) => {
+router.get('/:userId', requireAuth, async (req,res) => {
 
     try {
         const user = await User.findOne({_id: req.params.userId});
@@ -120,7 +129,7 @@ router.get('/api/users/:userId', requireAuth, async (req,res) => {
 
 
 //update a user
-router.put('/api/user/:userId', requireAuth, async (req, res) => {
+router.put('/:userId', requireAuth, async (req, res) => {
     
     try {
         const updatedField = {
@@ -142,8 +151,9 @@ router.put('/api/user/:userId', requireAuth, async (req, res) => {
     }
 }); 
 
+
 //delete a user
-router.delete('/api/user/:userId', requireAuth, async (req,res) => {
+router.delete('/:userId', requireAuth, async (req,res) => {
     try {
         const shops = await Shop.find({userId: req.params.userId}, '_id');
         shops.forEach( async (shop) => {
@@ -159,8 +169,9 @@ router.delete('/api/user/:userId', requireAuth, async (req,res) => {
     }
 });
 
+
 //user sign-in
-router.post('/api/login', async (req,res) => {
+router.post('/login', async (req,res) => {
     const {email, password} = req.body;
     
     try {
@@ -177,11 +188,6 @@ router.post('/api/login', async (req,res) => {
     
 });
 
-//user signout
-router.get('/api/logout', (req, res) => {
-    res.cookie('jwt', '', { maxAge: 1} );
-    res.status(200).json({data: 'signed out'})
-});
 
 module.exports = router;
 

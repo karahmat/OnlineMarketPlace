@@ -38,6 +38,7 @@ function DynamicFormComponent({handleInputChange, handleFileUpload, frontEndErro
             <Form.Label>Category</Form.Label>
             
             <Form.Control as="select" name={`category${formIndex}`} onChange={handleInputChange} isInvalid={ !!frontEndErrors.category }>
+                    <option value={null}>Choose a category</option>
                 { selectValues.map((eachValue, index) => (
                     <option key={index} value={eachValue}>{eachValue}</option>
                 ))}                

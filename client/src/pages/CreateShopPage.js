@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
+import Alert from 'react-bootstrap/Alert';
 
 const initialState = {
     name: '',
@@ -96,7 +97,7 @@ function CreateShopPage() {
             }            
 
             setIsUploading(true);
-            const response = await fetch(`/api/shops/by/${userData.userId}`, {
+            const response = await fetch(`/api/shops/users/${userData.userId}`, {
                 method: 'POST',
                 // headers: { 'content-type': 'application/json' },
                 body: formData
@@ -105,6 +106,7 @@ function CreateShopPage() {
             
             if (data.shopId) {
                 setIsUploading(false);
+                //console.log(formData);
                 //history.push('/');
                 window.location.assign(`/shops/by/${userData.userId}`);
                 // redirect user to /posts
@@ -119,6 +121,8 @@ function CreateShopPage() {
     return ( 
         <Container>
             <h1 className="mt-2">New Shop</h1>
+            { !userData || userData.usertype === "buyer" && <Alert variant="danger">You are not a seller, you cannot create shop!</Alert> }
+            { userData.usertype === "seller" && 
             <Form>
                 <Form.Group className="mb-3" controlId="formBasicShopname">
                     <Form.Label>Shop Name</Form.Label>
@@ -176,6 +180,7 @@ function CreateShopPage() {
                 }
 
             </Form>
+            }
         </Container>
      );
 }
