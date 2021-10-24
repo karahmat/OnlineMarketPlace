@@ -194,6 +194,17 @@ router.post(
   }
 )
 
+
+//list categories
+router.get('/categories', async (req, res) => {
+  try {
+    const result = await Product.distinct('category')
+    res.status(201).json(result)
+  } catch (err) {
+    console.log(err)
+  }
+})
+
 //get each product details
 router.get('/:productId', async (req, res) => {
   try {
@@ -293,14 +304,5 @@ router.get('/search/:searchValue', async (req, res) => {
   }
 })
 
-//list categories
-router.get('/categories', async (req, res) => {
-  try {
-    const result = await Product.distinct('category')
-    res.status(201).json(result)
-  } catch (err) {
-    console.log(err)
-  }
-})
 
 module.exports = router
