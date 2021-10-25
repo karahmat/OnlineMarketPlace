@@ -21,6 +21,7 @@ The application was developed using the MongoDB, Express, React, NodeJS (MERN) s
 
 ## Structure of Web Application
 
+![Component Tree] (https://imgur.com/1Smctp1)
 
 The application comprises the following key components:
 
@@ -71,10 +72,11 @@ Implementation is fairly straightforward using [react-paypal-button-v2](https://
 
 ### Messenger page
 
+![Messenger App] (https://imgur.com/FUR4CGG)
+
 The Messenger (chat) page comprises: (a) the Conversation component, which handles (create, read, delete) the Receiver and Sender of messages, and the Message component, which handles (create and read) all the Messages (ConversationId, text of message and senderId). 
 
-
-The Chat page requires the following States:
+The Messenger page requires the following States:
 
 - message: to store all the messages coming in from MongoDB and the socket server.
 
