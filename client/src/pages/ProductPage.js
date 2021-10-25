@@ -57,7 +57,7 @@ const ProductPage = () => {
   }
 
   const checkOutHandler = () => {
-    history.push('/cartout')
+    history.push(`/cart/${userData.userId}/cartout`)
   }
 
   return (

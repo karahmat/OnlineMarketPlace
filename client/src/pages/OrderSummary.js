@@ -67,7 +67,7 @@ const OrderSummary = () => {
     dispatch(cartActions.clearCartInfo())
     window.localStorage.removeItem('cartItems')
     window.localStorage.removeItem('shippingAddress')
-    history.push('/ordersuccess')
+    history.push(`/cart/${userData.userId}/cartout/ordersummary/ordersuccess`)
   }
 
   return (

@@ -72,16 +72,16 @@ function App() {
           <Route exact path='/products/:id'>
             <ProductPage />
           </Route>
-          <Route path='/cart'>
+          <Route path='/cart/:id' exact>
             <CartPage />
           </Route>
-          <Route path='/cartout'>
+          <Route path='/cart/:id/cartout' exact>
             <CartOutPage />
           </Route>
-          <Route path='/ordersummary'>
+          <Route path='/cart/:id/cartout/ordersummary' exact>
             <OrderSummary />
           </Route>
-          <Route path='/ordersuccess'>
+          <Route path='/cart/:id/cartout/ordersummary/ordersuccess'>
             <OrderSuccess />
           </Route>
           <Route path='/signup'>

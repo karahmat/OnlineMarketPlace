@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Form, Button, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/FormContainer'
@@ -8,8 +8,10 @@ import {
 } from '../store/cartActions'
 import { useHistory } from 'react-router'
 import CartOutStages from '../components/CartOutStages'
+import { UserContext } from '../App'
 
 const CartOutPage = () => {
+  const userData = useContext(UserContext)
   const shippingAddress = useSelector((state) => state.cart.shippingAddress)
   const [address, setAddress] = useState(shippingAddress.address)
   const [postalCode, setPostalCode] = useState(shippingAddress.postalCode)
@@ -26,7 +28,7 @@ const CartOutPage = () => {
     e.preventDefault()
     dispatch(saveShippingAddressAction({ address, postalCode }))
     dispatch(savePaymentMethodAction(paymentMethod))
-    history.push('/ordersummary')
+    history.push(`/cart/${userData.userId}/cartout/ordersummary`)
   }
 
   return (
