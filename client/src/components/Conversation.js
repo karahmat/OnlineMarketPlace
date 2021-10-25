@@ -23,7 +23,7 @@ function Conversation({ currentChat, handleCurrentChat, conversation, currentUse
   const handleDeleteConvo = async () => {
     try {      
       setDeletedMsg(false);
-      const res = await fetch(`/api/conversations/delete/${conversation._id}`, {
+      const res = await fetch(`/api/conversations/${conversation._id}`, {
         method: "DELETE"
       });
       const data = await res.json();

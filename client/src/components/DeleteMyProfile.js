@@ -4,12 +4,11 @@ import { logOut } from '../utils/authenticate';
 function DeleteMyProfile({userId}) {
   
     const handleDelete = async () => {
-        const response = await fetch(`/api/user/${userId}`, {
+        const response = await fetch(`/api/users/${userId}`, {
             method: 'DELETE',
             headers: { 'content-type': 'application/json' }            
         })
-        const data = await response.json();
-        console.log("RESPONSE", data);
+        const data = await response.json();        
 
         if (data.data) {
             //history.push('/');

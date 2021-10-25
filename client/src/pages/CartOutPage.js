@@ -18,9 +18,9 @@ const CartOutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState('PayPal')
 
   const onSubmitHandler = (e) => {
-    if (postalCode.length < 6) {
+    if (postalCode.length !== 6 ) {
       return alert(
-        'postal code is less than 6 digits! Please enter a valid postal code.'
+        'postal code is not 6 digits! Please enter a valid postal code.'
       )
     }
     e.preventDefault()
@@ -48,7 +48,9 @@ const CartOutPage = () => {
           <Form.Group controlId='postalCode'>
             <Form.Label>Postal Code</Form.Label>
             <Form.Control
-              type='text'
+              type='number'
+              minLength={6}
+              maxLength={6}
               placeholder='Enter postal code'
               value={postalCode}
               required

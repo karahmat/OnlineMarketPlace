@@ -7,8 +7,11 @@ function SearchResultPage() {
 
     const { searchCat, searchValue } = useParams();
     
+    // searchCat can either by "category" (search products by category)
+    // or "search" (search products through product name or product description)
+    
     console.log("search Value=",searchValue);    
-    const apiEndPt = searchCat === "category" ? `/api/products?category=${searchValue}` : `/api/products/product/${searchCat}/${searchValue}`;
+    const apiEndPt = searchCat === "category" ? `/api/products?category=${searchValue}` : `/api/products/search/${searchValue}`;
     const { result, isLoading } = useFetchAPI(apiEndPt);
     
     if (!result || isLoading) {

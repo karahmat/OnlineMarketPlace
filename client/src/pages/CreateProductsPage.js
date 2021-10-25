@@ -97,9 +97,12 @@ function CreateProductsPage() {
                 formData.append(oneImage.file_id, oneImage.uploaded_file)
             }
             
+            for (const items of formData) {
+                console.log(`${items[0]} - ${items[1]}`);
+            }
             setIsUploading(true);
                         
-            const response = await fetch(`/api/products/by/${shopId}/${userId}`, {
+            const response = await fetch(`/api/products/shops/${shopId}/users/${userId}`, {
                 method: 'POST',                               
                 body: formData
             }); 

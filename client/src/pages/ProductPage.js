@@ -40,7 +40,7 @@ const ProductPage = () => {
 
   useEffect(() => {
     console.log('this is the 1st', cartItems)
-    dispatch(fetchProductsData(`/api/products/product/${params.id}`))
+    dispatch(fetchProductsData(`/api/products/${params.id}`))
   }, [dispatch, cartItems, params.id])
 
   // console.log(product.rating)

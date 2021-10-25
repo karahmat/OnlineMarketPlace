@@ -19,7 +19,7 @@ export const isAuthenticated = () => {
 
 export const logOut = async() => {
   
-  const res = await fetch('/api/logout');
+  const res = await fetch('/api/users/logout');
   const data = await res.json();
   if (data.data === "signed out") {
 

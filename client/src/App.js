@@ -43,8 +43,7 @@ function App() {
       const data = await response.json()
 
       if (data.userId) {
-        setUserData(data)
-        console.log('userData', userData)
+        setUserData(data)        
       } else if (data.errors) {
         setUserData(data.errors)
       }

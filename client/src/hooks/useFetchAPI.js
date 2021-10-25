@@ -5,8 +5,7 @@ export const useFetchAPI = (url) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     
-    useEffect(() => {
-        console.log("this use fetch api is called");
+    useEffect(() => {        
         const controller = new AbortController();
         const signal = {signal: controller.signal};
         async function getDataFromAPI() {

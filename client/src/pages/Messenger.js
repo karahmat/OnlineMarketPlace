@@ -56,7 +56,7 @@ function Messenger() {
     useEffect(()=> {
         const getConversation = async() => {
             try {                
-                const res = await fetch(`/api/conversations/${userData.userId}`);
+                const res = await fetch(`/api/conversations/users/${userData.userId}`);
                 const data = await res.json();                
                 setConversations(data);
             } catch (err) {
@@ -157,7 +157,7 @@ function Messenger() {
     useEffect(() => {
         const getMessages = async () => {
           try {
-            const res = await fetch("/api/messages/" + currentChat?._id);
+            const res = await fetch("/api/messages/conversations/" + currentChat?._id);
             const data = await res.json();
             setMessages(data);
           } catch (err) {

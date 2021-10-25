@@ -17,7 +17,7 @@ function OneShop() {
     const [modalShow, setModalShow] = useState(false);
     const userDataClient = useContext(UserContext);
     const { shopId } = useParams();
-    const { result, isLoading } = useMultipleFetchAPI([`/api/shops/shop/${ shopId }`, `/api/products?shopId=${ shopId }`]);
+    const { result, isLoading } = useMultipleFetchAPI([`/api/shops/${ shopId }`, `/api/products?shopId=${ shopId }`]);
 
     if (!result || isLoading) {
         return ( 

@@ -83,7 +83,7 @@ function EditMyProfile() {
 
         } else {
 
-            const response = await fetch(`/api/user/${userId}`, {
+            const response = await fetch(`/api/users/${userId}`, {
                 method: 'PUT',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(formInputs)

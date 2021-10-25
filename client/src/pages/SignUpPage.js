@@ -72,11 +72,12 @@ function SignUpPage() {
 
         } else {
 
-            const response = await fetch("/api/signup", {
+            const response = await fetch("/api/users/signup", {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(formInputs)
-            })
+            });
+            
             const data = await response.json();
             
             if (data.userId) {
