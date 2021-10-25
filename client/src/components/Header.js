@@ -57,7 +57,6 @@ const Header = () => {
             <Nav className='ms-auto'>
               {loggedIn && (
                 <>
-
                   <LinkContainer to='/shops'>
                     <Nav.Link>Shops</Nav.Link>
                   </LinkContainer>
@@ -66,7 +65,9 @@ const Header = () => {
                   </LinkContainer>
                   <LinkContainer to='/messenger'>
                     <Nav.Link>
-                      <i className='far fa-bell fa-sm ml-2 nav-link'>Notifications</i>
+                      <i className='far fa-bell fa-sm ml-2 nav-link'>
+                        Notifications
+                      </i>
                     </Nav.Link>
                   </LinkContainer>
 
@@ -77,7 +78,6 @@ const Header = () => {
               )}
               {loggedIn === false && (
                 <>
-
                   <LinkContainer to='/shops'>
                     <Nav.Link>Shops</Nav.Link>
                   </LinkContainer>
@@ -91,7 +91,6 @@ const Header = () => {
                       <i className='fas fa-user'>Login</i>
                     </Nav.Link>
                   </LinkContainer>
-
                 </>
               )}
             </Nav>
@@ -118,31 +117,30 @@ const Header = () => {
 
           <Col xs={2} sm={2} md={2} lg={1} xl={1}>
             <Nav>
-
-              <LinkContainer to={loggedIn ? '/cart' : '/login'}>
+              <LinkContainer
+                to={loggedIn ? `/cart/${userData.userId}` : '/login'}
+              >
                 <Nav.Link>
                   <i className='fas fa-shopping-cart fa-xl'></i>
-                  { cartItems.length > 0 && 
-                  <span
-                    style={{
-                      position: 'relative',
-                      backgroundColor: '#ff7f7f',
-                      top: '-15px',
-                      left: '-10px',
-                      borderRadius: '8px',
-                      fontSize: '10px',
-                      padding: '5px',
-                    }}
-                  >
-                    {cartItems.length}
-                  </span>
-                  }
+                  {cartItems.length > 0 && (
+                    <span
+                      style={{
+                        position: 'relative',
+                        backgroundColor: '#ff7f7f',
+                        top: '-15px',
+                        left: '-10px',
+                        borderRadius: '8px',
+                        fontSize: '10px',
+                        padding: '5px',
+                      }}
+                    >
+                      {cartItems.length}
+                    </span>
+                  )}
                 </Nav.Link>
               </LinkContainer>
             </Nav>
           </Col>
-
-
         </Container>
       </Navbar>
     </header>

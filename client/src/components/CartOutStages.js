@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { UserContext } from '../App'
 import { Nav } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
 const CartOutStages = ({ stage1, stage2, stage3 }) => {
+  const userData = useContext(UserContext)
   return (
     <Nav className='justify-content-center mb-4'>
       <Nav.Item>
@@ -21,7 +23,7 @@ const CartOutStages = ({ stage1, stage2, stage3 }) => {
       </Nav.Item>
       <Nav.Item>
         {stage2 ? (
-          <LinkContainer to='/cartout'>
+          <LinkContainer to={`/cart/${userData.userId}/cartout`}>
             <Nav.Link>Shipping/Payment</Nav.Link>
           </LinkContainer>
         ) : (
@@ -35,7 +37,7 @@ const CartOutStages = ({ stage1, stage2, stage3 }) => {
       </Nav.Item>
       <Nav.Item>
         {stage3 ? (
-          <LinkContainer to='/ordersummary'>
+          <LinkContainer to={`/cart/${userData.userId}/cartout/ordersummary`}>
             <Nav.Link>Order Summary</Nav.Link>
           </LinkContainer>
         ) : (
