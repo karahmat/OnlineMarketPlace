@@ -85,9 +85,14 @@ const ProductPage = () => {
                   />
                 )}
               </ListGroup.Item>
-              <ListGroup.Item as="h3">{product.name}</ListGroup.Item>
-              <ListGroup.Item>Description: {product.description}</ListGroup.Item>
-              <ListGroup.Item>Other products in <Link to={`/shops/shop/${product.shopId}`}>shop</Link></ListGroup.Item>
+              <ListGroup.Item as='h3'>{product.name}</ListGroup.Item>
+              <ListGroup.Item>
+                Description: {product.description}
+              </ListGroup.Item>
+              <ListGroup.Item>
+                Other products in{' '}
+                <Link to={`/shops/shop/${product.shopId}`}>shop</Link>
+              </ListGroup.Item>
             </ListGroup>
           </Col>
           <Col md={3}>
@@ -196,98 +201,105 @@ const ProductPage = () => {
         </Modal.Header>
         <Modal.Body>
           <Container className='my-2'>
-            <Row>
-              <Col md={8}>
-                {cartItems.length === 0 ? (
-                  <Alert>
-                    Your Cart is Empty<Link to='/'>Go Back</Link>
-                  </Alert>
-                ) : (
-                  <ListGroup variant='flush'>
-                    {cartItems.map((item) => (
-                      <ListGroup.Item key={item.productId}>
-                        <Row>
-                          <Col md={2}>
-                            <Image
-                              src={item.image}
-                              alt={item.name}
-                              fluid
-                              rounded
-                            />
-                          </Col>
-                          <Col md={3}>
-                            <Link to={`/product/${item.productId}`}>
-                              {item.name}
-                            </Link>
-                          </Col>
-                          <Col md={2}>${item.price}</Col>
-                          <Col md={3}>
-                            <Form.Control
-                              as='select'
-                              size='sm'
-                              value={item.qty}
-                              onChange={(e) =>
-                                dispatch(
-                                  addToCartAction(
-                                    item.productId,
-                                    Number(e.target.value)
+            {!userData.userId ? (
+              <Alert>
+                You are not Logged in! To add to cart:
+                <Link to='/login'>Login Page</Link>
+              </Alert>
+            ) : (
+              <Row>
+                <Col md={8}>
+                  {cartItems.length === 0 ? (
+                    <Alert>
+                      Your Cart is Empty<Link to='/'>Go Back</Link>
+                    </Alert>
+                  ) : (
+                    <ListGroup variant='flush'>
+                      {cartItems.map((item) => (
+                        <ListGroup.Item key={item.productId}>
+                          <Row>
+                            <Col md={2}>
+                              <Image
+                                src={item.image}
+                                alt={item.name}
+                                fluid
+                                rounded
+                              />
+                            </Col>
+                            <Col md={3}>
+                              <Link to={`/product/${item.productId}`}>
+                                {item.name}
+                              </Link>
+                            </Col>
+                            <Col md={2}>${item.price}</Col>
+                            <Col md={3}>
+                              <Form.Control
+                                as='select'
+                                size='sm'
+                                value={item.qty}
+                                onChange={(e) =>
+                                  dispatch(
+                                    addToCartAction(
+                                      item.productId,
+                                      Number(e.target.value)
+                                    )
                                   )
-                                )
-                              }
-                            >
-                              {[...Array(item.stock).keys()].map((x) => (
-                                <option key={x + 1} value={x + 1}>
-                                  {x + 1}
-                                </option>
-                              ))}
-                            </Form.Control>
-                          </Col>
-                          <Col md={2}>
-                            <Button
-                              type='button'
-                              variant='light'
-                              onClick={() =>
-                                removerFromCartHandler(item.productId)
-                              }
-                            >
-                              <i className='fas fa-trash'></i>
-                            </Button>
-                          </Col>
-                        </Row>
+                                }
+                              >
+                                {[...Array(item.stock).keys()].map((x) => (
+                                  <option key={x + 1} value={x + 1}>
+                                    {x + 1}
+                                  </option>
+                                ))}
+                              </Form.Control>
+                            </Col>
+                            <Col md={2}>
+                              <Button
+                                type='button'
+                                variant='light'
+                                onClick={() =>
+                                  removerFromCartHandler(item.productId)
+                                }
+                              >
+                                <i className='fas fa-trash'></i>
+                              </Button>
+                            </Col>
+                          </Row>
+                        </ListGroup.Item>
+                      ))}
+                    </ListGroup>
+                  )}
+                </Col>
+                <Col md={4}>
+                  <Card>
+                    <ListGroup variant='flush'>
+                      <ListGroup.Item>
+                        <h3>
+                          Subtotal (
+                          {cartItems.reduce((acc, item) => acc + item.qty, 0)})
+                          items
+                        </h3>
+                        $
+                        {cartItems
+                          .reduce((acc, item) => acc + item.qty * item.price, 0)
+                          .toFixed(2)}
                       </ListGroup.Item>
-                    ))}
-                  </ListGroup>
-                )}
-              </Col>
-              <Col md={4}>
-                <Card>
-                  <ListGroup variant='flush'>
-                    <ListGroup.Item>
-                      <h3>
-                        Subtotal (
-                        {cartItems.reduce((acc, item) => acc + item.qty, 0)})
-                        items
-                      </h3>
-                      $
-                      {cartItems
-                        .reduce((acc, item) => acc + item.qty * item.price, 0)
-                        .toFixed(2)}
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                      <Button
-                        type='button'
-                        variant='info'
-                        disabled={cartItems.length === 0}
-                        onClick={checkOutHandler}
-                      >
-                        {' '}
-                        Check Out{' '}
-                      </Button>
-                    </ListGroup.Item>
-                  </ListGroup>
-                </Card>
-              </Col>
-            </Row>
+                      <ListGroup.Item>
+                        <Button
+                          type='button'
+                          variant='info'
+                          disabled={cartItems.length === 0}
+                          onClick={checkOutHandler}
+                        >
+                          {' '}
+                          Check Out{' '}
+                        </Button>
+                      </ListGroup.Item>
+                    </ListGroup>
+                  </Card>
+                </Col>
+              </Row>
+            )}
           </Container>
         </Modal.Body>
       </Modal>
