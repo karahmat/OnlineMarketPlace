@@ -80,7 +80,23 @@ router.post('/', async (req,res) => {
 
 });
 
+//create a user
+router.post('/signup', async (req,res) => {
+    
+    try {          
+        
+        const user = await User.create(req.body);
+        const token = createToken(user._id, user.usertype);
+        //send cookie to browser, but it cannot be accessed by clicking document.cookie due to httpOnly: true
+        res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000}); //maxAge in milliseconds here
+        res.status(201).json({ userId: user._id, usertype: user.usertype });   
+    }
+    catch (err) {                    
+        const errors = handleErrors(err);        
+        res.status(400).json({errors});
+    }
 
+});
 
 //fetch a user through jwt
 router.get('/jwt', requireAuth, async (req,res) => {
